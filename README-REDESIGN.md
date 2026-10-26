@@ -20,8 +20,8 @@ Nothing here touches the production files in the parent folder.
 | Assets relocated to `public/assets/` | ✅ |
 | Broken asset paths fixed | ✅ |
 | Unused files removed | ✅ |
-| DB | ⚠️ points at production MySQL `koruvilla_blog` |
-| `npm install` / Vite build | ⬜ not yet run |
+| DB | ✅ local MySQL `koruvilla_blog` (copy of production posts) |
+| `npm install` / Vite build | ✅ (`node_modules/`, `public/build/` present; run `npm ci && npm run build` on a fresh clone) |
 
 ---
 
@@ -107,18 +107,23 @@ Relocated to their correct locations:
 
 ## Database
 
-`.env` points at the **same production MySQL** (`koruvilla_blog`) so the
-redesign reads real content out of the box.
+`.env` points at a **local MySQL** instance (`koruvilla_blog`) that holds a copy
+of the production posts, so the redesign shows real content without touching the
+live database.
 
 ```
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1     ← set to your local/host MySQL
+DB_HOST=127.0.0.1     ← local MySQL; set to your own host if different
 DB_DATABASE=koruvilla_blog
 ```
 
-No MySQL is running on this machine yet. Start one, then set `DB_HOST`.
-Sessions/cache use an isolated cookie name + cache prefix so they never
-collide with the live site.
+Start MySQL locally (e.g. `brew services start mysql`), then create the database
+and import the dump, or run `php artisan migrate --seed` to build it from the
+migrations and `database/data/real-posts.json`. Sessions/cache use an isolated
+cookie name + cache prefix.
+
+> Note: the post data is a snapshot, not a live link. New posts published on
+> thekoruville.com will not appear here until the DB is re-synced.
 
 ---
 

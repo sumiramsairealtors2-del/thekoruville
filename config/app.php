@@ -43,6 +43,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Read-only Mode
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the database connection refuses to run INSERT, UPDATE,
+    | DELETE, ALTER, DROP, TRUNCATE, CREATE, RENAME, GRANT or REVOKE
+    | statements. Useful when pointing a local copy of the app at a live
+    | database that must not be modified. Public pages only ever SELECT.
+    |
+    */
+
+    'read_only' => (bool) env('APP_READ_ONLY', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application URL
     |--------------------------------------------------------------------------
     |
