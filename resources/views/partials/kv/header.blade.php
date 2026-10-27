@@ -1,5 +1,6 @@
 {{-- Header: olive crown + centred logo plaque, links float over the hero --}}
-<header class="kv-header{{ !empty($solid) ? ' kv-header--solid' : '' }}" id="kvHeader">
+<header class="kv-header" id="kvHeader">
+
 
   <div class="kv-crown" aria-hidden="false">
     <svg class="kv-crown__shape" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false">
