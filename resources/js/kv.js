@@ -2,6 +2,8 @@
    THE KORU VILLE — redesign (v2) interactions
    Vanilla, no dependencies. Loaded by layouts/kv.blade.php.
    ========================================================================== */
+import './kv-motion.js';
+
 (function () {
   'use strict';
 

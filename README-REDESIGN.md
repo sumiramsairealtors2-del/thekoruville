@@ -146,6 +146,36 @@ cookie name + cache prefix.
 
 ---
 
+## Motion layer (homepage animations)
+
+`resources/js/kv-motion.js` adds a small, dependency-free motion system in the
+spirit of Framer Motion / Aceternity: spring easings, orchestrated stagger,
+word-by-word headings, scroll parallax, 3D card tilt,
+magnetic buttons, counters, icon draw-in and a reading-progress bar.
+
+It is opt-in per element, so it can be used on any Blade page:
+
+| Attribute | Effect |
+|-----------|--------|
+| `data-mv` | fade + rise (default); variants: `fade`, `left`, `right`, `scale`, `blur`, `words` |
+| `data-mv-delay="320"` | delay in ms for that element |
+| `data-mv-word-delay="55"` | per-word delay for `data-mv="words"` |
+| `data-mv-group="90"` | staggers the `data-mv` children by 90 ms |
+| `data-mv-parallax="40"` | scroll-linked translate (px factor) |
+| `data-mv-tilt="4"` | 3D tilt (max degrees) on pointer move |
+| `data-mv-magnet="8"` | magnetic hover for buttons |
+| `data-mv-count="3.5"` | animated counter; `data-mv-decimals="1"` for decimals |
+| `data-mv-count-group` | runs counters inside the element when it enters view |
+| `data-mv-draw` | draws SVG strokes inside the element |
+| `data-mv-progress` | element that becomes the scroll progress bar |
+
+Hidden states are scoped to `html.mv-js`, which the inline `<head>` snippet adds
+(and removes after 3 s if the module never boots), so content stays visible
+without JavaScript. Everything is skipped under
+`prefers-reduced-motion: reduce`.
+
+---
+
 ## Commands
 
 ```bash

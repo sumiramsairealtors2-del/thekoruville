@@ -30,6 +30,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/apple-touch-icon.png') }}" />
 <link rel="manifest" href="{{ asset('assets/site.webmanifest') }}" />
 
+{{-- Motion layer opt-in: hidden states only apply once JS is alive --}}
+<script>
+  document.documentElement.classList.add('mv-js');
+  window.setTimeout(function () {
+    if (!window.__kvMotion) document.documentElement.classList.remove('mv-js');
+  }, 3000);
+</script>
+
 {{-- Redesign design system (Vite) --}}
 @vite(['resources/css/kv.css', 'resources/js/kv.js'])
 

@@ -392,7 +392,7 @@ body.kv.is-locked{overflow:hidden}
   display:block;font-family:var(--kv-font-display);font-weight:500;
   font-size:clamp(30px,2.7vw,36px);line-height:1;letter-spacing:-.02em;
 }
-.kv-stat span{display:block;margin-top:8px;font-size:11px;letter-spacing:.06em;color:rgba(235,228,204,.72)}
+.kv-stat > span{display:block;margin-top:8px;font-size:11px;letter-spacing:.06em;color:rgba(235,228,204,.72)}
 .kv-about__copy{
   text-align:right;font-size:14px;line-height:1.62;letter-spacing:.015em;
   text-transform:uppercase;color:#3c4531;max-width:560px;margin-left:auto;
@@ -825,18 +825,46 @@ body.kv.is-locked{overflow:hidden}
 /* ------------------------------------------------------------ rail (CTA) */
 .kv-rail{
   position:fixed;right:0;top:50%;transform:translateY(-50%);
+  transform-origin:100% 50%;
   z-index:70;width:62px;height:319px;
   border:0;padding:0;cursor:pointer;
   background:transparent;
   display:block;
+  transition:transform .5s var(--kv-ease-out);
 }
-.kv-rail__shape{position:absolute;inset:0;width:100%;height:100%;fill:#3d4c1d}
+.kv-rail__shape{
+  position:absolute;inset:0;width:100%;height:100%;fill:#3d4c1d;
+  transition:fill .4s var(--kv-ease-out),filter .5s var(--kv-ease-out);
+}
 .kv-rail span{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(90deg);
   font-size:10.5px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
   color:var(--kv-cream);white-space:nowrap;
+  transition:letter-spacing .5s var(--kv-ease-out),color .4s var(--kv-ease-out);
 }
-.kv-rail:hover .kv-rail__shape{fill:#2f3c16}
+/* hover: the tab grows out of the screen edge, warms up and glows.
+   NOTE: never translate this element — it sits flush at right:0, so any
+   translateX leaves a strip of page showing and the tab looks detached. */
+.kv-rail:hover,
+.kv-rail:focus-visible{
+  transform:translateY(-50%) scale(1.07);
+}
+.kv-rail:hover .kv-rail__shape,
+.kv-rail:focus-visible .kv-rail__shape{
+  fill:#2f3c16;
+  filter:drop-shadow(0 0 10px rgba(212,187,98,.55)) drop-shadow(0 0 26px rgba(212,187,98,.3));
+}
+.kv-rail:hover span,
+.kv-rail:focus-visible span{
+  letter-spacing:.44em;
+  color:#f7f0db;
+}
+.kv-rail:active{transform:translateY(-50%) scale(1.02)}
+@media (prefers-reduced-motion:reduce){
+  .kv-rail,.kv-rail__shape,.kv-rail span{transition:none}
+  .kv-rail:hover,.kv-rail:focus-visible,.kv-rail:active{transform:translateY(-50%)}
+}
+
 
 /* ---------------------------------------------------------------- modals */
 .kv-modal{
@@ -1462,4 +1490,120 @@ body.kv.is-locked{overflow:hidden}
   .kv-art-pager__link--next{justify-items:start;text-align:left}
   .kv-art-more__head{align-items:flex-start}
   .kv-art-more__head .kv-btn{display:none}
+}
+
+/* ==========================================================================
+   MOTION LAYER (v2) — framer-motion-style choreography, no dependencies.
+   Opt-in per element with data-mv* attributes. Hidden states live under
+   .mv-js (added inline in <head>) so content never disappears without JS.
+   ========================================================================== */
+:root{
+  --kv-ease-out:cubic-bezier(.16,1,.3,1);
+  --kv-ease-spring:cubic-bezier(.34,1.4,.64,1);
+}
+
+/* -- scroll reveal (spring-ish easing, staggered by --mv-delay) ------------- */
+.mv-js [data-mv]{
+  opacity:0;
+  transform:translate3d(0,42px,0);
+  transition:
+    opacity .8s var(--kv-ease-out),
+    transform .8s var(--kv-ease-out),
+    filter .8s var(--kv-ease-out);
+  transition-delay:var(--mv-delay,0ms);
+}
+.mv-js [data-mv]:not(.is-in){will-change:opacity,transform}
+.mv-js [data-mv].is-in{opacity:1;transform:none;filter:none}
+
+.mv-js [data-mv="fade"]{transform:none}
+.mv-js [data-mv="left"]{transform:translate3d(-48px,0,0)}
+.mv-js [data-mv="right"]{transform:translate3d(48px,0,0)}
+.mv-js [data-mv="scale"]{transform:scale(.94)}
+.mv-js [data-mv="blur"]{transform:translate3d(0,26px,0);filter:blur(8px)}
+.mv-js [data-mv="words"]{opacity:1;transform:none}
+
+/* -- word-by-word heading reveal (Aceternity "text generate") --------------- */
+.mv-word{
+  display:inline-block;overflow:hidden;vertical-align:top;
+  padding-bottom:.12em;margin-bottom:-.12em;
+}
+.mv-word>span{
+  display:inline-block;opacity:0;
+  transform:translate3d(0,110%,0) rotate(4deg);
+  transition:transform .95s var(--kv-ease-out),opacity .75s var(--kv-ease-out);
+  transition-delay:var(--mv-delay,0ms);
+  will-change:transform,opacity;
+}
+.mv-js [data-mv="words"].is-in .mv-word>span{opacity:1;transform:none}
+
+/* -- 3D tilt on cards ------------------------------------------------------ */
+.mv-js [data-mv][data-mv-tilt].is-in{
+  transform:perspective(1100px) rotateX(var(--mv-rx,0deg)) rotateY(var(--mv-ry,0deg)) scale(1.004);
+  transition:transform .6s var(--kv-ease-out),opacity .8s var(--kv-ease-out);
+}
+.mv-js [data-mv][data-mv-tilt].is-tilting{transition:transform .12s linear}
+
+/* -- magnetic buttons ------------------------------------------------------ */
+.mv-magnet{
+  transform:translate3d(var(--mv-mx,0px),var(--mv-my,0px),0);
+  transition:transform .4s var(--kv-ease-spring);
+}
+
+/* -- scroll-linked parallax layers ----------------------------------------- */
+.mv-js .kv-hero__slide{transform:translate3d(0,var(--mv-p,0px),0) scale(1.06);will-change:transform}
+.mv-js .kv-split__media img{transform:translate3d(0,var(--mv-p,0px),0) scale(1.14);will-change:transform}
+.mv-js .kv-gallery__media img{transform:translate3d(0,var(--mv-p,0px),0) scale(1.1);will-change:transform}
+.mv-js .kv-unlock__bg img{transform:translate3d(0,var(--mv-p,0px),0) scale(1.16)}
+.kv-hero__copy{will-change:transform,opacity}
+
+/* -- reading progress bar -------------------------------------------------- */
+.mv-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:300;pointer-events:none}
+.mv-progress span{
+  display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;
+  background:linear-gradient(90deg,var(--kv-gold),var(--kv-gold-soft));
+  box-shadow:0 0 14px rgba(212,187,98,.55);
+}
+
+/* -- rotating border beam on the unlock cards ------------------------------ */
+@property --mv-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+.mv-js .kv-unlock::after{
+  content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:1px;
+  pointer-events:none;
+  background:conic-gradient(from var(--mv-angle),transparent 0deg 255deg,
+    rgba(212,187,98,.85) 300deg,transparent 340deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  animation:mv-beam 7s linear infinite;
+}
+@keyframes mv-beam{to{--mv-angle:360deg}}
+
+/* -- micro-interactions ---------------------------------------------------- */
+.kv-faq__a p{
+  opacity:0;transform:translateY(-6px);
+  transition:opacity .35s var(--kv-ease-out),transform .35s var(--kv-ease-out);
+}
+.kv-faq__item.is-open .kv-faq__a p{opacity:1;transform:none;transition-delay:.08s}
+
+.kv-chip{
+  transition:transform .35s var(--kv-ease-out),border-color .35s var(--kv-ease-out),
+             color .35s var(--kv-ease-out),background .35s var(--kv-ease-out);
+}
+.kv-chip:hover{
+  transform:translateY(-3px);border-color:#a89d78;color:#39422c;
+  background:rgba(49,57,34,.04);
+}
+.kv-post{transition:transform .5s var(--kv-ease-out),box-shadow .5s var(--kv-ease-out)}
+.kv-post:hover{transform:translateY(-4px)}
+
+/* -- reduced motion: show everything, animate nothing ---------------------- */
+@media (prefers-reduced-motion:reduce){
+  .mv-js [data-mv],
+  .mv-js [data-mv] .mv-word>span{
+    opacity:1!important;transform:none!important;filter:none!important;
+    clip-path:none!important;transition:none!important;
+  }
+  .mv-js .kv-unlock::after{animation:none}
+  .kv-hero__copy{transform:none!important;opacity:1!important}
 }
