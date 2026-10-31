@@ -24,6 +24,18 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/amenities', function () {
+    return view('amenities');
+})->name('amenities');
+
+Route::get('/pricing', function () {
+    return view('pricing');
+})->name('pricing');
+
 Route::get('/privacy-policy', function () {
     return view('pp');
 });
@@ -126,6 +138,38 @@ Route::get('/sitemap.xml', function () {
     $xml .= "        <priority>0.8000</priority>\n";
 
     $xml .= "    </url>\n";
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ABOUT / AMENITIES / PRICING
+    |--------------------------------------------------------------------------
+    */
+
+    foreach (['/about' => '0.8000', '/amenities' => '0.8000', '/pricing' => '0.8000'] as $path => $priority) {
+
+        $xml .= "    <url>\n";
+
+        $xml .= '        <loc>'
+        . htmlspecialchars(
+            url($path),
+            ENT_XML1,
+            'UTF-8'
+        )
+        . "</loc>\n";
+
+        $xml .= '        <lastmod>'
+        . now()->toAtomString()
+        . "</lastmod>\n";
+
+        $xml .= "        <changefreq>monthly</changefreq>\n";
+
+        $xml .= '        <priority>'
+        . $priority
+        . "</priority>\n";
+
+        $xml .= "    </url>\n";
+    }
 
 
     /*

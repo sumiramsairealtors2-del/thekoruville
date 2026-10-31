@@ -82,20 +82,26 @@
   <div class="kv-hero__frame" data-mv="scale">
 
     <div class="kv-hero__slide is-active" aria-hidden="false" data-mv-parallax="-46">
-      <img src="{{ asset('assets/img/kv/hero-1920.webp') }}"
-           srcset="{{ asset('assets/img/kv/hero-800.webp') }} 800w, {{ asset('assets/img/kv/hero-1280.webp') }} 1280w, {{ asset('assets/img/kv/hero-1920.webp') }} 1920w"
-           sizes="100vw" width="1282" height="654"
-           alt="The Koru Ville resort-themed township at Kilawali, Uttarakhand" fetchpriority="high">
+      <picture>
+        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-01-mobile-900x1600.webp') }}">
+        <img src="{{ asset('assets/img/slots/hero-01-desktop-1920x1080.webp') }}"
+             width="1920" height="1080"
+             alt="The Koru Ville resort-themed township at Kilawali, Uttarakhand" fetchpriority="high">
+      </picture>
     </div>
     <div class="kv-hero__slide" aria-hidden="true" data-mv-parallax="-46">
-      <img src="{{ asset('assets/img/kv/about-1000.webp') }}"
-           srcset="{{ asset('assets/img/kv/about-480.webp') }} 480w, {{ asset('assets/img/kv/about-760.webp') }} 760w, {{ asset('assets/img/kv/about-1000.webp') }} 1000w"
-           sizes="100vw" width="614" height="768" alt="The Koru Ville at dusk" loading="lazy">
+      <picture>
+        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-02-mobile-900x1600.webp') }}">
+        <img src="{{ asset('assets/img/slots/hero-02-desktop-1920x1080.webp') }}"
+             width="1920" height="1080" alt="The Koru Ville at dusk" loading="lazy">
+      </picture>
     </div>
     <div class="kv-hero__slide" aria-hidden="true" data-mv-parallax="-46">
-      <img src="{{ asset('assets/img/kv/why-1040.webp') }}"
-           srcset="{{ asset('assets/img/kv/why-520.webp') }} 520w, {{ asset('assets/img/kv/why-800.webp') }} 800w, {{ asset('assets/img/kv/why-1040.webp') }} 1040w"
-           sizes="100vw" width="1054" height="1054" alt="The Koru Ville clubhouse and landscaped grounds" loading="lazy">
+      <picture>
+        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-03-mobile-900x1600.webp') }}">
+        <img src="{{ asset('assets/img/slots/hero-03-desktop-1920x1080.webp') }}"
+             width="1920" height="1080" alt="The Koru Ville clubhouse and landscaped grounds" loading="lazy">
+      </picture>
     </div>
 
     <div class="kv-hero__copy">
@@ -157,10 +163,12 @@
 <section class="kv-panel kv-panel--olive" id="why-this-location">
   <div class="kv-split">
     <div class="kv-split__media" data-mv="scale">
-      <img src="{{ asset('assets/img/kv/why-800.webp') }}"
-           srcset="{{ asset('assets/img/kv/why-520.webp') }} 520w, {{ asset('assets/img/kv/why-800.webp') }} 800w, {{ asset('assets/img/kv/why-1040.webp') }} 1040w"
-           sizes="(max-width:1024px) 100vw, 55vw" width="1054" height="1054"
-           alt="Landscaped grounds at The Koru Ville, Kilawali" loading="lazy" data-mv-parallax="52">
+      <picture>
+        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/location-mobile-900x765.webp') }}">
+        <img src="{{ asset('assets/img/slots/location-desktop-1400x1020.webp') }}"
+             width="1400" height="1020"
+             alt="Landscaped grounds at The Koru Ville, Kilawali" loading="lazy" data-mv-parallax="52">
+      </picture>
     </div>
 
     <div class="kv-split__body" data-mv-group="80">
@@ -191,10 +199,12 @@
       <article class="kv-plot" data-mv="up" data-mv-tilt="4">
         <div class="kv-plot__media">
           <span class="kv-plot__badge">Starting size</span>
-          <img src="{{ asset('assets/img/kv/plot-1-860.webp') }}"
-               srcset="{{ asset('assets/img/kv/plot-1-420.webp') }} 420w, {{ asset('assets/img/kv/plot-1-640.webp') }} 640w, {{ asset('assets/img/kv/plot-1-860.webp') }} 860w"
-               sizes="(max-width:720px) 90vw, 33vw" width="574" height="766"
-               alt="111 sq.yd residential plot at The Koru Ville" loading="lazy">
+          <picture>
+            <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-01-mobile-760x836.webp') }}">
+            <img src="{{ asset('assets/img/slots/plot-01-desktop-900x1013.webp') }}"
+                 width="900" height="1013"
+                 alt="111 sq.yd residential plot at The Koru Ville" loading="lazy">
+          </picture>
         </div>
         <div class="kv-plot__body">
           <svg class="kv-plot__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
@@ -215,10 +225,12 @@
       <article class="kv-plot" data-mv="up" data-mv-tilt="4">
         <div class="kv-plot__media">
           <span class="kv-plot__badge">Most popular</span>
-          <img src="{{ asset('assets/img/kv/plot-2-860.webp') }}"
-               srcset="{{ asset('assets/img/kv/plot-2-420.webp') }} 420w, {{ asset('assets/img/kv/plot-2-640.webp') }} 640w, {{ asset('assets/img/kv/plot-2-860.webp') }} 860w"
-               sizes="(max-width:720px) 90vw, 33vw" width="857" height="1143"
-               alt="125 sq.yd residential plot at The Koru Ville" loading="lazy">
+          <picture>
+            <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-02-mobile-760x836.webp') }}">
+            <img src="{{ asset('assets/img/slots/plot-02-desktop-900x1013.webp') }}"
+                 width="900" height="1013"
+                 alt="125 sq.yd residential plot at The Koru Ville" loading="lazy">
+          </picture>
         </div>
         <div class="kv-plot__body">
           <svg class="kv-plot__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
@@ -239,10 +251,12 @@
       <article class="kv-plot" data-mv="up" data-mv-tilt="4">
         <div class="kv-plot__media">
           <span class="kv-plot__badge">Largest layout</span>
-          <img src="{{ asset('assets/img/kv/plot-3-860.webp') }}"
-               srcset="{{ asset('assets/img/kv/plot-3-420.webp') }} 420w, {{ asset('assets/img/kv/plot-3-640.webp') }} 640w, {{ asset('assets/img/kv/plot-3-860.webp') }} 860w"
-               sizes="(max-width:720px) 90vw, 33vw" width="576" height="768"
-               alt="139 sq.yd residential plot at The Koru Ville" loading="lazy">
+          <picture>
+            <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-03-mobile-760x836.webp') }}">
+            <img src="{{ asset('assets/img/slots/plot-03-desktop-900x1013.webp') }}"
+                 width="900" height="1013"
+                 alt="139 sq.yd residential plot at The Koru Ville" loading="lazy">
+          </picture>
         </div>
         <div class="kv-plot__body">
           <svg class="kv-plot__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
@@ -267,10 +281,12 @@
 {{-- ================================================== GALLERY ================================================== --}}
 <section class="kv-gallery" id="gallery">
   <div class="kv-gallery__media" data-mv="scale">
-    <img src="{{ asset('assets/img/kv/gallery-tiger-1440.webp') }}"
-         srcset="{{ asset('assets/img/kv/gallery-tiger-900.webp') }} 900w, {{ asset('assets/img/kv/gallery-tiger-1440.webp') }} 1440w"
-         sizes="100vw" width="941" height="400"
-         alt="Wildlife near Jim Corbett National Park" loading="lazy" data-mv-parallax="34">
+    <picture>
+      <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/gallery-mobile-900x1125.webp') }}">
+      <img src="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
+           width="1920" height="820"
+           alt="The Koru Ville grounds at Kilawali" loading="lazy" data-mv-parallax="34">
+    </picture>
 
     <div class="kv-gallery__label" aria-hidden="true" data-mv="fade" data-mv-delay="260">
       <svg class="kv-gallery__shape" viewBox="0 0 260 74" preserveAspectRatio="none" focusable="false"><path d="M0 0C20 2 38 14 45 44C45 62 57 74 75 74H185C203 74 215 62 215 44C222 14 240 2 260 0Z"/></svg>
@@ -278,8 +294,8 @@
     </div>
 
     <button type="button" class="kv-gallery__play"
-            data-lightbox="{{ asset('assets/img/kv/gallery-1440.webp') }}"
-            data-alt="The Koru Ville grounds at dusk"
+            data-lightbox="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
+            data-alt="The Koru Ville grounds at Kilawali"
             aria-label="Open gallery">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M20 15v5h-5"/></svg>
     </button>

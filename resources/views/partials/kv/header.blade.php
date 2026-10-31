@@ -1,10 +1,10 @@
 {{-- Header: olive crown + centred logo plaque, links float over the hero --}}
-<header class="kv-header" id="kvHeader">
+<header class="kv-header{{ !empty($solid) ? ' kv-header--solid' : '' }}" id="kvHeader">
 
 
   <div class="kv-crown" aria-hidden="false">
     <svg class="kv-crown__shape" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <use href="#kv-crown-shape"/>
+      <use href="#kv-crown-header"/>
     </svg>
 
     <a class="kv-crown__tab" href="{{ url('/') }}" aria-label="The Koru Ville — home">
@@ -14,14 +14,14 @@
 
   <nav class="kv-nav kv-nav--left" aria-label="Primary">
     <a href="{{ url('/') }}" @if(request()->is('/')) aria-current="page" @endif>Home</a>
-    <a href="{{ url('/') }}#amenities">Amenities</a>
-    <a href="{{ url('/') }}#layout-price">Layout &amp; Price</a>
+    <a href="{{ url('/amenities') }}" @if(request()->is('amenities')) aria-current="page" @endif>Amenities</a>
+    <a href="{{ url('/pricing') }}" @if(request()->is('pricing')) aria-current="page" @endif>Layout &amp; Price</a>
     <a href="{{ url('/blog') }}">Blog</a>
   </nav>
 
   <nav class="kv-nav kv-nav--right" aria-label="Secondary">
     <a href="{{ url('/') }}#contact">Contact</a>
-    <a href="{{ url('/') }}#about">About</a>
+    <a href="{{ url('/about') }}" @if(request()->is('about')) aria-current="page" @endif>About</a>
     <a class="kv-phone-pill" href="tel:+918377000300">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.3Z"/></svg>
       +91 – 8377 000 300

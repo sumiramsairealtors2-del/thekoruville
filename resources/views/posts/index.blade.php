@@ -2,6 +2,7 @@
 
 @section('title', 'Blog | Residential Plots News & Guides – The Koru Ville')
 @section('description', 'Read guides and updates on residential plots near Jim Corbett, Kilawali and Kashipur — insights from the team at The Koru Ville on land, location and living.')
+@section('hero', '1')
 
 @section('head')
 <script type="application/ld+json">
@@ -29,75 +30,17 @@
 
 @section('content')
 
-<!-- <section class="kv-pagehead " id="blog" style="margin-top: 28px; border-radius: 18px 18px 0 0;">
-  <div class="kv-shell">
-    <span class="kv-eyebrow">The Koru Ville · Journal</span>
-    <h1>The Koru Ville Blog</h1>
-    <p class="kv-lede">Guides, location intelligence and honest answers for anyone evaluating residential plots near Jim Corbett —
-       written by the team behind The Koru Ville in Kilawali, Uttarakhand.</p>
-    <div class="kv-pagehead__meta">
-      <span>{{ $posts->total() }} {{ Str::plural('article', $posts->total()) }}</span>
-      <span>Land · Location · Living</span>
-    </div>
-  </div>
-</section>  -->
-
-
-<section
-    class="kv-pagehead"
-    id="blog"
-    style="
-        position: relative;
-        isolation: isolate;
-        margin-top: 29px;
-        border-radius: 18px 18px 0 0;
-        overflow: hidden;
-        min-height: 450px;
-        padding: 90px 0;
-        display: flex;
-        align-items: center;
-        background: transparent;
-        background-image: url('{{ asset('assets/img/Sunset Villa Overlooking a Tropical Valley.png') }}');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        box-shadow: none;
-        filter: none;
-    ">
-
-    <!-- Background Overlay Layer -->
-    <div
-        style="
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: inherit;
-            pointer-events: none;
-        ">
-    </div>
-
-    <div class="kv-shell">
-        <span class="kv-eyebrow" style="color:#fff;">The Koru Ville · Journal</span>
-
-        <h1 style="color:#fff;">The Koru Ville Blog</h1>
-
-        <p class="kv-lede" style="color:#fff;">
-            Guides, location intelligence and honest answers for anyone
-            evaluating residential plots near Jim Corbett —
-            written by the team behind The Koru Ville in Kilawali, Uttarakhand.
-        </p>
-
-        <div class="kv-pagehead__meta" style="color:#fff;">
-            <span>
-                {{ $posts->total() }}
-                {{ Str::plural('article', $posts->total()) }}
-            </span>
-
-            <span>Land · Location · Living</span>
-        </div>
-    </div>
-</section>
+@include('partials.kv.pagehero', [
+  'id' => 'blog',
+  'eyebrow' => 'The Koru Ville · Journal',
+  'title' => 'The Koru Ville Blog',
+  'lede' => 'Guides, location intelligence and honest answers for anyone evaluating residential plots near Jim Corbett — written by the team behind The Koru Ville in Kilawali, Uttarakhand.',
+  'image' => 'assets/img/Sunset Villa Overlooking a Tropical Valley.png',
+  'imageWidth' => 1920,
+  'imageHeight' => 1080,
+  'alt' => 'Sunset villa overlooking a tropical valley near Jim Corbett',
+  'meta' => [$posts->total().' '.Str::plural('article', $posts->total()), 'Land · Location · Living'],
+])
 
 
 

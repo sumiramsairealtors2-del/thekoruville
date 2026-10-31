@@ -29,11 +29,11 @@
       <div>
         <h4>Explore</h4>
         <ul>
-          <li><a href="{{ url('/') }}#about">About</a></li>
+          <li><a href="{{ url('/about') }}">About</a></li>
           <li><a href="{{ url('/blog') }}">Blogs</a></li>
-          <li><a href="{{ url('/') }}#amenities">Amenities</a></li>
+          <li><a href="{{ url('/amenities') }}">Amenities</a></li>
           <li><a href="{{ url('/') }}#why-this-location">Why This Location</a></li>
-          <li><a href="{{ url('/') }}#layout-price">Layout &amp; Price</a></li>
+          <li><a href="{{ url('/pricing') }}">Layout &amp; Price</a></li>
         </ul>
       </div>
 

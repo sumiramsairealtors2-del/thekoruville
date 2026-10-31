@@ -7,9 +7,9 @@
 
   <nav aria-label="Mobile">
     <a href="{{ url('/') }}">Home <span>01</span></a>
-    <a href="{{ url('/') }}#about">About <span>02</span></a>
-    <a href="{{ url('/') }}#amenities">Amenities <span>03</span></a>
-    <a href="{{ url('/') }}#layout-price">Layout &amp; Price <span>04</span></a>
+    <a href="{{ url('/about') }}">About <span>02</span></a>
+    <a href="{{ url('/amenities') }}">Amenities <span>03</span></a>
+    <a href="{{ url('/pricing') }}">Layout &amp; Price <span>04</span></a>
     <a href="{{ url('/') }}#why-this-location">Why This Location <span>05</span></a>
     <a href="{{ url('/') }}#map">Map <span>06</span></a>
     <a href="{{ url('/blog') }}">Blog <span>07</span></a>
