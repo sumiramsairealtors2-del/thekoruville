@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: thekoruville
+    runtime: docker
+    plan: free
+    healthCheckPath: /up
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_NAME
+        value: The Koruville
+      # Render auto-generates a Laravel-compatible key: base64:xxxx
+      - key: APP_KEY
+        generateValue: true
+      # APP_URL is filled in automatically from RENDER_EXTERNAL_URL at startup,
+      # so we don't need to hardcode it
+      - key: APP_URL
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: info
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: APP_LOCALE
+        value: en
