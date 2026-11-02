@@ -44,7 +44,7 @@
 
 
 
-<section class="kv-subsection" style="margin-top: 24px; ">
+<section class="kv-subsection">
   <div class="kv-shell">
     <div class="kv-section-head" >
       <span class="kv-eyebrow">Latest Articles</span>

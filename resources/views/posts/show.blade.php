@@ -3,9 +3,37 @@
 @php
   $published = $post->created_at ?? $post->updated_at;
   $excerpt = $post->meta_description ?: Str::limit(strip_tags($post->content ?? ''), 190);
-  $heroImage = $post->image
-      ? asset('storage/'.$post->image)
-      : asset('assets/img/kv/gallery-1440.webp');
+  /*
+    Blog cover dummies (fallback when a post has no usable image) — replace these
+    three files with real uploads at the SAME dimensions:
+      desktop  2000x1000  (2:1)   ->  public/assets/img/kv/art-hero/hero-desktop-2000x1000.jpg
+      tablet   1600x1200  (4:3)   ->  public/assets/img/kv/art-hero/hero-tablet-1600x1200.jpg
+      mobile   1080x1200  (9:10)  ->  public/assets/img/kv/art-hero/hero-mobile-1080x1200.jpg
+
+    If the post HAS an image, we read its real pixel dimensions and set
+    --kv-hero-ratio on the hero frame, so the frame matches the image exactly:
+    no cropping, no blank bars — any upload dimension renders correctly.
+  */
+  $heroImageDesktop = asset('assets/img/kv/art-hero/hero-desktop-2000x1000.jpg');
+  $heroImageTablet  = asset('assets/img/kv/art-hero/hero-tablet-1600x1200.jpg');
+  $heroImageMobile  = asset('assets/img/kv/art-hero/hero-mobile-1080x1200.jpg');
+  $heroImage = $heroImageDesktop;
+  $heroRatio = null; // only set when a real uploaded image is used
+  $heroImgW = null;
+  $heroImgH = null;
+  if (!empty($post->image)) {
+      $heroPath = public_path('storage/'.$post->image);
+      if (is_file($heroPath)) {
+          $dims = @getimagesize($heroPath);
+          if ($dims) {
+              $heroImgW = $dims[0];
+              $heroImgH = $dims[1];
+              $heroRatio = round($heroImgW / $heroImgH, 4);
+              $heroImageDesktop = $heroImageTablet = $heroImageMobile = asset('storage/'.$post->image);
+              $heroImage = $heroImageDesktop;
+          }
+      }
+  }
   $pageUrl = url()->current();
   $canonical = $post->canonical_url ?: $pageUrl;
   $shareUrl = rawurlencode($pageUrl);
@@ -68,13 +96,17 @@
 
   {{-- ============================================================== cover --}}
   <section class="kv-art-hero" aria-label="Article cover">
-    <div class="kv-art-hero__frame">
+    <div class="kv-art-hero__frame"@if($heroRatio) style="--kv-hero-ratio: {{ $heroRatio }}"@endif>
       <div class="kv-art-hero__media">
-        <img src="{{ $heroImage }}" alt="{{ $post->title }}" width="1600" height="900" fetchpriority="high">
+        <picture>
+          <source media="(max-width:720px)" srcset="{{ $heroImageMobile }}"@if($heroImgW) width="{{ $heroImgW }}" height="{{ $heroImgH }}"@endif>
+          <source media="(min-width:721px) and (max-width:1100px)" srcset="{{ $heroImageTablet }}"@if($heroImgW) width="{{ $heroImgW }}" height="{{ $heroImgH }}"@endif>
+          <img src="{{ $heroImageDesktop }}" alt="{{ $post->title }}"@if($heroImgW) width="{{ $heroImgW }}" height="{{ $heroImgH }}"@else width="2000" height="1000"@endif fetchpriority="high">
+        </picture>
       </div>
       <div class="kv-art-hero__shade" aria-hidden="true"></div>
 
-      <div class="kv-art-hero__content">
+      {{-- <div class="kv-art-hero__content">
         <div class="kv-art-hero__top">
           <span class="kv-eyebrow">The Koru Ville · Journal</span>
           <a class="kv-art-back" href="{{ url('/blog') }}">
@@ -82,7 +114,7 @@
             All articles
           </a>
         </div>
-      </div>
+      </div> --}}
 
     </div>
   </section>
@@ -119,6 +151,26 @@
               </div> --}}
             </dl>
           </div>
+
+          {{-- mobile-only inline copy of "In this article" (sidebar TOC is desktop/tablet) --}}
+          @if(count($toc))
+            <details class="kv-toc kv-toc--inline" data-kv-toc>
+              <summary>
+                In this article
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <ol>
+                @foreach($toc as $index => $item)
+                  <li>
+                    <a href="#{{ $item['id'] }}" data-kv-toc-link>
+                      <span>{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                      {{ $item['text'] }}
+                    </a>
+                  </li>
+                @endforeach
+              </ol>
+            </details>
+          @endif
 
           <div class="kv-art-hero__main">
             <h1 class="kv-art-title">{{ $post->title }}</h1>

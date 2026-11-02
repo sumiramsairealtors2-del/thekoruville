@@ -484,17 +484,16 @@ import './kv-motion.js';
     window.addEventListener('resize', updateReadbar);
   }
 
-  var toc = $('[data-kv-toc]');
-  var tocLinks = $$('[data-kv-toc-link]');
-
-  if (toc) {
+  $$('[data-kv-toc]').forEach(function (toc) {
     if (window.matchMedia('(max-width: 1100px)').matches) toc.removeAttribute('open');
 
     toc.addEventListener('click', function (e) {
       var link = e.target.closest('[data-kv-toc-link]');
       if (link && window.matchMedia('(max-width: 1100px)').matches) toc.removeAttribute('open');
     });
-  }
+  });
+
+  var tocLinks = $$('[data-kv-toc-link]');
 
   if (tocLinks.length && 'IntersectionObserver' in window) {
     var headings = tocLinks
