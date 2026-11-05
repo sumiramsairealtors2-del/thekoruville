@@ -414,7 +414,7 @@ body.kv.is-locked{overflow:hidden}
   position:relative;background:var(--kv-olive);color:var(--kv-cream);
   padding:clamp(40px,4.4vw,66px) clamp(30px,4vw,64px);
   display:flex;flex-direction:column;justify-content:center;
-  border-radius:92px 0 0 0;z-index:2;text-align:center;
+  z-index:2;text-align:center;
 }
 .kv-split__body::before{display:none}
 .kv-split__body .kv-eyebrow,.kv-split__body .kv-display{text-align:center}
@@ -434,6 +434,263 @@ body.kv.is-locked{overflow:hidden}
   display:grid;place-items:center;z-index:3;
 }
 .kv-split__arrow svg{width:15px;height:15px}
+
+/* ------------------------------------------------------ location crown tab */
+/* Part of .kv-split__body: a 270°-rotated spine tab on the body's left edge
+   (absolute on desktop; resting inside its slot when the layout stacks).
+   Clicking sweeps a green panel in from right to left across the whole split
+   with the full heading, paragraph and detail list. No JS positioning — the
+   tab/panel are pure CSS (inset/percent based), so resize stays fluid free. */
+.kv-loc-crown__slot{display:grid;place-items:center;height:clamp(76px,8vw,96px)}
+.kv-split__body .kv-loc-crown__btn{
+  position:absolute;z-index:5;left:-174px;top:50%;
+  width:280px;height:68px;
+  translate:0 -50%;rotate:90deg;
+  border:0;padding:0;background:none;cursor:pointer;display:block;font:inherit;
+  transition:opacity .3s var(--kv-ease);}
+.kv-loc-crown__btn:focus-visible{outline:2px solid var(--kv-gold-soft);outline-offset:3px;border-radius:10px}
+.kv-loc-crown__shape{position:absolute;inset:0;width:100%;height:100%;fill:var(--kv-olive);filter:drop-shadow(0 4px 2px rgba(20,26,16,.28))}
+.kv-loc-crown__label{
+  position:absolute;left:15%;right:15%;top:16.7%;bottom:0;
+  display:grid;place-items:center;padding-top:clamp(6px,.75vw,11px);
+  text-align:center;font-family:var(--kv-font-display);font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--kv-cream);
+  font-size:clamp(12px,1.02vw,14.5px);line-height:1.4;
+}
+/* filled arrow replaces the text label on the tab; its own 180° + the button's
+   rotate leaves it pointing toward the content (right on desktop, down on mobile) */
+.kv-loc-crown__arrow{
+  display:block;position:absolute;left:50%;top:58%;
+  width:clamp(30px,2.8vw,42px);height:auto;aspect-ratio:1;
+  translate:-50% -50%;rotate:180deg;
+  color:var(--kv-cream);fill:currentColor;
+  transition:rotate .45s var(--kv-ease);
+}
+.kv-loc-crown__label{display:none}
+.kv-split.is-loc-open .kv-loc-crown__arrow{rotate:0deg}
+/* the tab never hides: it rides above the open panel as its toggle. The ride
+   uses sampled @keyframes (not a transition): the tab HOLDS still while the
+   wave sweeps the body, is then glued to the wave's easing exactly — every
+   frame places the tab on the wave's front — and parks flush on the stopped
+   face (the wave stops at 90% coverage). Sample points map the wave's own
+   bezier; close mirrors it until the retreat passes the seam */
+@keyframes kv-loc-ride-d {
+  0%,21.4% {left:-174px}
+  24.3% {left:calc(-174px + .125 * var(--kv-loc-stop-x,0px))}
+  27.9% {left:calc(-174px + .25 * var(--kv-loc-stop-x,0px))}
+  32.1% {left:calc(-174px + .375 * var(--kv-loc-stop-x,0px))}
+  37%   {left:calc(-174px + .5 * var(--kv-loc-stop-x,0px))}
+  43.1% {left:calc(-174px + .625 * var(--kv-loc-stop-x,0px))}
+  51.2% {left:calc(-174px + .75 * var(--kv-loc-stop-x,0px))}
+  63.1% {left:calc(-174px + .875 * var(--kv-loc-stop-x,0px))}
+  100%  {left:calc(-174px + var(--kv-loc-stop-x,0px))}
+}
+@keyframes kv-loc-back-d {
+  0%      {left:calc(-174px + var(--kv-loc-stop-x,0px))}
+  2.26%   {left:calc(-174px + .9375 * var(--kv-loc-stop-x,0px))}
+  4.53%   {left:calc(-174px + .875 * var(--kv-loc-stop-x,0px))}
+  6.84%   {left:calc(-174px + .8125 * var(--kv-loc-stop-x,0px))}
+  9.21%   {left:calc(-174px + .75 * var(--kv-loc-stop-x,0px))}
+  11.66%  {left:calc(-174px + .6875 * var(--kv-loc-stop-x,0px))}
+  14.24%  {left:calc(-174px + .625 * var(--kv-loc-stop-x,0px))}
+  16.98%  {left:calc(-174px + .5625 * var(--kv-loc-stop-x,0px))}
+  19.94%  {left:calc(-174px + .5 * var(--kv-loc-stop-x,0px))}
+  23.2%   {left:calc(-174px + .4375 * var(--kv-loc-stop-x,0px))}
+  26.86%  {left:calc(-174px + .375 * var(--kv-loc-stop-x,0px))}
+  31.07%  {left:calc(-174px + .3125 * var(--kv-loc-stop-x,0px))}
+  36.05%  {left:calc(-174px + .25 * var(--kv-loc-stop-x,0px))}
+  42.21%  {left:calc(-174px + .1875 * var(--kv-loc-stop-x,0px))}
+  50.32%  {left:calc(-174px + .125 * var(--kv-loc-stop-x,0px))}
+  62.39%  {left:calc(-174px + .0625 * var(--kv-loc-stop-x,0px))}
+  100%    {left:-174px}
+}
+.kv-split.is-loc-open .kv-loc-crown__btn{
+  z-index:7;pointer-events:auto;
+  /* parked flush on the wave's stopped face (--kv-loc-stop-x is JS-measured:
+     the 10% stop edge left of the seam, exact at any viewport incl. the gap) */
+  left:calc(var(--kv-loc-stop-x,-100%) - 174px);
+  animation:kv-loc-ride-d .7s linear .1s both;
+}
+.kv-split.kv-loc-closing .kv-loc-crown__btn{
+  animation:kv-loc-back-d .7s linear .1s both;
+}
+
+/* take-over face — sweeps in right → left, green with the full content */
+.kv-split.is-loc-open .kv-split__body{min-height:620px;z-index:auto;transition:min-height .7s var(--kv-ease)}.kv-loc-crown__panel{
+  position:absolute;inset:0;z-index:6;overflow-y:auto;
+  background:var(--kv-olive);color:var(--kv-cream);
+  /* symmetric top/bottom padding so the flex-centered inner sits dead middle */
+  padding:clamp(34px,3.6vw,52px) clamp(26px,3.4vw,50px);
+  display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;
+  clip-path:inset(0 0 0 100%); /* the revealed edge travels right → left */
+  /* close tokens mirror the open ones: same .7s duration + .1s delay on the
+     clip; the fade stretches over the whole retreat so the wave face stays
+     visible for the tab's return ride */
+  transition:clip-path .7s var(--kv-ease) .1s,opacity .7s var(--kv-ease) .1s,visibility .9s .1s;
+}
+.kv-loc-crown__panel-inner{
+  margin:auto;max-width:680px;transform:translateX(46px);opacity:0;
+  transition:transform .55s var(--kv-ease) .3s,opacity .4s var(--kv-ease) .3s;
+}
+/* the wave stops at 90% coverage: a sliver of image survives at its far side
+   and the riding tab parks flush on the stopped face */
+.kv-split.is-loc-open .kv-loc-crown__panel{
+  opacity:1;visibility:visible;clip-path:inset(0 0 0 10%);
+  transition:clip-path .7s var(--kv-ease) .1s,opacity .25s var(--kv-ease) .1s,visibility .3s .1s;
+}
+.kv-split.is-loc-open .kv-loc-crown__panel-inner{transform:none;opacity:1}
+/* close = the exact mirror of the open: identical .7s + .1s-delay tokens, and
+   the retreat TRAVELS THE SAME DISTANCE as the tab's open ride — the face
+   pulls back from the 10% stop to the seam (JS-measured --kv-loc-seam-x) with
+   the same sampled bezier, so the tab rides it glued end-far-end. The green
+   stays SOLID while the face retreats (the fade only dissolves the last
+   third, together with the ride) — otherwise the wave's edge washes out
+   mid-motion and the tab reads detached from the wave it's riding */
+@keyframes kv-loc-bcl-fade{
+  0%,56%{opacity:1}
+  100%{opacity:0}
+}
+@keyframes kv-loc-wipe-bcl-d {
+  0%      {clip-path:inset(0 0 0 10%)}
+  2.26%  {clip-path:inset(0 0 0 calc(10% + .0625 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  4.53%  {clip-path:inset(0 0 0 calc(10% + .125 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  6.84%  {clip-path:inset(0 0 0 calc(10% + .1875 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  9.21%  {clip-path:inset(0 0 0 calc(10% + .25 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  11.66% {clip-path:inset(0 0 0 calc(10% + .3125 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  14.24% {clip-path:inset(0 0 0 calc(10% + .375 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  16.98% {clip-path:inset(0 0 0 calc(10% + .4375 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  19.94% {clip-path:inset(0 0 0 calc(10% + .5 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  23.2%  {clip-path:inset(0 0 0 calc(10% + .5625 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  26.86% {clip-path:inset(0 0 0 calc(10% + .625 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  31.07% {clip-path:inset(0 0 0 calc(10% + .6875 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  36.05% {clip-path:inset(0 0 0 calc(10% + .75 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  42.21% {clip-path:inset(0 0 0 calc(10% + .8125 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  50.32% {clip-path:inset(0 0 0 calc(10% + .875 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  62.39% {clip-path:inset(0 0 0 calc(10% + .9375 * (var(--kv-loc-seam-x,100%) - 10%)))}
+  100%   {clip-path:inset(0 0 0 var(--kv-loc-seam-x,100%))}
+}
+.kv-split.kv-loc-closing .kv-loc-crown__panel{
+  animation:kv-loc-wipe-bcl-d .7s linear .1s both, kv-loc-bcl-fade .7s linear .1s both;
+}
+/* content stays centered like the rest of the split — no asymmetric padding */
+.kv-loc-crown__panel-title{
+  font-family:var(--kv-font-display);font-weight:600;letter-spacing:.01em;
+  font-size:clamp(24px,2.2vw,32px);line-height:1.16;
+  color:var(--kv-cream);margin:0 0 14px;text-align:center;
+}
+.kv-loc-crown__panel-text{
+  font-family:var(--kv-font-serif);
+  font-size:clamp(16px,1.35vw,19px);line-height:1.5;
+  color:rgba(235,228,204,.85);margin:0 auto 22px;max-width:44ch;text-align:center;
+}
+.kv-loc-crown__close{
+  position:absolute;top:16px;right:16px;z-index:6;
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(235,228,204,.35);background:transparent;color:var(--kv-cream);
+  display:grid;place-items:center;cursor:pointer;
+  transition:background .2s var(--kv-ease),color .2s var(--kv-ease),border-color .2s var(--kv-ease);
+}
+.kv-loc-crown__close:hover{background:var(--kv-cream);color:var(--kv-ink);border-color:var(--kv-cream)}
+.kv-loc-crown__close svg{width:13px;height:13px}
+.kv-loc-crown__close:focus-visible{outline:2px solid var(--kv-gold-soft);outline-offset:2px}
+/* stacked: the text container sits below the image, so the same olive tab
+   anchors to its TOP edge (flush on the seam, upright text) and the green
+   panel sweeps bottom → top instead of right → left */
+@media (max-width:1024px){
+  /* collapse the slot visually without un-rendering the button inside it */
+  .kv-loc-crown__slot{height:0;padding:0;visibility:hidden}
+  .kv-split__body .kv-loc-crown__btn{
+    position:absolute;left:50%;top:0;margin:0;visibility:visible;
+    width:min(280px,calc(100% - 56px));
+    translate:-50% -100%;rotate:0deg;
+  }
+  .kv-split__body .kv-loc-crown__btn{
+    position:absolute;left:50%;top:0;margin:0;visibility:visible;
+    width:min(280px,calc(100% - 56px));
+    translate:-50% -100%;rotate:180deg;
+  }
+  /* open: the tab holds while the wave rises through the body (18% keyframe
+     hold), then is glued to its front to the wave's stopped face; the panel
+     keeps the split's REST height now (no growth), so the stop line is 76px —
+     just past the 68px tab, whose bottom parks flush on the stopped face */
+  @keyframes kv-loc-ride-m {
+    0%,17.98% {translate:-50% calc(-1 * 100%)}
+    21.8%  {translate:-50% calc(-100% + .1429 * (76px - var(--kv-loc-media-h,0px)))}
+    26.17% {translate:-50% calc(-100% + .2857 * (76px - var(--kv-loc-media-h,0px)))}
+    31.32% {translate:-50% calc(-100% + .4286 * (76px - var(--kv-loc-media-h,0px)))}
+    37.71% {translate:-50% calc(-100% + .5714 * (76px - var(--kv-loc-media-h,0px)))}
+    46.18% {translate:-50% calc(-100% + .7143 * (76px - var(--kv-loc-media-h,0px)))}
+    58.95% {translate:-50% calc(-100% + .8571 * (76px - var(--kv-loc-media-h,0px)))}
+    100%   {translate:-50% calc(8px - var(--kv-loc-media-h,0px))}
+  }
+  @keyframes kv-loc-back-m {
+    0%      {translate:-50% calc(-100% + (76px - var(--kv-loc-media-h,0px)))}
+    2.26%   {translate:-50% calc(-100% + .9375 * (76px - var(--kv-loc-media-h,0px)))}
+    4.53%   {translate:-50% calc(-100% + .875 * (76px - var(--kv-loc-media-h,0px)))}
+    6.84%   {translate:-50% calc(-100% + .8125 * (76px - var(--kv-loc-media-h,0px)))}
+    9.21%   {translate:-50% calc(-100% + .75 * (76px - var(--kv-loc-media-h,0px)))}
+    11.66%  {translate:-50% calc(-100% + .6875 * (76px - var(--kv-loc-media-h,0px)))}
+    14.24%  {translate:-50% calc(-100% + .625 * (76px - var(--kv-loc-media-h,0px)))}
+    16.98%  {translate:-50% calc(-100% + .5625 * (76px - var(--kv-loc-media-h,0px)))}
+    19.94%  {translate:-50% calc(-100% + .5 * (76px - var(--kv-loc-media-h,0px)))}
+    23.2%   {translate:-50% calc(-100% + .4375 * (76px - var(--kv-loc-media-h,0px)))}
+    26.86%  {translate:-50% calc(-100% + .375 * (76px - var(--kv-loc-media-h,0px)))}
+    31.07%  {translate:-50% calc(-100% + .3125 * (76px - var(--kv-loc-media-h,0px)))}
+    36.05%  {translate:-50% calc(-100% + .25 * (76px - var(--kv-loc-media-h,0px)))}
+    42.21%  {translate:-50% calc(-100% + .1875 * (76px - var(--kv-loc-media-h,0px)))}
+    50.32%  {translate:-50% calc(-100% + .125 * (76px - var(--kv-loc-media-h,0px)))}
+    62.39%  {translate:-50% calc(-100% + .0625 * (76px - var(--kv-loc-media-h,0px)))}
+    100%    {translate:-50% calc(-1 * 100%)}
+  }
+  .kv-split.is-loc-open .kv-split__body .kv-loc-crown__btn{
+    left:50%;
+    translate:-50% calc(8px - var(--kv-loc-media-h,0px));
+    animation-name:kv-loc-ride-m;
+  }
+  .kv-split.kv-loc-closing .kv-split__body .kv-loc-crown__btn{
+    animation-name:kv-loc-back-m;
+  }
+  /* close mirror (same tokens as the open): the retreat travels the same
+     distance as the tab's open ride — the face sinks from the 10% stop back
+     down to the seam (the image's height, JS-measured), the tab riding it
+     glued the whole way; the body's residual green fades out with the panel */
+  @keyframes kv-loc-wipe-bcl-m {
+    0%      {clip-path:inset(calc(76px) 0 0 0)}
+    2.26%   {clip-path:inset(calc(76px + .0625 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    4.53%   {clip-path:inset(calc(76px + .125 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    6.84%   {clip-path:inset(calc(76px + .1875 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    9.21%   {clip-path:inset(calc(76px + .25 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    11.66%  {clip-path:inset(calc(76px + .3125 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    14.24%  {clip-path:inset(calc(76px + .375 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    16.98%  {clip-path:inset(calc(76px + .4375 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    19.94%  {clip-path:inset(calc(76px + .5 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    23.2%   {clip-path:inset(calc(76px + .5625 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    26.86%  {clip-path:inset(calc(76px + .625 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    31.07%  {clip-path:inset(calc(76px + .6875 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    36.05%  {clip-path:inset(calc(76px + .75 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    42.21%  {clip-path:inset(calc(76px + .8125 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    50.32%  {clip-path:inset(calc(76px + .875 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    62.39%  {clip-path:inset(calc(76px + .9375 * (var(--kv-loc-media-h,0px) - 76px)) 0 0 0)}
+    100%    {clip-path:inset(var(--kv-loc-media-h,0px) 0 0 0)}
+  }
+  .kv-split.kv-loc-closing .kv-loc-crown__panel{animation-name:kv-loc-wipe-bcl-m, kv-loc-bcl-fade}
+  /* open keeps the split at its REST height: the body never grows, so the
+     page below never shifts and the panel's lower edge never moves */
+  .kv-split.is-loc-open .kv-split__body{min-height:0;transition:none}
+  /* preserve the approved mobile arrow size */
+  .kv-loc-crown__arrow{width:clamp(26px,9vw,34px)}
+  .kv-loc-crown__panel{border-radius:0 0 26px 26px;clip-path:inset(100% 0 0 0);padding-top:96px}
+  /* the wave stops at 90% coverage here too: 10% sliver survives at the top;
+     the close × moves below the stopped face (the band above is clipped) */
+  .kv-loc-crown__close{top:calc(76px + 16px)}
+  .kv-split.is-loc-open .kv-loc-crown__panel{clip-path:inset(76px 0 0 0)}
+  /* content moves with the base rule's centering; only the entrance differs */
+  .kv-loc-crown__panel-inner{margin:0;transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .kv-loc-crown__btn,.kv-loc-crown__panel,.kv-loc-crown__panel-inner,.kv-loc-crown__arrow{transition:none !important;animation:none !important}
+}
 
 /* ---------------------------------------------------------------- plots */
 .kv-plots{padding:56px 0 64px}

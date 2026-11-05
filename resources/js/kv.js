@@ -469,6 +469,78 @@ import './kv-motion.js';
     });
   }
 
+  /* --------------------------------------------------- location crown tab */
+  /* #kvLocCrownBtn (part of .kv-split__body) toggles the green take-over
+     panel #kvLocCrownPanel, which is positioned pure-CSS over the split.
+     No measuring needed — resize stays automatic. */
+  (function () {
+    var btn = $('#kvLocCrownBtn');
+    var panel = $('#kvLocCrownPanel');
+    if (!btn || !panel) return;
+    var split = btn.closest('.kv-split');
+    var closer = $('.kv-loc-crown__close', panel);
+
+    /* the wave's landmarks for parking the tab exactly: the seam→panel-top
+       distance (media-h), the wave's 10% stop edge (stop-x) and the seam's
+       own position (seam-x, the close retreat's terminal) */
+    function syncRide() {
+      var bodyEl = btn.closest('.kv-split__body');
+      if (!bodyEl) return;
+      var sr = split.getBoundingClientRect();
+      var br = bodyEl.getBoundingClientRect();
+      split.style.setProperty('--kv-loc-media-h', (br.top - sr.top).toFixed(2) + 'px');
+      split.style.setProperty('--kv-loc-stop-x', (sr.width * 0.1 + sr.left - br.left).toFixed(2) + 'px');
+      split.style.setProperty('--kv-loc-seam-x', (br.left - sr.left).toFixed(2) + 'px');
+    }
+    syncRide();
+    window.addEventListener('resize', syncRide);
+
+    var open = false;
+    var closeTimer = 0;
+
+    function setOpen(next) {
+      if (next) syncRide();
+      open = !!next;
+      if (split) split.classList.toggle('is-loc-open', open);
+      /* the close ride is an animation, gated so it never plays on page load */
+      clearTimeout(closeTimer);
+      if (split) {
+        if (open) {
+          split.classList.remove('kv-loc-closing');
+        } else {
+          split.classList.add('kv-loc-closing');
+          closeTimer = setTimeout(function () { split.classList.remove('kv-loc-closing'); }, 900);
+        }
+      }
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Hide the full location content' : 'Show the full location content');
+      panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!open);
+      if (open && closer) {
+        /* wait for the wipe to make the panel focusable */
+        setTimeout(function () { if (open && closer) closer.focus({ preventScroll: true }); }, 380);
+      }
+    });
+    if (closer) closer.addEventListener('click', function () {
+      setOpen(false);
+      btn.focus({ preventScroll: true });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && open) {
+        setOpen(false);
+        btn.focus({ preventScroll: true });
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (open && !panel.contains(e.target) && !btn.contains(e.target)) setOpen(false);
+    });
+  })();
+
   /* ------------------------------------------------------- article page */
   var readbar = $('[data-kv-progress]');
 

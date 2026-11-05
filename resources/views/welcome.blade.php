@@ -172,15 +172,34 @@
     </div>
 
     <div class="kv-split__body" data-mv-group="80">
+      {{-- the crown tab is part of the body: a 270° spine tab on its left edge.
+           On desktop it sits absolutely at the body's left edge; stacked it
+           rests inside this slot between the eyebrow and the overview text --}}
+      <div class="kv-loc-crown__slot" id="kvLocCrownSlot">
+        <button class="kv-loc-crown__btn" id="kvLocCrownBtn" type="button" aria-expanded="false" aria-controls="kvLocCrownPanel" aria-label="Show the full location content">
+          <svg class="kv-loc-crown__shape" viewBox="0 0 320 74" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-gallery"></use></svg>
+          <span class="kv-loc-crown__label" aria-hidden="true">Kilawali &mdash; at the Gateway</span>
+          <svg class="kv-loc-crown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 4v10.17l-5.59-5.58L4 10l8 8 8-8-1.41-1.41L13 14.17V4z"/></svg>
+        </button>
+      </div>
       <span class="kv-eyebrow" data-mv="fade">Why This Location</span>
-      <h2 class="kv-display kv-display--light kv-display--lg" data-mv="words">Kilawali, at the Gateway to Jim Corbett</h2>
-      <p data-mv="blur">Proximity without isolation — Kilawali sits along a working highway corridor that connects you to the park in one direction and Kashipur's markets, hospitals and rail link in the other.</p>
+      <p data-mv="blur">Proximity without isolation — the park trailheads in one direction, Kashipur's markets, hospitals and rail link in the other.</p>
+    </div>
 
-      <ul class="kv-split__list" data-mv-group="90">
-        <li data-mv="left"><span>01</span><div><b>Nature &amp; wildlife</b><br>Phato Gate 15 min · Tumaria Dam walking distance · Garjia Devi Temple short drive</div></li>
-        <li data-mv="left"><span>02</span><div><b>Everyday essentials</b><br>Nearest school ~15 min · AIIMS Hospital ~34 min</div></li>
-        <li data-mv="left"><span>03</span><div><b>Rail &amp; air</b><br>Gaushala 11 km · Kashipur Junction 20 km · Ramnagar 23 km · Pantnagar Airport 66 km</div></li>
-      </ul>
+    {{-- green take-over panel: sweeps in right → left over the whole split --}}
+    <div class="kv-loc-crown__panel" id="kvLocCrownPanel" aria-hidden="true">
+      <button class="kv-loc-crown__close" type="button" aria-label="Close the full location content">
+        <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <div class="kv-loc-crown__panel-inner">
+        <h2 class="kv-loc-crown__panel-title">Kilawali, at the Gateway to Jim Corbett</h2>
+        <p class="kv-loc-crown__panel-text">Proximity without isolation — Kilawali sits along a working highway corridor that connects you to the park in one direction and Kashipur's markets, hospitals and rail link in the other.</p>
+        <ul class="kv-split__list">
+          <li><span>01</span><div><b>Nature &amp; wildlife</b><br>Phato Gate 15 min · Tumaria Dam walking distance · Garjia Devi Temple short drive</div></li>
+          {{-- <li><span>02</span><div><b>Everyday essentials</b><br>Nearest school ~15 min · AIIMS Hospital ~34 min</div></li> --}}
+          {{-- <li><span>03</span><div><b>Rail &amp; air</b><br>Gaushala 11 km · Kashipur Junction 20 km · Ramnagar 23 km · Pantnagar Airport 66 km</div></li> --}}
+        </ul>
+      </div>
     </div>
   </div>
 </section>
