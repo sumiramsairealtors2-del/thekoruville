@@ -289,7 +289,7 @@
     </picture>
 
     <div class="kv-gallery__label" aria-hidden="true" data-mv="fade" data-mv-delay="260">
-      <svg class="kv-gallery__shape" viewBox="0 0 260 74" preserveAspectRatio="none" focusable="false"><path d="M0 0C20 2 38 14 45 44C45 62 57 74 75 74H185C203 74 215 62 215 44C222 14 240 2 260 0Z"/></svg>
+      <svg class="kv-gallery__shape" viewBox="0 0 320 74" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-gallery"/></svg>
       <span>Gallery</span>
     </div>
 

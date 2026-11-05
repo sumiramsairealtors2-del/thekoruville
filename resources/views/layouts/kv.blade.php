@@ -63,17 +63,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <symbol id="kv-crown-shape" viewBox="0 0 320 93">
     <path d="M0 0H320V30C285.57 39.37 282.51 84.88 247 93H73C37.49 84.88 34.43 39.37 0 30Z"/>
   </symbol>
-  {{-- Header crown: the "Enquiry Now" tab's own outline, turned 90° and fitted to the plaque.
-       The tab's flat edge is flush with the screen; here it is flush with the *bottom* of the
-       olive band, so the tab's long tangent shoulder flows straight out of the bar with no corner.
-       Same curve data as #kv-rail-shape — only rotated and scaled. --}}
-  <symbol id="kv-crown-header" viewBox="0 0 320 93">
-    <path d="M0 31C0.7 31.2 1.71 31.3 4.01 32.2C6.32 33.1 10.73 34.5 14.04 36.2C17.35 38 20.76 39.9 24.08 42.7C27.39 45.5 30.8 48.8 34.11 52.9C37.42 57 40.83 63.2 44.14 67.6C47.45 72 50.86 75.9 54.17 79.1C57.48 82.3 60.89 84.6 64.2 86.6C67.51 88.6 70.92 90 74.23 91C77.54 92.1 82.56 92.6 84.26 92.9L244.76 92.9C246.47 92.7 251.49 92.1 254.8 91C258.11 89.9 261.52 88.4 264.83 86.3C268.14 84.2 271.55 81.8 274.86 78.5C278.17 75.2 281.58 70.9 284.89 66.3C288.2 61.8 291.61 55.4 294.92 51.2C298.23 47 301.94 43.8 304.95 41.2C307.96 38.6 310.47 37.5 312.98 35.8C315.49 34.1 318.8 31.8 320 31Z"/>
-  </symbol>
-  {{-- Plot card crowns: same tab curve again, flat edge on the card body's top edge (the
+  {{-- Plot card crowns: the same tab curve, flat edge on the card body's top edge (the
        shape is flipped with scaleY(-1) in CSS, so the flat edge lands at the bottom). --}}
+  {{-- Header crown lives directly in partials/kv/header.blade.php (inline <path>). Do NOT
+       route it through a symbol <use>: a symbol viewBox plus an outer svg viewBox compounds
+       the transform twice in Chrome and shears the plaque off-screen. The plot / gallery
+       symbols below are safe because their outer <svg viewBox> matches the symbol's exactly
+       (identity compound). --}}
   <symbol id="kv-crown-plot" viewBox="0 0 320 93">
     <path d="M0 0C0.7 0.3 1.71 0.45 4.01 1.8C6.32 3.15 10.73 5.25 14.04 7.8C17.35 10.5 20.76 13.35 24.08 17.55C27.39 21.75 30.8 26.7 34.11 32.85C37.42 39 40.83 48.3 44.14 54.9C47.45 61.5 50.86 67.35 54.17 72.15C57.48 76.95 60.89 80.4 64.2 83.4C67.51 86.4 70.92 88.5 74.23 90C77.54 91.65 82.56 92.4 84.26 92.85L244.76 92.85C246.47 92.55 251.49 91.65 254.8 90C258.11 88.35 261.52 86.1 264.83 82.95C268.14 79.8 271.55 76.2 274.86 71.25C278.17 66.3 281.58 59.85 284.89 52.95C288.2 46.2 291.61 36.6 294.92 30.3C298.23 24 301.94 19.2 304.95 15.3C307.96 11.4 310.47 9.75 312.98 7.2C315.49 4.65 318.8 1.2 320 0Z"/>
+  </symbol>
+  {{-- Gallery label tab: the same tab curve again, flat edge on the gallery's top edge so
+       the label hangs out of the photo with the tangent shoulder, like the header crown. --}}
+  <symbol id="kv-crown-gallery" viewBox="0 0 320 74">
+    <path d="M0 0C0.7 0.24 1.71 0.36 4.01 1.43C6.32 2.51 10.73 4.18 14.04 6.21C17.35 8.35 20.76 10.62 24.08 13.96C27.39 17.31 30.8 21.25 34.11 26.14C37.42 31.03 40.83 38.43 44.14 43.68C47.45 48.94 50.86 53.59 54.17 57.41C57.48 61.23 60.89 63.97 64.2 66.36C67.51 68.75 70.92 70.42 74.23 71.61C77.54 72.93 82.56 73.52 84.26 73.88L244.76 73.88C246.47 73.64 251.49 72.93 254.8 71.61C258.11 70.3 261.52 68.51 264.83 66C268.14 63.5 271.55 60.63 274.86 56.69C278.17 52.75 281.58 47.62 284.89 42.13C288.2 36.76 291.61 29.12 294.92 24.11C298.23 19.1 301.94 15.28 304.95 12.17C307.96 9.07 310.47 7.76 312.98 5.73C315.49 3.7 318.8 0.95 320 0Z"/>
   </symbol>
   {{-- Hero prev/next tab: the "Enquiry Now" tab's own outline, turned 90° and fitted to the
        arrow tab — same curve data as #kv-crown-header and #kv-rail-shape, with the flat edge

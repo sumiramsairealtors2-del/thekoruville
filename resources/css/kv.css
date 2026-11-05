@@ -211,30 +211,33 @@ body.kv.is-locked{overflow:hidden}
 }
 .kv-header > *{pointer-events:auto}
 
-/* centre crown — logo plaque dropping out of the olive band */
+/* centre crown — full-width olive band sweeping down into the centred logo plaque.
+   Width grows with the viewport (min 585px so the plaque always clears the logo) and the
+   height follows the shape's native aspect, so everything scales fluidly while resizing. */
 .kv-crown{
-  position:absolute;top:-7px;left:50%;transform:translateX(-50%);
-  width:clamp(158px,18.5vw,265px);
-  aspect-ratio:265/110;height:auto;
+  position:absolute;top:clamp(10px,.73vw,14px);left:50%;transform:translateX(calc(-50% + .4vw));
+  width:max(50vw,585px);
+  aspect-ratio:522/70.74;height:auto;
   z-index:2;pointer-events:none;
 }
-.kv-crown__shape{position:absolute;inset:0;width:100%;height:100%;fill:var(--kv-olive)}
+.kv-crown__shape{position:absolute;inset:0;z-index:0;width:100%;height:100%;fill:var(--kv-olive)}
 .kv-crown__tab{
-  position:absolute;left:22.8%;right:22.8%;top:0;bottom:4px;
+  position:absolute;left:36%;right:37%;top:0;bottom:4px;
   display:flex;align-items:flex-end;justify-content:center;
-  padding:0 6px 5px;
+  z-index:1;pointer-events:auto;padding:0 6px 5px;
 }
 .kv-crown__tab img{width:auto;max-width:100%;height:auto;max-height:clamp(40px,5.5vw,65px);object-fit:contain}
 .kv-crown__tab:focus-visible{outline-offset:-4px}
 
-/* nav links sit over the hero image */
+/* nav links sit over the hero image (above the crown shape's shoulders) */
 .kv-nav{
+  position:relative;z-index:3;
   display:flex;align-items:center;gap:38px;
   list-style:none;margin:0;padding:0;height: 50px;
 }
 .kv-nav--right{gap:30px}
 .kv-nav a{
-  font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  font-size:clamp(11px,.625vw,12px);font-weight:500;letter-spacing:.16em;text-transform:uppercase;
   color:var(--kv-cream);text-shadow:0 1px 12px rgba(10,14,8,.45);
   transition:color .2s var(--kv-ease);
 }
@@ -245,7 +248,7 @@ body.kv.is-locked{overflow:hidden}
   display:inline-flex;align-items:center;gap:8px;
   height:32px;padding:0 18px;border-radius:999px;
   background:rgba(49,57,34,.92);border:1px solid rgba(235,228,204,.35);
-  color:var(--kv-cream);font-size:11px;letter-spacing:.12em;white-space:nowrap;
+  color:var(--kv-cream);font-size:clamp(9.5px,.57vw,11px);letter-spacing:.12em;white-space:nowrap;
   transition:background .2s var(--kv-ease),border-color .2s var(--kv-ease);
 }
 .kv-phone-pill:hover{background:var(--kv-olive-deep);border-color:var(--kv-gold-soft)}
@@ -1037,7 +1040,8 @@ body.kv.is-locked{overflow:hidden}
   .kv-drawer{padding:22px 20px 28px}
   .kv-gallery__label{left:22%;}
   .kv-unlock-grid{grid-template-columns:1fr;}
-  .kv-crown{top: -10px;}
+  .kv-crown{left:0;right:0;width:100%;transform:translateX(.75%);height:clamp(58px,16vw,64px);aspect-ratio:auto;top:clamp(6px,2vw,8px)}
+  .kv-crown__tab{left:36%;right:37%;bottom:2px}
 }
 
 @media(max-width:560px){
