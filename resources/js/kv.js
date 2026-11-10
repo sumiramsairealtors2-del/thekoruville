@@ -469,6 +469,85 @@ import './kv-motion.js';
     });
   }
 
+  /* ------------------------------------------------- gallery film (inline) */
+  /* #kvGalleryPlay starts the film in the section itself — no lightbox/modal.
+     Once started it stays on screen as the play/pause control, and the video
+     keeps its last frame when paused. */
+  (function () {
+    var media = $('#kvGalleryMedia');
+    var video = $('#kvGalleryVideo');
+    var btn = $('#kvGalleryPlay');
+    var toggleBtn = $('#kvGalleryToggle');
+    var seek = $('#kvGallerySeek');
+    var time = $('#kvGalleryTime');
+    if (!media || !video || !btn) return;
+
+    function clock(sec) {
+      sec = isFinite(sec) && sec > 0 ? sec : 0;
+      var m = Math.floor(sec / 60);
+      var s = Math.floor(sec % 60);
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function reflect(playing) {
+      media.classList.toggle('is-playing', playing);
+      if (!toggleBtn) return;
+      toggleBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+      toggleBtn.setAttribute('aria-label', playing ? 'Pause the site film' : 'Play the site film');
+    }
+
+    function sync() {
+      var dur = video.duration || 0;
+      var cur = video.currentTime || 0;
+      var pct = dur ? Math.min(100, (cur / dur) * 100) : 0;
+      if (time) time.textContent = clock(cur) + ' / ' + clock(dur);
+      if (seek) {
+        seek.value = Math.round(pct * 10);
+        seek.style.setProperty('--kv-seek', pct.toFixed(2) + '%');
+      }
+    }
+
+    function toggle() {
+      if (!video.paused) {
+        video.pause();
+        return;
+      }
+      media.classList.add('is-video');
+      var started = video.play();
+      if (started && started.catch) {
+        started.catch(function () {
+          // no playable source yet — stay on the still with the play icon
+          media.classList.remove('is-video');
+          reflect(false);
+        });
+      }
+    }
+
+    btn.addEventListener('click', toggle);
+    if (toggleBtn) toggleBtn.addEventListener('click', toggle);
+    video.addEventListener('click', toggle);
+    video.addEventListener('play', function () {
+      media.classList.add('is-video');
+      reflect(true);
+    });
+    video.addEventListener('pause', function () { reflect(false); });
+    video.addEventListener('ended', function () { reflect(false); });
+    video.addEventListener('timeupdate', sync);
+    video.addEventListener('loadedmetadata', sync);
+    video.addEventListener('durationchange', sync);
+
+    /* the timeline scrubs both ways: dragging writes the new time straight
+       onto the video, so it works while playing and while paused */
+    if (seek) {
+      seek.addEventListener('input', function () {
+        if (!video.duration) return;
+        video.currentTime = (seek.value / 1000) * video.duration;
+        sync();
+      });
+    }
+    sync();
+  })();
+
   /* --------------------------------------------------- location crown tab */
   /* #kvLocCrownBtn (part of .kv-split__body) toggles the green take-over
      panel #kvLocCrownPanel, which is positioned pure-CSS over the split.

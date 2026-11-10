@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Models\Post;
 
@@ -43,6 +44,17 @@ Route::get('/privacy-policy', function () {
 Route::get('/terms-and-conditions', function () {
     return view('tc');
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| MEDIA
+|--------------------------------------------------------------------------
+*/
+
+/* Served through PHP so range requests work (see MediaController). */
+Route::get('/media/gallery-film', [MediaController::class, 'gallery'])
+    ->name('media.gallery');
 
 
 /*

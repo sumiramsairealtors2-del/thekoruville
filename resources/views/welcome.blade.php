@@ -124,11 +124,11 @@
 
   <div class="kv-hero__nav">
     <button type="button" class="kv-hero__arrow kv-hero__arrow--prev" aria-label="Previous image">
-      <svg class="kv-hero__arrow-shape" viewBox="0 0 320 63" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-arrow-tab"/></svg>
+      @include('partials.kv.crown', ['shapeClass' => 'kv-hero__arrow-shape', 'shapeVariant' => 'tab'])
       <svg class="kv-hero__arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
     </button>
     <button type="button" class="kv-hero__arrow kv-hero__arrow--next" aria-label="Next image">
-      <svg class="kv-hero__arrow-shape" viewBox="0 0 320 63" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-arrow-tab"/></svg>
+      @include('partials.kv.crown', ['shapeClass' => 'kv-hero__arrow-shape', 'shapeVariant' => 'tab'])
       <svg class="kv-hero__arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
     </button>
   </div>
@@ -177,7 +177,7 @@
            rests inside this slot between the eyebrow and the overview text --}}
       <div class="kv-loc-crown__slot" id="kvLocCrownSlot">
         <button class="kv-loc-crown__btn" id="kvLocCrownBtn" type="button" aria-expanded="false" aria-controls="kvLocCrownPanel" aria-label="Show the full location content">
-          <svg class="kv-loc-crown__shape" viewBox="0 0 320 74" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-gallery"></use></svg>
+          @include('partials.kv.crown', ['shapeClass' => 'kv-loc-crown__shape', 'shapeVariant' => 'tab-side'])
           <span class="kv-loc-crown__label" aria-hidden="true">Kilawali &mdash; at the Gateway</span>
           <svg class="kv-loc-crown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 4v10.17l-5.59-5.58L4 10l8 8 8-8-1.41-1.41L13 14.17V4z"/></svg>
         </button>
@@ -226,7 +226,7 @@
           </picture>
         </div>
         <div class="kv-plot__body">
-          <svg class="kv-plot__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
+          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
           <span class="kv-plot__emblem" aria-hidden="true">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
           </span>
@@ -252,7 +252,7 @@
           </picture>
         </div>
         <div class="kv-plot__body">
-          <svg class="kv-plot__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
+          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
           <span class="kv-plot__emblem" aria-hidden="true">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
           </span>
@@ -278,7 +278,7 @@
           </picture>
         </div>
         <div class="kv-plot__body">
-          <svg class="kv-plot__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
+          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
           <span class="kv-plot__emblem" aria-hidden="true">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
           </span>
@@ -299,7 +299,7 @@
 
 {{-- ================================================== GALLERY ================================================== --}}
 <section class="kv-gallery" id="gallery">
-  <div class="kv-gallery__media" data-mv="scale">
+  <div class="kv-gallery__media" id="kvGalleryMedia" data-mv="scale">
     <picture>
       <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/gallery-mobile-900x1125.webp') }}">
       <img src="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
@@ -307,17 +307,37 @@
            alt="The Koru Ville grounds at Kilawali" loading="lazy" data-mv-parallax="34">
     </picture>
 
+    {{-- The film plays here, in the section — no lightbox, no modal. The centre
+         button starts it and then stays on as its play/pause control. --}}
+    <video class="kv-gallery__video" id="kvGalleryVideo"
+           playsinline preload="metadata"
+           poster="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
+           aria-label="The Koru Ville site film">
+      {{-- ?v= busts the cache when the film file is replaced --}}
+      <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/gallery.mp4')) ?: 1 }}" type="video/mp4">
+    </video>
+
     <div class="kv-gallery__label" aria-hidden="true" data-mv="fade" data-mv-delay="260">
-      <svg class="kv-gallery__shape" viewBox="0 0 320 74" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-gallery"/></svg>
+      @include('partials.kv.crown', ['shapeClass' => 'kv-gallery__shape', 'shapeVariant' => 'tab'])
       <span>Gallery</span>
     </div>
 
-    <button type="button" class="kv-gallery__play"
-            data-lightbox="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
-            data-alt="The Koru Ville grounds at Kilawali"
-            aria-label="Open gallery">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M20 15v5h-5"/></svg>
+    <button type="button" class="kv-gallery__play" id="kvGalleryPlay"
+            aria-label="Play the site film">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12Z"/></svg>
     </button>
+
+    {{-- inline player controls: play/pause + a scrubbable timeline --}}
+    <div class="kv-gallery__controls">
+      <button type="button" class="kv-gallery__toggle" id="kvGalleryToggle"
+              aria-label="Pause the site film" aria-pressed="false">
+        <svg class="kv-gallery__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12Z"/></svg>
+        <svg class="kv-gallery__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
+      </button>
+      <input type="range" class="kv-gallery__seek" id="kvGallerySeek"
+             min="0" max="1000" step="1" value="0" aria-label="Seek through the site film">
+      <span class="kv-gallery__time" id="kvGalleryTime">0:00 / 0:00</span>
+    </div>
 
     <span class="kv-gallery__caption">The Koru Ville · Kilawali</span>
   </div>
@@ -417,7 +437,8 @@
   $featuredUrl = $featured ? url('/blog/'.$featured->slug) : url('/blog');
   $featuredImage = $postImage($featured);
 @endphp
-<section class="kv-blog" id="blog" data-blog-slider>
+<div class="kv-blog-wrap" data-blog-slider>
+<section class="kv-blog" id="blog">
   <div class="kv-blog__bg" data-blog-bg>
     <img src="{{ $featuredImage }}" alt="" aria-hidden="true" loading="lazy" class="is-active" data-blog-bg-img>
     <img alt="" aria-hidden="true" loading="lazy" data-blog-bg-img>
@@ -443,7 +464,12 @@
         </span>
       </a>
     </div>
+  </div>
+</section>
 
+{{-- The post carousel is its own section: side rail on desktop, a separate
+     block under the featured panel on phones and tablets. --}}
+<section class="kv-blog__posts" aria-label="More articles">
     <div class="kv-blog__rail" data-mv="right" data-mv-delay="320">
       <button type="button" class="kv-blog__arrow kv-blog__arrow--prev" data-prev aria-label="Previous article">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 19l-7-7 7-7"/></svg>
@@ -465,7 +491,7 @@
               @endif
             </div>
             <div class="kv-post__body">
-              <svg class="kv-post__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
+              @include('partials.kv.crown', ['shapeClass' => 'kv-post__crown', 'shapeVariant' => 'crown'])
               <h3>{{ \Illuminate\Support\Str::limit($post->title, 48) }}</h3>
               <span>{{ $post->updated_at?->format('M Y') }}</span>
             </div>
@@ -474,7 +500,7 @@
           <a class="kv-post" href="{{ url('/blog') }}">
             <div class="kv-post__media"><img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="The Koru Ville blog" loading="lazy"></div>
             <div class="kv-post__body">
-              <svg class="kv-post__crown" viewBox="0 0 320 93" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kv-crown-shape"/></svg>
+              @include('partials.kv.crown', ['shapeClass' => 'kv-post__crown', 'shapeVariant' => 'crown'])
               <h3>Why Residential Plots Near Jim Corbett Hold Their Value</h3>
               <span>Insights</span>
             </div>
@@ -488,8 +514,8 @@
 
       <div class="kv-blog__dots" data-dots aria-hidden="true"></div>
     </div>
-  </div>
 </section>
+</div>
 
 {{-- ==================================================== MAP ==================================================== --}}
 <section class="kv-panel kv-panel--cream2 kv-map" id="map">

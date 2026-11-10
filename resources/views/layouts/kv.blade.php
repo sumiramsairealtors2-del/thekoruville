@@ -58,32 +58,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </head>
 <body class="kv">
 
-{{-- Reusable silhouettes (crown / rail) --}}
+{{-- Reusable rail silhouette. All crown / tab silhouettes render inline from
+     partials/kv/crown.blade.php — a symbol viewBox compounds twice in Chrome. --}}
 <svg class="kv-sprite" aria-hidden="true" focusable="false" width="0" height="0">
-  <symbol id="kv-crown-shape" viewBox="0 0 320 93">
-    <path d="M0 0H320V30C285.57 39.37 282.51 84.88 247 93H73C37.49 84.88 34.43 39.37 0 30Z"/>
-  </symbol>
-  {{-- Plot card crowns: the same tab curve, flat edge on the card body's top edge (the
-       shape is flipped with scaleY(-1) in CSS, so the flat edge lands at the bottom). --}}
-  {{-- Header crown lives directly in partials/kv/header.blade.php (inline <path>). Do NOT
-       route it through a symbol <use>: a symbol viewBox plus an outer svg viewBox compounds
-       the transform twice in Chrome and shears the plaque off-screen. The plot / gallery
-       symbols below are safe because their outer <svg viewBox> matches the symbol's exactly
-       (identity compound). --}}
-  <symbol id="kv-crown-plot" viewBox="0 0 320 93">
-    <path d="M0 0C0.7 0.3 1.71 0.45 4.01 1.8C6.32 3.15 10.73 5.25 14.04 7.8C17.35 10.5 20.76 13.35 24.08 17.55C27.39 21.75 30.8 26.7 34.11 32.85C37.42 39 40.83 48.3 44.14 54.9C47.45 61.5 50.86 67.35 54.17 72.15C57.48 76.95 60.89 80.4 64.2 83.4C67.51 86.4 70.92 88.5 74.23 90C77.54 91.65 82.56 92.4 84.26 92.85L244.76 92.85C246.47 92.55 251.49 91.65 254.8 90C258.11 88.35 261.52 86.1 264.83 82.95C268.14 79.8 271.55 76.2 274.86 71.25C278.17 66.3 281.58 59.85 284.89 52.95C288.2 46.2 291.61 36.6 294.92 30.3C298.23 24 301.94 19.2 304.95 15.3C307.96 11.4 310.47 9.75 312.98 7.2C315.49 4.65 318.8 1.2 320 0Z"/>
-  </symbol>
-  {{-- Gallery label tab: the same tab curve again, flat edge on the gallery's top edge so
-       the label hangs out of the photo with the tangent shoulder, like the header crown. --}}
-  <symbol id="kv-crown-gallery" viewBox="0 0 320 74">
-    <path d="M0 0C0.7 0.24 1.71 0.36 4.01 1.43C6.32 2.51 10.73 4.18 14.04 6.21C17.35 8.35 20.76 10.62 24.08 13.96C27.39 17.31 30.8 21.25 34.11 26.14C37.42 31.03 40.83 38.43 44.14 43.68C47.45 48.94 50.86 53.59 54.17 57.41C57.48 61.23 60.89 63.97 64.2 66.36C67.51 68.75 70.92 70.42 74.23 71.61C77.54 72.93 82.56 73.52 84.26 73.88L244.76 73.88C246.47 73.64 251.49 72.93 254.8 71.61C258.11 70.3 261.52 68.51 264.83 66C268.14 63.5 271.55 60.63 274.86 56.69C278.17 52.75 281.58 47.62 284.89 42.13C288.2 36.76 291.61 29.12 294.92 24.11C298.23 19.1 301.94 15.28 304.95 12.17C307.96 9.07 310.47 7.76 312.98 5.73C315.49 3.7 318.8 0.95 320 0Z"/>
-  </symbol>
-  {{-- Hero prev/next tab: the "Enquiry Now" tab's own outline, turned 90° and fitted to the
-       arrow tab — same curve data as #kv-crown-header and #kv-rail-shape, with the flat edge
-       on the hero's edge so the shoulder flows out of the frame with no corner. --}}
-  <symbol id="kv-arrow-tab" viewBox="0 0 320 63">
-    <path d="M0 0C0.7 0.2 1.71 0.3 4.01 1.22C6.32 2.13 10.73 3.56 14.04 5.28C17.35 7.11 20.76 9.04 24.08 11.89C27.39 14.73 30.8 18.09 34.11 22.25C37.42 26.42 40.83 32.72 44.14 37.19C47.45 41.66 50.86 45.62 54.17 48.88C57.48 52.13 60.89 54.46 64.2 56.5C67.51 58.53 70.92 59.95 74.23 60.97C77.54 62.09 82.56 62.59 84.26 62.9L244.76 62.9C246.47 62.7 251.49 62.09 254.8 60.97C258.11 59.85 261.52 58.33 264.83 56.19C268.14 54.06 271.55 51.62 274.86 48.27C278.17 44.91 281.58 40.54 284.89 35.87C288.2 31.3 291.61 24.79 294.92 20.53C298.23 16.26 301.94 13.01 304.95 10.36C307.96 7.72 310.47 6.6 312.98 4.88C315.49 3.15 318.8 0.81 320 0Z"/>
-  </symbol>
+  {{-- Tail clip for the enquiry tab. Every crown shape on the site is an inline path
+       from partials/kv/crown.blade.php, not a sprite symbol: a symbol viewBox plus an
+       outer svg viewBox compounds the transform twice in Chrome. --}}
   <symbol id="kv-rail-shape" viewBox="0 0 62 319">
     <path d="M62 0C61.8 0.7 61.7 1.7 60.8 4.0C59.9 6.3 58.5 10.7 56.8 14.0C55.0 17.3 53.1 20.7 50.3 24.0C47.5 27.3 44.2 30.7 40.1 34.0C36.0 37.3 29.8 40.7 25.4 44.0C21.0 47.3 17.1 50.7 13.9 54.0C10.7 57.3 8.4 60.7 6.4 64.0C4.4 67.3 3.0 70.7 2.0 74.0C0.9 77.3 0.4 82.3 0.1 84.0V244C0.3 245.7 0.9 250.7 2.0 254.0C3.1 257.3 4.6 260.7 6.7 264.0C8.8 267.3 11.2 270.7 14.5 274.0C17.8 277.3 22.1 280.7 26.7 284.0C31.2 287.3 37.6 290.7 41.8 294.0C46.0 297.3 49.2 301.0 51.8 304.0C54.4 307.0 55.5 309.5 57.2 312.0C58.9 314.5 61.2 317.8 62.0 319.0Z"/>
   </symbol>

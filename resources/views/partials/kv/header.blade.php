@@ -3,11 +3,8 @@
 
 
   <div class="kv-crown" aria-hidden="false">
-    {{-- Inline path (NOT a <use>): symbol+viewBox compounds transforms twice in Chrome.
-         viewBox covers the path's native frame; the plaque's flat band is the shape's top. --}}
-    <svg class="kv-crown__shape" viewBox="185.19 27.72 522 70.74" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M707.17,27.73H185.19v11.83h96.82c19.03,1.18,34.56,12.92,45.28,31.17,9.19,15.67,25.07,27.62,42.02,27.63l145.93.1c18.41.01,33.57-13.18,43.27-30.25,9.54-16.79,24.76-28.18,42.47-28.66h106.2v-11.83Z"/>
-    </svg>
+    {{-- Inline crown path: sized by width + aspect-ratio, so the sweep never distorts. --}}
+    @include('partials.kv.crown', ['shapeClass' => 'kv-crown__shape', 'shapeVariant' => 'header'])
 
     <a class="kv-crown__tab" href="{{ url('/') }}" aria-label="The Koru Ville — home">
       <img src="{{ asset('assets/img/Logo.webp') }}" alt="The Koru Ville" width="1093" height="589">
