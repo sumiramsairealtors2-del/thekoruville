@@ -601,12 +601,12 @@ body.kv.is-locked{overflow:hidden}
   /* collapse the slot visually without un-rendering the button inside it */
   .kv-loc-crown__slot{height:0;padding:0;visibility:hidden}
   .kv-split__body .kv-loc-crown__btn{
-    position:absolute;left:50%;top:0;margin:0;visibility:visible;
+    position:absolute;left:50%;top:1px;margin:0;visibility:visible;
     width:min(280px,calc(100% - 56px));
     translate:-50% -100%;rotate:0deg;
   }
   .kv-split__body .kv-loc-crown__btn{
-    position:absolute;left:50%;top:0;margin:0;visibility:visible;
+    position:absolute;left:50%;top:1px;margin:0;visibility:visible;
     width:min(280px,calc(100% - 56px));
     translate:-50% -100%;rotate:180deg;
   }
@@ -1282,13 +1282,13 @@ body.kv.is-locked{overflow:hidden}
   /* .kv-unlock-grid{grid-template-columns:1fr;max-width:560px} */
   /* Stacked blog: the featured photo is one section that stops after its CTA;
      the post carousel is a separate cream section beneath it. */
-  .kv-blog{min-height:0;padding-bottom:44px;border-radius:var(--kv-radius)}
+  .kv-blog{min-height:0;padding-bottom:44px;}
   .kv-blog__label{position:relative;top:24px;width:min(500px,70%);min-height:120px;padding:26px 34px;border-radius:0 32px 32px 0}
   .kv-blog__inner{grid-template-columns:1fr;padding:40px 0 0;gap:0}
   .kv-blog__feature{margin:0 28px;max-width:520px}
   .kv-blog__posts{
-    margin:16px var(--kv-frame) 0;padding:28px 28px 0;
-    background:var(--kv-cream);border-radius:var(--kv-radius);
+    margin:0px var(--kv-frame) 0;padding:28px 28px 0;
+    background:var(--kv-cream);
   }
   .kv-blog__rail{padding-bottom:94px}
   .kv-blog__track{grid-auto-columns:60%}
@@ -1314,7 +1314,7 @@ body.kv.is-locked{overflow:hidden}
   .kv-section{padding:60px 0}
   /* .kv-panel{border-radius:20px} */
   .kv-hero{padding-top:12px}
-  .kv-hero__frame{height:clamp(560px,86vh,720px);border-radius:20px}
+  .kv-hero__frame{height:clamp(560px,86vh,720px)}
   .kv-hero__copy{width:auto;left:22px;right:22px;bottom:66px;text-align:left}
   .kv-hero__copy h1{font-size:clamp(38px,11.5vw,56px);margin-bottom:14px}
   .kv-hero__sub{font-size:10.5px;letter-spacing:.14em;text-align:left}
@@ -1361,14 +1361,14 @@ body.kv.is-locked{overflow:hidden}
   .kv-amenity svg{width:36px;height:36px}
   .kv-invest{padding:60px 0 64px}
   .kv-unlock{min-height:280px;padding:34px 24px}
-  .kv-blog{border-radius:20px;padding-bottom:34px}
+  .kv-blog{padding-bottom:34px}
   .kv-blog__label{width:min(360px,84%);min-height:90px;padding:20px 24px;border-radius:0 26px 26px 0; top: 20px;}
   .kv-blog__label .kv-display{font-size:28px}
   .kv-blog__label .kv-eyebrow{margin-bottom:6px;font-size:10px}
   .kv-blog__inner{padding:30px 0 0;gap:0}
   .kv-blog__feature{margin:0 20px}
   .kv-blog__heading{font-size:32px}
-  .kv-blog__posts{margin:12px var(--kv-frame) 0;padding:24px 20px 0;border-radius:18px}
+  .kv-blog__posts{margin:0px var(--kv-frame) 0;padding:24px 20px 0;}
   .kv-blog__rail{padding-bottom:84px}
   .kv-blog__track{grid-auto-columns:72%}
   .kv-blog__rail .kv-blog__arrow{
