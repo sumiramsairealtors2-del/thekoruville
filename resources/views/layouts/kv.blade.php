@@ -22,6 +22,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter+Tight:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
 
 {{-- Icons / favicons --}}
 <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon.svg') }}" />
@@ -86,30 +87,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 {{-- ============ ENQUIRY MODAL ============ --}}
 <div class="kv-modal" id="kvModal-enquiry" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="kvEnquiryTitle">
-  <div class="kv-modal__box">
+  <div class="kv-modal__box kv-modal__box--enquiry">
     <button type="button" class="kv-modal__close" data-kv-close-modal aria-label="Close"></button>
-    <span class="kv-eyebrow">Get In Touch</span>
-    <h2 id="kvEnquiryTitle">Enquire About Plots</h2>
-    <p>Share your details and our team will call you with the latest availability and pricing.</p>
-    <form data-kv-form data-source="The Koru Ville Website — Enquiry" novalidate>
-      <div class="kv-field">
-        <label for="enqName">Full Name</label>
-        <input type="text" id="enqName" name="name" autocomplete="name" required>
-        <p class="kv-form__error"></p>
+    <div class="kv-modal__box__cols">
+      <div class="kv-modal__box__img">
+        <img src="{{ asset('assets/img/popup.webp') }}" alt="The Koru Ville tiger" loading="lazy">
       </div>
-      <div class="kv-field">
-        <label for="enqEmail">Email</label>
-        <input type="email" id="enqEmail" name="email" autocomplete="email" required>
-        <p class="kv-form__error"></p>
+      <div class="kv-modal__box__form">
+        <span class="kv-eyebrow">Get In Touch</span>
+        <h2 id="kvEnquiryTitle">Enquire About Plots</h2>
+        <p>Share your details and our team will call you with the latest availability and pricing.</p>
+        <form data-kv-form data-source="The Koru Ville Website — Enquiry" novalidate>
+          <div class="kv-field">
+            <label for="enqName">Full Name</label>
+            <input type="text" id="enqName" name="name" autocomplete="name" required>
+            <p class="kv-form__error"></p>
+          </div>
+          <div class="kv-field">
+            <label for="enqEmail">Email</label>
+            <input type="email" id="enqEmail" name="email" autocomplete="email" required>
+            <p class="kv-form__error"></p>
+          </div>
+          <div class="kv-field">
+            <label for="enqPhone">Phone</label>
+            <input type="tel" id="enqPhone" name="mobile" autocomplete="tel" required>
+            <p class="kv-form__error"></p>
+          </div>
+          <button type="submit" class="kv-btn kv-btn--olive kv-btn--block">Send Enquiry</button>
+          <p class="kv-form__status" role="status" aria-live="polite"></p>
+        </form>
       </div>
-      <div class="kv-field">
-        <label for="enqPhone">Phone</label>
-        <input type="tel" id="enqPhone" name="mobile" autocomplete="tel" required>
-        <p class="kv-form__error"></p>
-      </div>
-      <button type="submit" class="kv-btn kv-btn--olive kv-btn--block">Send Enquiry</button>
-      <p class="kv-form__status" role="status" aria-live="polite"></p>
-    </form>
+    </div>
   </div>
 </div>
 

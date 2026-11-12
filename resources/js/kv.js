@@ -123,7 +123,20 @@ import './kv-motion.js';
     modal.setAttribute('aria-hidden', 'true');
     if (!document.querySelector('.kv-modal.is-open')) document.body.classList.remove('is-locked');
     if (lastFocus) lastFocus.focus();
+    if (modal.id === 'kvModal-enquiry') {
+      enquiryDismissed = true;
+    }
   }
+
+  /* ------------------------------------------------------------ enquiry auto-open */
+  var enquiryDismissed = false;
+  (function autoOpenEnquiry() {
+    if (enquiryDismissed) return;
+    var modal = $('#kvModal-enquiry');
+    if (!modal) return;
+    setTimeout(function () { openModal('enquiry'); }, 5000);
+  })();
+
 
   document.addEventListener('click', function (e) {
     var opener = e.target.closest('[data-kv-open]');

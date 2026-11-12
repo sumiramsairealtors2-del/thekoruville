@@ -30,8 +30,8 @@
   --sand:var(--c-light-beige);
   --white:var(--c-soft-cream);
 
-  --font-display:'Cormorant Garamond', serif;
-  --font-body:'Jost', sans-serif;
+  --font-display:var(--kv-font-display);
+  --font-body:var(--kv-font-display);
   --container:1240px;
 }
 
@@ -54,7 +54,7 @@
 /* ---------- hero ---------- */
 .blog-hero{
   padding:160px 0 90px;
-  background:linear-gradient(160deg, #1c2013 0%, #313922 100%);
+  background:linear-gradient(160deg, #313922 0%, #313922 100%);
   text-align:center;
   position:relative;
   overflow:hidden;
