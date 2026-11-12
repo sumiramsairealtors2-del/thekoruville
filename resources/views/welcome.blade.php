@@ -380,6 +380,10 @@
         <h3>Clubhouse</h3>
         <p>A shared resort-style clubhouse at the heart of it all.</p>
       </div>
+      <div class="kv-amenity__viewmore" aria-label="View more amenities">
+        <p>Explore every shared space — pool, lawns, dining cluster, security and clubhouse.</p>
+        <a href="{{ url('/amenities') }}" class="kv-amenity__viewmore-link">View more <span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </div>
 </section>
