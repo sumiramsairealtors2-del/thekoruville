@@ -16,7 +16,7 @@ class MediaController extends Controller
      */
     public function gallery(): BinaryFileResponse
     {
-        $path = public_path('assets/video/gallery.mp4');
+        $path = public_path('assets/video/The-Koru-Ville-Teaser.mp4');
 
         abort_unless(is_file($path), 404);
 

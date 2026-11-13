@@ -7,7 +7,7 @@
     @include('partials.kv.crown', ['shapeClass' => 'kv-crown__shape', 'shapeVariant' => 'header'])
 
     <a class="kv-crown__tab" href="{{ url('/') }}" aria-label="The Koru Ville — home">
-      <img src="{{ asset('assets/img/Logo.webp') }}" alt="The Koru Ville" width="1093" height="589">
+      <img src="{{ asset('assets/img/website.png') }}" alt="The Koru Ville" width="1093" height="589">
     </a>
   </div>
 
@@ -17,6 +17,12 @@
     <a href="{{ url('/pricing') }}" @if(request()->is('pricing')) aria-current="page" @endif>Layout &amp; Price</a>
     <a href="{{ url('/blog') }}">Blog</a>
   </nav>
+
+  <div class="kv-header__logo" aria-label="The Koru Ville — home">
+    <a href="{{ url('/') }}">
+      <img src="{{ asset('assets/img/website.png') }}" alt="The Koru Ville" loading="lazy">
+    </a>
+  </div>
 
   <nav class="kv-nav kv-nav--right" aria-label="Secondary">
     <a href="{{ url('/') }}#contact">Contact</a>

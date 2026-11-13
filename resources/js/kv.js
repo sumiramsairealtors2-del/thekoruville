@@ -48,6 +48,35 @@ import './kv-motion.js';
     });
   }
 
+  /* ------------------------------------------------------------ scroll navbar pill */
+  (function scrollNavbar() {
+    var header = $('#kvHeader');
+    if (!header) return;
+    var lastScrollY = window.scrollY;
+    var ticking = false;
+    var threshold = 60;
+
+    function update() {
+      var currentScrollY = window.scrollY;
+
+      if (currentScrollY > threshold) {
+        header.classList.add('kv-header--scrolled');
+      } else {
+        header.classList.remove('kv-header--scrolled');
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+
   /* --------------------------------------------------------------- hero */
   var slides = $$('.kv-hero__slide');
   var dots = $$('.kv-hero__dots button');
@@ -114,6 +143,8 @@ import './kv-motion.js';
     modal.classList.add('is-open');
     modal.removeAttribute('aria-hidden');
     document.body.classList.add('is-locked');
+    modal.classList.add('kv-modal--opening');
+    setTimeout(function () { modal.classList.remove('kv-modal--opening'); }, 500);
     var focusable = modal.querySelector('input, button, a');
     if (focusable) focusable.focus();
   }
@@ -123,9 +154,7 @@ import './kv-motion.js';
     modal.setAttribute('aria-hidden', 'true');
     if (!document.querySelector('.kv-modal.is-open')) document.body.classList.remove('is-locked');
     if (lastFocus) lastFocus.focus();
-    if (modal.id === 'kvModal-enquiry') {
-      enquiryDismissed = true;
-    }
+    if (modal.id === 'kvModal-enquiry') enquiryDismissed = true;
   }
 
   /* ------------------------------------------------------------ enquiry auto-open */

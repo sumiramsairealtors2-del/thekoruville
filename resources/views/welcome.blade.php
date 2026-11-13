@@ -84,7 +84,7 @@
     <div class="kv-hero__slide is-active" aria-hidden="false" data-mv-parallax="-46">
       <picture>
         <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-01-mobile-900x1600.webp') }}">
-        <img src="{{ asset('assets/img/slots/hero-01-desktop-1920x1080.webp') }}"
+        <img src="{{ asset('https://thekoruville.com/assets/img/thekoruville.jpg') }}"
              width="1920" height="1080"
              alt="The Koru Ville resort-themed township at Kilawali, Uttarakhand" fetchpriority="high">
       </picture>
@@ -92,14 +92,14 @@
     <div class="kv-hero__slide" aria-hidden="true" data-mv-parallax="-46">
       <picture>
         <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-02-mobile-900x1600.webp') }}">
-        <img src="{{ asset('assets/img/slots/hero-02-desktop-1920x1080.webp') }}"
+        <img src="{{ asset('https://thekoruville.com/assets/img/thekoruville.webp') }}"
              width="1920" height="1080" alt="The Koru Ville at dusk" loading="lazy">
       </picture>
     </div>
     <div class="kv-hero__slide" aria-hidden="true" data-mv-parallax="-46">
       <picture>
         <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-03-mobile-900x1600.webp') }}">
-        <img src="{{ asset('assets/img/slots/hero-03-desktop-1920x1080.webp') }}"
+        <img src="{{ asset('https://thekoruville.com/assets/img/villaview.webp') }}"
              width="1920" height="1080" alt="The Koru Ville clubhouse and landscaped grounds" loading="lazy">
       </picture>
     </div>
@@ -165,7 +165,7 @@
     <div class="kv-split__media" data-mv="scale">
       <picture>
         <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/location-mobile-900x765.webp') }}">
-        <img src="{{ asset('assets/img/slots/location-desktop-1400x1020.webp') }}"
+        <img src="{{ asset('https://thekoruville.com/assets/img/koru_villa_1.webp') }}"
              width="1400" height="1020"
              alt="Landscaped grounds at The Koru Ville, Kilawali" loading="lazy" data-mv-parallax="52">
       </picture>
@@ -220,7 +220,7 @@
           <span class="kv-plot__badge">Starting size</span>
           <picture>
             <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-01-mobile-760x836.webp') }}">
-            <img src="{{ asset('assets/img/slots/plot-01-desktop-900x1013.webp') }}"
+            <img src="{{ asset('https://thekoruville.com/assets/img/mayura.webp') }}"
                  width="900" height="1013"
                  alt="111 sq.yd residential plot at The Koru Ville" loading="lazy">
           </picture>
@@ -231,7 +231,7 @@
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
           </span>
           <h3>111 sq.yd</h3>
-          <p>The starter plot — a compact retreat inside the resort-themed layout.</p>
+          <p>The Mayoora plot — a compact retreat inside the resort-themed layout.</p>
           <div class="kv-plot__meta">
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Residential</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>111 sq.yd</span>
@@ -246,7 +246,7 @@
           <span class="kv-plot__badge">Most popular</span>
           <picture>
             <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-02-mobile-760x836.webp') }}">
-            <img src="{{ asset('assets/img/slots/plot-02-desktop-900x1013.webp') }}"
+            <img src="{{ asset('https://thekoruville.com/assets/img/simha.webp') }}"
                  width="900" height="1013"
                  alt="125 sq.yd residential plot at The Koru Ville" loading="lazy">
           </picture>
@@ -257,7 +257,7 @@
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
           </span>
           <h3>125 sq.yd</h3>
-          <p>A little more room — ideal for a family home with outdoor space.</p>
+          <p>A Mriga Plot — ideal for a family home with outdoor space.</p>
           <div class="kv-plot__meta">
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Residential</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>125 sq.yd</span>
@@ -272,7 +272,7 @@
           <span class="kv-plot__badge">Largest layout</span>
           <picture>
             <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-03-mobile-760x836.webp') }}">
-            <img src="{{ asset('assets/img/slots/plot-03-desktop-900x1013.webp') }}"
+            <img src="{{ asset('https://thekoruville.com/assets/img/mriga.webp') }}"
                  width="900" height="1013"
                  alt="139 sq.yd residential plot at The Koru Ville" loading="lazy">
           </picture>
@@ -283,7 +283,7 @@
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
           </span>
           <h3>139 sq.yd</h3>
-          <p>The largest layout — generous space for a full family residence.</p>
+          <p>The Simha layout — generous space for a full family residence.</p>
           <div class="kv-plot__meta">
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Residential</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>139 sq.yd</span>
@@ -314,7 +314,7 @@
            poster="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
            aria-label="The Koru Ville site film">
       {{-- ?v= busts the cache when the film file is replaced --}}
-      <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/gallery.mp4')) ?: 1 }}" type="video/mp4">
+      <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/The-Koru-Ville-Teaser.mp4')) ?: 1 }}" type="video/mp4">
     </video>
 
     <div class="kv-gallery__label" aria-hidden="true" data-mv="fade" data-mv-delay="260">
@@ -424,22 +424,6 @@
 {{-- ==================================================== BLOG ==================================================== --}}
 @php
   $posts = \App\Models\Post::where('is_published', true)->latest('updated_at')->take(5)->get();
-
-  if ($posts->isEmpty()) {
-    $jsonPath = database_path('data/real-posts.json');
-    if (is_file($jsonPath)) {
-      $data = json_decode(file_get_contents($jsonPath), true);
-      if (is_array($data)) {
-        $posts = collect(array_map(function ($item) {
-          return (object) array_merge($item, [
-            'updated_at' => $item['published_at'] ?? null,
-            'image' => $item['image'] ?? null,
-          ]);
-        }, array_slice($data, 0, 5)));
-      }
-    }
-  }
-
   $featured = $posts->first();
   $cards = $posts->slice(1)->values();
   if ($cards->count() < 3) { $cards = $posts->take(3); }
@@ -449,13 +433,7 @@
       return \Illuminate\Support\Str::limit(trim(preg_replace('/\s+/', ' ', $text)), 150, '…');
   };
   $postImage = function ($post, $fallback = 'assets/img/kv/gallery-1440.webp') {
-      if ($post && $post->image) {
-        $storagePath = public_path('storage/'.$post->image);
-        if (is_file($storagePath)) {
-          return asset('storage/'.$post->image);
-        }
-      }
-      return asset($fallback);
+      return $post && $post->image ? asset('storage/'.$post->image) : asset($fallback);
   };
 
   $featuredTitle = $featured ? $featured->title : 'Notes from the Koru Ville';

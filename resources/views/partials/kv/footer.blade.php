@@ -65,7 +65,7 @@
                href="https://up-rera.in/projects"
                target="_blank"
                rel="noopener noreferrer">
-              UPRERAPRJ622344/11/2025
+              UKREP10260000768
             </a>
 
             <p class="kv-footer__rera-meta">Launch 04-11-2025</p>
