@@ -424,6 +424,22 @@
 {{-- ==================================================== BLOG ==================================================== --}}
 @php
   $posts = \App\Models\Post::where('is_published', true)->latest('updated_at')->take(5)->get();
+
+  if ($posts->isEmpty()) {
+    $jsonPath = database_path('data/real-posts.json');
+    if (is_file($jsonPath)) {
+      $data = json_decode(file_get_contents($jsonPath), true);
+      if (is_array($data)) {
+        $posts = collect(array_map(function ($item) {
+          return (object) array_merge($item, [
+            'updated_at' => $item['published_at'] ?? null,
+            'image' => $item['image'] ?? null,
+          ]);
+        }, array_slice($data, 0, 5)));
+      }
+    }
+  }
+
   $featured = $posts->first();
   $cards = $posts->slice(1)->values();
   if ($cards->count() < 3) { $cards = $posts->take(3); }
@@ -433,7 +449,13 @@
       return \Illuminate\Support\Str::limit(trim(preg_replace('/\s+/', ' ', $text)), 150, '…');
   };
   $postImage = function ($post, $fallback = 'assets/img/kv/gallery-1440.webp') {
-      return $post && $post->image ? asset('storage/'.$post->image) : asset($fallback);
+      if ($post && $post->image) {
+        $storagePath = public_path('storage/'.$post->image);
+        if (is_file($storagePath)) {
+          return asset('storage/'.$post->image);
+        }
+      }
+      return asset($fallback);
   };
 
   $featuredTitle = $featured ? $featured->title : 'Notes from the Koru Ville';
