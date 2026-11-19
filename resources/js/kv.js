@@ -55,16 +55,23 @@ import './kv-motion.js';
     var lastScrollY = window.scrollY;
     var ticking = false;
     var threshold = 60;
+    var wasScrolled = false;
 
     function update() {
       var currentScrollY = window.scrollY;
+      var shouldBeScrolled = currentScrollY > threshold;
 
-      if (currentScrollY > threshold) {
+      if (shouldBeScrolled && !wasScrolled) {
         header.classList.add('kv-header--scrolled');
-      } else {
+        header.style.top = '-160px';
+        window.requestAnimationFrame(function () {
+          header.style.top = '';
+        });
+      } else if (!shouldBeScrolled && wasScrolled) {
         header.classList.remove('kv-header--scrolled');
       }
 
+      wasScrolled = shouldBeScrolled;
       lastScrollY = currentScrollY;
       ticking = false;
     }
@@ -302,50 +309,143 @@ import './kv-motion.js';
     });
   });
 
-  /* ---------------------------------------------------------- carousels */
+  /* ---------------------------------------------------------- carousels (centre-focused, infinite) */
   $$('[data-carousel]').forEach(function (group) {
     var track = group.querySelector('[data-track]');
     if (!track) return;
     var prev = group.querySelector('[data-prev]');
     var next = group.querySelector('[data-next]');
-    var dotsWrap = group.querySelector('[data-dots]');
-    var dots = [];
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var MIN_SCALE = 0.82;
+    var CLONES = 3;
 
-    function gap() { return parseFloat(getComputedStyle(track).columnGap) || 20; }
-    function stepWidth() {
-      var card = track.firstElementChild;
-      return card ? card.getBoundingClientRect().width + gap() : track.clientWidth * 0.8;
+    var cards = Array.prototype.slice.call(track.children);
+    var count = cards.length;
+    if (count === 0) return;
+
+    var allItems = [];
+    var realCentres = [];
+    var STEP = 0;
+    var MIN_SCROLL = 0;
+    var MAX_SCROLL = 0;
+    var scaleTimer = null;
+    var snapTimer = null;
+    var scrolling = false;
+    var active = 0;
+
+    /* --------------------------------------------------- layout measure */
+    function measure() {
+      var head = document.createDocumentFragment();
+      var tail = document.createDocumentFragment();
+      for (var i = count - CLONES; i < count; i++) head.appendChild(cards[i].cloneNode(true));
+      for (var i = 0; i < CLONES; i++) tail.appendChild(cards[i].cloneNode(true));
+      track.insertBefore(head, track.firstChild);
+      track.appendChild(tail);
+      allItems = Array.prototype.slice.call(track.children);
+      realCentres = allItems.slice(CLONES, CLONES + count).map(function (it) {
+        return it.offsetLeft + it.offsetWidth / 2;
+      });
+      if (count > 1) STEP = realCentres[1] - realCentres[0];
+      else STEP = cards[0] ? cards[0].offsetWidth : 0;
+      var half = track.clientWidth / 2;
+      MIN_SCROLL = realCentres[0] - half;
+      MAX_SCROLL = realCentres[count - 1] - half;
     }
 
-    function step(dir) {
-      track.scrollBy({ left: dir * stepWidth(), behavior: reduceMotion ? 'auto' : 'smooth' });
-    }
-    if (prev) prev.addEventListener('click', function () { step(-1); });
-    if (next) next.addEventListener('click', function () { step(1); });
-
-    if (dotsWrap) {
-      Array.prototype.forEach.call(track.children, function () {
-        var dot = document.createElement('span');
-        dotsWrap.appendChild(dot);
-        dots.push(dot);
+    /* --------------------------------------------------- centre scaling */
+    function applyScales() {
+      if (STEP === 0) return;
+      var tc = track.scrollLeft + track.clientWidth / 2;
+      allItems.forEach(function (it) {
+        var centre = it.offsetLeft + it.offsetWidth / 2;
+        var d = centre - tc;
+        var steps = d / (STEP * 1.6);
+        var t = Math.max(0, Math.min(1, 1 - Math.abs(steps)));
+        var ease = t * t * (3 - 2 * t);
+        var scale = MIN_SCALE + (1 - MIN_SCALE) * ease;
+        it.style.setProperty('--kv-review-scale', scale.toFixed(3));
       });
     }
 
-    function sync() {
-      var max = track.scrollWidth - track.clientWidth - 2;
-      if (prev) prev.disabled = track.scrollLeft <= 2;
-      if (next) next.disabled = track.scrollLeft >= max;
-      if (dots.length) {
-        var active = Math.round(track.scrollLeft / stepWidth());
-        dots.forEach(function (dot, i) { dot.classList.toggle('is-active', i === active); });
-      }
+    function scheduleScale() {
+      if (scaleTimer) return;
+      scaleTimer = requestAnimationFrame(function () {
+        scaleTimer = null;
+        applyScales();
+      });
     }
-    track.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    sync();
+
+    /* --------------------------------------------------- infinite wrap */
+    function handleWrap() {
+      var sl = track.scrollLeft;
+      var moved = false;
+      if (sl < MIN_SCROLL) {
+        track.scrollLeft = sl + count * STEP;
+        moved = true;
+      } else if (sl > MAX_SCROLL) {
+        track.scrollLeft = sl - count * STEP;
+        moved = true;
+      }
+      return moved;
+    }
+
+    /* --------------------------------------------------- scroll to index */
+    function scrollToIndex(index, animate) {
+      if (index < 0) index = count - 1;
+      if (index >= count) index = 0;
+      if (index === active) return;
+      var target = realCentres[index] - track.clientWidth / 2;
+      scrolling = true;
+      track.scrollTo({ left: target, behavior: (animate && !reduceMotion) ? 'smooth' : 'auto' });
+      active = index;
+      scheduleScale();
+      setTimeout(function () { scrolling = false; }, 400);
+    }
+
+    function nearestIndex() {
+      var sl = track.scrollLeft + track.clientWidth / 2;
+      var best = 0;
+      var bestDist = Math.abs(realCentres[0] - sl);
+      for (var i = 1; i < count; i++) {
+        var dist = Math.abs(realCentres[i] - sl);
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      }
+      return best;
+    }
+
+    /* prev / next */
+    if (prev) {
+      prev.addEventListener('click', function () { scrollToIndex(active - 1, true); });
+    }
+    if (next) {
+      next.addEventListener('click', function () { scrollToIndex(active + 1, true); });
+    }
+
+    /* scroll: continuous scale + wrap + snap to centre on end */
+    track.addEventListener('scroll', function () {
+      if (scrolling) { scheduleScale(); return; }
+      scheduleScale();
+      if (handleWrap()) { scheduleScale(); return; }
+      if (snapTimer) clearTimeout(snapTimer);
+      snapTimer = setTimeout(function () {
+        var idx = nearestIndex();
+        if (idx !== active) scrollToIndex(idx, true);
+      }, 160);
+    }, { passive: true });
+
+    measure();
+    track.scrollLeft = MIN_SCROLL;
+    applyScales();
+    active = 0;
+
+    window.addEventListener('resize', function () {
+      measure();
+      track.scrollLeft = MIN_SCROLL + active * STEP;
+      applyScales();
+    }, { passive: true });
   });
 
-  /* --------------------------------------------- blog featured carousel */
+  /* --------------------------------------------- blog featured carousel (centre-focused, infinite) */
   $$('[data-blog-slider]').forEach(function (section) {
     var track = section.querySelector('[data-track]');
     var feature = section.querySelector('[data-blog-feature]');
@@ -359,6 +459,14 @@ import './kv-motion.js';
     var dotsWrap = section.querySelector('[data-dots]');
     var layers = $$('[data-blog-bg-img]', section);
     var cards = $$('[data-slide]', track);
+    var count = cards.length;
+    if (count === 0) return;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var MIN_SCALE = 0.82;
+    var CLONES = count > 1 ? Math.min(3, count) : 0;
+    var USE_LOOP = count > 1;
+
     var slides = [{
       title: feature.getAttribute('data-title') || '',
       copy: feature.getAttribute('data-copy') || '',
@@ -375,14 +483,23 @@ import './kv-motion.js';
       });
     });
 
-    var active = 0;
     var activeLayer = 0;
     var bgRequest = 0;
     var swapTimer = null;
     var dots = [];
+    var scaleTimer = null;
+    var snapTimer = null;
+    var scrolling = false;
+    var active = 0;
+
+    var allItems = [];
+    var realCentres = [];
+    var STEP = 0;
+    var MIN_SCROLL = 0;
+    var MAX_SCROLL = 0;
 
     if (dotsWrap) {
-      slides.forEach(function () {
+      slides.slice(1).forEach(function () {
         var dot = document.createElement('span');
         dotsWrap.appendChild(dot);
         dots.push(dot);
@@ -413,64 +530,142 @@ import './kv-motion.js';
       preload.src = src;
     }
 
-    function scrollRail(index) {
-      var behavior = reduceMotion ? 'auto' : 'smooth';
-      if (index <= 0) {
-        track.scrollTo({ left: 0, behavior: behavior });
-        return;
+    /* --------------------------------------------------- layout measure */
+    function measure() {
+      allItems = $$('[data-slide]', track);
+      if (USE_LOOP && CLONES > 0) {
+        var head = document.createDocumentFragment();
+        var tail = document.createDocumentFragment();
+        for (var i = count - CLONES; i < count; i++) head.appendChild(cards[i].cloneNode(true));
+        for (var i = 0; i < CLONES; i++) tail.appendChild(cards[i].cloneNode(true));
+        track.insertBefore(head, track.firstChild);
+        track.appendChild(tail);
+        allItems = $$('[data-slide]', track);
       }
-      var card = track.children[index - 1];
-      if (!card) return;
-      var left = track.scrollLeft + card.getBoundingClientRect().left - track.getBoundingClientRect().left;
-      var max = track.scrollWidth - track.clientWidth;
-      track.scrollTo({ left: Math.max(0, Math.min(left, max)), behavior: behavior });
+      realCentres = allItems.slice(CLONES, CLONES + count).map(function (it) {
+        return it.offsetLeft + it.offsetWidth / 2;
+      });
+      if (count > 1) STEP = realCentres[1] - realCentres[0];
+      else STEP = cards[0] ? cards[0].offsetWidth : 0;
+      var half = track.clientWidth / 2;
+      MIN_SCROLL = realCentres[0] - half;
+      MAX_SCROLL = realCentres[count - 1] - half;
     }
 
-    function render(index, animate) {
-      var slide = slides[index];
-      if (!slide) return;
+    /* --------------------------------------------------- centre scaling */
+    function applyScales() {
+      if (STEP === 0) return;
+      var tc = track.scrollLeft + track.clientWidth / 2;
+      allItems.forEach(function (it) {
+        var centre = it.offsetLeft + it.offsetWidth / 2;
+        var d = centre - tc;
+        var steps = d / (STEP * 1.6);
+        var t = Math.max(0, Math.min(1, 1 - Math.abs(steps)));
+        var ease = t * t * (3 - 2 * t);
+        var scale = MIN_SCALE + (1 - MIN_SCALE) * ease;
+        it.style.setProperty('--kv-blog-scale', scale.toFixed(3));
+      });
+    }
+
+    function scheduleScale() {
+      if (scaleTimer) return;
+      scaleTimer = requestAnimationFrame(function () {
+        scaleTimer = null;
+        applyScales();
+      });
+    }
+
+    /* --------------------------------------------------- infinite wrap */
+    function handleWrap() {
+      if (!USE_LOOP) return false;
+      var sl = track.scrollLeft;
+      var moved = false;
+      if (sl < MIN_SCROLL) {
+        track.scrollLeft = sl + count * STEP;
+        moved = true;
+      } else if (sl > MAX_SCROLL) {
+        track.scrollLeft = sl - count * STEP;
+        moved = true;
+      }
+      return moved;
+    }
+
+    /* --------------------------------------------------- render ui */
+    function renderUI(index) {
       active = index;
-
+      var slide = slides[index + 1];
+      if (!slide) return;
       if (cta) cta.href = slide.url;
-
-      if (animate) {
-        clearTimeout(swapTimer);
-        feature.classList.add('is-swapping');
-        swapTimer = setTimeout(function () {
-          titleEl.textContent = slide.title;
-          copyEl.textContent = slide.copy;
-          feature.classList.remove('is-swapping');
-        }, 160);
-      } else {
+      if (swapTimer) clearTimeout(swapTimer);
+      feature.classList.add('is-swapping');
+      swapTimer = setTimeout(function () {
         titleEl.textContent = slide.title;
         copyEl.textContent = slide.copy;
-      }
-
+        feature.classList.remove('is-swapping');
+      }, 160);
       setBackground(slide.image);
-      scrollRail(index);
-
       cards.forEach(function (card, i) {
-        card.classList.toggle('is-active', i === index - 1);
+        card.classList.toggle('is-active', i === index);
       });
       dots.forEach(function (dot, i) {
         dot.classList.toggle('is-active', i === index);
       });
-      if (prev) prev.disabled = index === 0;
-      if (next) next.disabled = index === slides.length - 1;
     }
 
+    function scrollToIndex(index, animate) {
+      if (index < 0) index = count - 1;
+      if (index >= count) index = 0;
+      if (index === active) return;
+      var target = realCentres[index] - track.clientWidth / 2;
+      scrolling = true;
+      track.scrollTo({ left: target, behavior: (animate && !reduceMotion) ? 'smooth' : 'auto' });
+      renderUI(index);
+      scheduleScale();
+      setTimeout(function () { scrolling = false; }, 400);
+    }
+
+    /* nearest real card index for current scrollLeft */
+    function nearestIndex() {
+      var sl = track.scrollLeft + track.clientWidth / 2;
+      var best = 0;
+      var bestDist = Math.abs(realCentres[0] - sl);
+      for (var i = 1; i < count; i++) {
+        var dist = Math.abs(realCentres[i] - sl);
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      }
+      return best;
+    }
+
+    /* prev / next */
     if (prev) {
-      prev.addEventListener('click', function () {
-        if (active > 0) render(active - 1, true);
-      });
+      prev.addEventListener('click', function () { scrollToIndex(active - 1, true); });
     }
     if (next) {
-      next.addEventListener('click', function () {
-        if (active < slides.length - 1) render(active + 1, true);
-      });
+      next.addEventListener('click', function () { scrollToIndex(active + 1, true); });
     }
 
-    render(0, false);
+    /* scroll: continuous scale + wrap + snap to centre on end */
+    track.addEventListener('scroll', function () {
+      if (scrolling) { scheduleScale(); return; }
+      scheduleScale();
+      if (handleWrap()) { scheduleScale(); return; }
+      if (snapTimer) clearTimeout(snapTimer);
+      snapTimer = setTimeout(function () {
+        var idx = nearestIndex();
+        if (idx !== active) scrollToIndex(idx, true);
+      }, 160);
+    }, { passive: true });
+
+    measure();
+    track.scrollLeft = MIN_SCROLL;
+    applyScales();
+    renderUI(0);
+
+    window.addEventListener('resize', function () {
+      measure();
+      track.scrollLeft = MIN_SCROLL + active * STEP;
+      applyScales();
+    }, { passive: true });
   });
 
   /* ------------------------------------------------------ review expand */
@@ -739,4 +934,126 @@ import './kv-motion.js';
       document.body.removeChild(tmp);
     });
   });
+})();
+
+/* ==========================================================================
+   THE KORU VILLE — dock-style navbar magnification
+   Apple macOS Dock proximity effect for the left and right nav groups.
+   Vanilla JS, spring physics, requestAnimationFrame. Zero dependencies.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var MAGNIFICATION = 1.28;
+  var DISTANCE = 150;
+  var STIFFNESS = 260;
+  var DAMPING = 26;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var desktop = window.matchMedia('(min-width: 1025px) and (hover: hover) and (pointer: fine)');
+
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
+
+  function clamp(v, mn, mx) { return Math.min(mx, Math.max(mn, v)); }
+
+  function smoothstep(t) { return t * t * (3 - 2 * t); }
+
+  /* Build an independent controller for one nav group. */
+  function createDock(group) {
+    var links = $$('.kv-nav-link', group);
+    if (!links.length) return null;
+
+    var items = links.map(function (el) {
+      return { el: el, scale: 1, velocity: 0, target: 1, rect: null };
+    });
+
+    function measure() {
+      items.forEach(function (it) {
+        it.rect = it.el.getBoundingClientRect();
+      });
+    }
+    measure();
+
+    var raf = null;
+    var last = null;
+    var mouse = null; // {x, y} or null when no active pointer
+
+    function targetScaleFor(it) {
+      if (!mouse) return 1;
+      var cx = it.rect.left + it.rect.width / 2;
+      var cy = it.rect.top + it.rect.height / 2;
+      var dx = mouse.x - cx;
+      var dy = mouse.y - cy;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var t = clamp(1 - dist / DISTANCE, 0, 1);
+      return 1 + (MAGNIFICATION - 1) * smoothstep(t);
+    }
+
+    function update(now) {
+      raf = null;
+      var dt = last ? clamp((now - last) / 1000, 0, 0.1) : 0.016;
+      last = now;
+      var changed = false;
+      items.forEach(function (it) {
+        var target = targetScaleFor(it);
+        var force = STIFFNESS * (target - it.scale);
+        var accel = force - DAMPING * it.velocity;
+        it.velocity += accel * dt;
+        it.scale += it.velocity * dt;
+        if (Math.abs(it.scale - 1) > 0.001 || Math.abs(it.velocity) > 0.001) changed = true;
+        it.el.style.setProperty('--kv-nav-dock-scale', it.scale.toFixed(4));
+      });
+      if (changed) raf = requestAnimationFrame(update);
+      else { raf = null; last = null; }
+    }
+
+    function start() { if (!raf) { last = null; raf = requestAnimationFrame(update); } }
+
+    function setMouse(x, y) {
+      if (!mouse) mouse = {};
+      mouse.x = x; mouse.y = y;
+      start();
+    }
+
+    function clearMouse() {
+      mouse = null;
+      start();
+    }
+
+    group.addEventListener('pointermove', function (e) { setMouse(e.clientX, e.clientY); }, { passive: true });
+    group.addEventListener('pointerleave', clearMouse, { passive: true });
+
+    var measureRaf = null;
+    function scheduleMeasure() {
+      if (measureRaf) return;
+      measureRaf = requestAnimationFrame(function () {
+        measureRaf = null;
+        measure();
+      });
+    }
+    window.addEventListener('resize', scheduleMeasure, { passive: true });
+    window.addEventListener('scroll', scheduleMeasure, { passive: true });
+
+    return { destroy: function () {
+      group.removeEventListener('pointermove', setMouse);
+      group.removeEventListener('pointerleave', clearMouse);
+      window.removeEventListener('resize', scheduleMeasure);
+      window.removeEventListener('scroll', scheduleMeasure);
+      if (raf) cancelAnimationFrame(raf);
+      items.forEach(function (it) { it.el.style.removeProperty('--kv-nav-dock-scale'); });
+    }};
+  }
+
+  function init() {
+    if (reduceMotion) return;
+    if (!desktop.matches) return;
+    $$('.kv-nav--left, .kv-nav--right').forEach(createDock);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

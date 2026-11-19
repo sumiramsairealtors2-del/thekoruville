@@ -6,7 +6,7 @@
         'Resort-themed plots from 111 sq.yd',
         '15 minutes from Phato Gate, Jim Corbett',
         '3.5 acres at Kilawali, Kashipur',
-        'RERA Reg. No.: UPRERAPRJ622344/11/2025',
+        'RERA Reg. No.: UKREP10260000768',
         'Book your private site visit',
       ];
     @endphp
