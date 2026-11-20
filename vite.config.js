@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/kv.css',
+                'resources/css/blog.css',
                 'resources/js/kv.js',
             ],
             refresh: true,

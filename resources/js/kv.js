@@ -85,10 +85,15 @@ import './kv-motion.js';
   })();
 
   /* --------------------------------------------------------------- hero */
-  var slides = $$('.kv-hero__slide');
-  var dots = $$('.kv-hero__dots button');
+  var hero = $('#home.kv-hero');
+  var slides = hero ? $$('.kv-hero__slide', hero) : [];
+  var dots = hero ? $$('.kv-hero__dots [aria-current]', hero) : [];
+  var rotation = hero && $('[data-hero-rotation]', hero);
+  var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
   var heroIndex = 0;
   var heroTimer = null;
+  var heroPaused = false;
+  var heroVisible = hero && hero.getBoundingClientRect().bottom > 0;
 
   function showSlide(i) {
     if (!slides.length) return;
@@ -106,19 +111,41 @@ import './kv-motion.js';
     restartHero();
   }
   function restartHero() {
-    if (heroTimer) clearInterval(heroTimer);
-    if (reduceMotion || slides.length < 2) return;
-    heroTimer = setInterval(function () { showSlide(heroIndex + 1); }, 7000);
+    clearInterval(heroTimer);
+    if (motionPreference.matches || slides.length < 2 || heroPaused ||
+        !heroVisible || document.hidden || hero.querySelector(':focus-visible')) return;
+    heroTimer = setInterval(function () { showSlide(heroIndex + 1); }, 14000);
   }
-  var prevBtn = $('.kv-hero__arrow--prev');
-  var nextBtn = $('.kv-hero__arrow--next');
+  var prevBtn = hero && $('.kv-hero__arrow--prev', hero);
+  var nextBtn = hero && $('.kv-hero__arrow--next', hero);
   if (prevBtn) prevBtn.addEventListener('click', function () { nextSlide(-1); });
   if (nextBtn) nextBtn.addEventListener('click', function () { nextSlide(1); });
   dots.forEach(function (d, k) { d.addEventListener('click', function () { showSlide(k); restartHero(); }); });
-  var heroFrame = $('.kv-hero__frame');
-  if (heroFrame) {
-    heroFrame.addEventListener('mouseenter', function () { if (heroTimer) clearInterval(heroTimer); });
-    heroFrame.addEventListener('mouseleave', restartHero);
+  if (hero && slides.length > 1) {
+    hero.addEventListener('focusin', restartHero);
+    hero.addEventListener('focusout', function () { requestAnimationFrame(restartHero); });
+    document.addEventListener('visibilitychange', restartHero);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        heroVisible = entries[0].isIntersecting;
+        hero.classList.toggle('is-offscreen', !heroVisible);
+        restartHero();
+      }).observe(hero);
+    }
+    if (rotation) {
+      rotation.hidden = motionPreference.matches;
+      rotation.addEventListener('click', function () {
+        heroPaused = !heroPaused;
+        hero.classList.toggle('is-paused', heroPaused);
+        rotation.setAttribute('aria-label', heroPaused ? 'Resume slideshow' : 'Pause slideshow');
+        $('span', rotation).textContent = heroPaused ? '▶' : 'Ⅱ';
+        restartHero();
+      });
+      motionPreference.addEventListener('change', function () {
+        rotation.hidden = motionPreference.matches;
+        restartHero();
+      });
+    }
   }
   restartHero();
 
@@ -170,7 +197,9 @@ import './kv-motion.js';
     if (enquiryDismissed) return;
     var modal = $('#kvModal-enquiry');
     if (!modal) return;
-    setTimeout(function () { openModal('enquiry'); }, 5000);
+    setTimeout(function () {
+      if (!enquiryDismissed && !document.querySelector('.kv-modal.is-open')) openModal('enquiry');
+    }, 5000);
   })();
 
 
@@ -181,15 +210,25 @@ import './kv-motion.js';
       var key = opener.getAttribute('data-kv-open');
       if (key === 'unlock') {
         var target = opener.getAttribute('data-unlock') || 'layout';
+        var isRequest = opener.hasAttribute('data-document-request');
+        var documentName = target === 'price' ? 'Price List' : 'Site Layout Plan';
         var title = $('#kvUnlockTitle');
         var message = $('#kvUnlockMessage');
         var field = $('#kvUnlockTarget');
-        if (title) title.textContent = target === 'price' ? 'Unlock Price List' : 'Unlock Layout Plan';
+        var eyebrow = $('#kvModal-unlock .kv-eyebrow');
+        var submit = $('#kvModal-unlock button[type="submit"]');
+        if (title) title.textContent = isRequest ? 'Request ' + documentName : (target === 'price' ? 'Unlock Price List' : 'Unlock Layout Plan');
         if (message) {
-          message.textContent = target === 'price'
-            ? 'Share a few details to unlock the current, plot-wise price breakup.'
-            : 'Share a few details to unlock the full site layout and plot numbering.';
+          if (isRequest) {
+            message.textContent = 'Share your contact details and our team will follow up with the ' + documentName.toLowerCase() + '.';
+          } else {
+            message.textContent = target === 'price'
+              ? 'Share a few details to unlock the current, plot-wise price breakup.'
+              : 'Share a few details to unlock the full site layout and plot numbering.';
+          }
         }
+        if (eyebrow) eyebrow.textContent = isRequest ? 'The Koru Ville' : 'Unlock Content';
+        if (submit) submit.textContent = isRequest ? 'Send Request' : 'Unlock Now';
         if (field) field.value = target;
       }
       openModal(key);
@@ -309,373 +348,228 @@ import './kv-motion.js';
     });
   });
 
-  /* ---------------------------------------------------------- carousels (centre-focused, infinite) */
-  $$('[data-carousel]').forEach(function (group) {
-    var track = group.querySelector('[data-track]');
-    if (!track) return;
-    var prev = group.querySelector('[data-prev]');
-    var next = group.querySelector('[data-next]');
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var MIN_SCALE = 0.82;
-    var CLONES = 3;
+  /* ---------------------------------------------------------- carousels */
+  function initCarousel(group, cards, scaleProperty, onSelect) {
+    var track = $('[data-track]', group);
+    var previous = $('[data-prev]', group);
+    var next = $('[data-next]', group);
+    if (cards.length < 2) {
+      if (previous) previous.hidden = true;
+      if (next) next.hidden = true;
+      if (cards.length && onSelect) onSelect(0, false);
+      return;
+    }
 
-    var cards = Array.prototype.slice.call(track.children);
     var count = cards.length;
-    if (count === 0) return;
+    var copies = count;
+    var before = document.createDocumentFragment();
+    var after = document.createDocumentFragment();
 
-    var allItems = [];
-    var realCentres = [];
-    var STEP = 0;
-    var MIN_SCROLL = 0;
-    var MAX_SCROLL = 0;
-    var scaleTimer = null;
-    var snapTimer = null;
-    var scrolling = false;
-    var active = 0;
-
-    /* --------------------------------------------------- layout measure */
-    function measure() {
-      var head = document.createDocumentFragment();
-      var tail = document.createDocumentFragment();
-      for (var i = count - CLONES; i < count; i++) head.appendChild(cards[i].cloneNode(true));
-      for (var i = 0; i < CLONES; i++) tail.appendChild(cards[i].cloneNode(true));
-      track.insertBefore(head, track.firstChild);
-      track.appendChild(tail);
-      allItems = Array.prototype.slice.call(track.children);
-      realCentres = allItems.slice(CLONES, CLONES + count).map(function (it) {
-        return it.offsetLeft + it.offsetWidth / 2;
+    function clone(card) {
+      var copy = card.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      [copy].concat($$('a, button, [tabindex]', copy)).forEach(function (element) {
+        element.tabIndex = -1;
       });
-      if (count > 1) STEP = realCentres[1] - realCentres[0];
-      else STEP = cards[0] ? cards[0].offsetWidth : 0;
-      var half = track.clientWidth / 2;
-      MIN_SCROLL = realCentres[0] - half;
-      MAX_SCROLL = realCentres[count - 1] - half;
+      return copy;
     }
 
-    /* --------------------------------------------------- centre scaling */
-    function applyScales() {
-      if (STEP === 0) return;
-      var tc = track.scrollLeft + track.clientWidth / 2;
-      allItems.forEach(function (it) {
-        var centre = it.offsetLeft + it.offsetWidth / 2;
-        var d = centre - tc;
-        var steps = d / (STEP * 1.6);
-        var t = Math.max(0, Math.min(1, 1 - Math.abs(steps)));
-        var ease = t * t * (3 - 2 * t);
-        var scale = MIN_SCALE + (1 - MIN_SCALE) * ease;
-        it.style.setProperty('--kv-review-scale', scale.toFixed(3));
-      });
-    }
-
-    function scheduleScale() {
-      if (scaleTimer) return;
-      scaleTimer = requestAnimationFrame(function () {
-        scaleTimer = null;
-        applyScales();
-      });
-    }
-
-    /* --------------------------------------------------- infinite wrap */
-    function handleWrap() {
-      var sl = track.scrollLeft;
-      var moved = false;
-      if (sl < MIN_SCROLL) {
-        track.scrollLeft = sl + count * STEP;
-        moved = true;
-      } else if (sl > MAX_SCROLL) {
-        track.scrollLeft = sl - count * STEP;
-        moved = true;
-      }
-      return moved;
-    }
-
-    /* --------------------------------------------------- scroll to index */
-    function scrollToIndex(index, animate) {
-      if (index < 0) index = count - 1;
-      if (index >= count) index = 0;
-      if (index === active) return;
-      var target = realCentres[index] - track.clientWidth / 2;
-      scrolling = true;
-      track.scrollTo({ left: target, behavior: (animate && !reduceMotion) ? 'smooth' : 'auto' });
-      active = index;
-      scheduleScale();
-      setTimeout(function () { scrolling = false; }, 400);
-    }
-
-    function nearestIndex() {
-      var sl = track.scrollLeft + track.clientWidth / 2;
-      var best = 0;
-      var bestDist = Math.abs(realCentres[0] - sl);
-      for (var i = 1; i < count; i++) {
-        var dist = Math.abs(realCentres[i] - sl);
-        if (dist < bestDist) { bestDist = dist; best = i; }
-      }
-      return best;
-    }
-
-    /* prev / next */
-    if (prev) {
-      prev.addEventListener('click', function () { scrollToIndex(active - 1, true); });
-    }
-    if (next) {
-      next.addEventListener('click', function () { scrollToIndex(active + 1, true); });
-    }
-
-    /* scroll: continuous scale + wrap + snap to centre on end */
-    track.addEventListener('scroll', function () {
-      if (scrolling) { scheduleScale(); return; }
-      scheduleScale();
-      if (handleWrap()) { scheduleScale(); return; }
-      if (snapTimer) clearTimeout(snapTimer);
-      snapTimer = setTimeout(function () {
-        var idx = nearestIndex();
-        if (idx !== active) scrollToIndex(idx, true);
-      }, 160);
-    }, { passive: true });
-
-    measure();
-    track.scrollLeft = MIN_SCROLL;
-    applyScales();
-    active = 0;
-
-    window.addEventListener('resize', function () {
-      measure();
-      track.scrollLeft = MIN_SCROLL + active * STEP;
-      applyScales();
-    }, { passive: true });
-  });
-
-  /* --------------------------------------------- blog featured carousel (centre-focused, infinite) */
-  $$('[data-blog-slider]').forEach(function (section) {
-    var track = section.querySelector('[data-track]');
-    var feature = section.querySelector('[data-blog-feature]');
-    if (!track || !feature) return;
-
-    var titleEl = feature.querySelector('[data-blog-title]');
-    var copyEl = feature.querySelector('[data-blog-copy]');
-    var cta = feature.querySelector('[data-blog-cta]');
-    var prev = section.querySelector('[data-prev]');
-    var next = section.querySelector('[data-next]');
-    var dotsWrap = section.querySelector('[data-dots]');
-    var layers = $$('[data-blog-bg-img]', section);
-    var cards = $$('[data-slide]', track);
-    var count = cards.length;
-    if (count === 0) return;
-
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var MIN_SCALE = 0.82;
-    var CLONES = count > 1 ? Math.min(3, count) : 0;
-    var USE_LOOP = count > 1;
-
-    var slides = [{
-      title: feature.getAttribute('data-title') || '',
-      copy: feature.getAttribute('data-copy') || '',
-      url: feature.getAttribute('data-url') || '',
-      image: feature.getAttribute('data-image') || ''
-    }];
-
-    cards.forEach(function (card) {
-      slides.push({
-        title: card.getAttribute('data-title') || '',
-        copy: card.getAttribute('data-copy') || '',
-        url: card.getAttribute('data-url') || '',
-        image: card.getAttribute('data-image') || ''
-      });
+    cards.forEach(function (card, index) {
+      card.dataset.carouselIndex = index;
+      after.appendChild(clone(card));
+      before.appendChild(clone(card));
     });
+    track.prepend(before);
+    track.append(after);
 
-    var activeLayer = 0;
-    var bgRequest = 0;
-    var swapTimer = null;
-    var dots = [];
-    var scaleTimer = null;
-    var snapTimer = null;
-    var scrolling = false;
+    var items = Array.from(track.children);
+    var centres = [];
     var active = 0;
+    var requested = null;
+    var frame = 0;
+    var settleTimer;
+    var trackWidth;
 
-    var allItems = [];
-    var realCentres = [];
-    var STEP = 0;
-    var MIN_SCROLL = 0;
-    var MAX_SCROLL = 0;
-
-    if (dotsWrap) {
-      slides.slice(1).forEach(function () {
-        var dot = document.createElement('span');
-        dotsWrap.appendChild(dot);
-        dots.push(dot);
+    function scrollToItem(index, animate) {
+      track.scrollTo({
+        left: centres[index] - track.clientWidth / 2,
+        behavior: animate && !motionPreference.matches ? 'smooth' : 'instant',
       });
     }
 
-    function setBackground(src) {
-      if (!src || !layers.length) return;
-      var current = layers[activeLayer];
-      if (current && current.getAttribute('src') === src) return;
+    function nearestItem() {
+      var position = track.scrollLeft + track.clientWidth / 2;
+      return centres.reduce(function (nearest, centre, index) {
+        return Math.abs(centre - position) < Math.abs(centres[nearest] - position) ? index : nearest;
+      }, 0);
+    }
 
-      if (layers.length < 2) {
-        if (current) current.src = src;
+    function updateScale(scrollLeft = track.scrollLeft) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      var position = scrollLeft + track.clientWidth / 2;
+      var range = (centres[1] - centres[0]) * 1.6;
+      var cycle = centres[copies + count] - centres[copies];
+      items.forEach(function (item, index) {
+        var distance = centres[index] - position;
+        if (cycle) distance -= Math.round(distance / cycle) * cycle;
+        var weight = range ? Math.max(0, 1 - Math.abs(distance) / range) : 1;
+        var scale = motionPreference.matches ? 1 : 0.82 + 0.18 * weight * weight * (3 - 2 * weight);
+        item.style.setProperty(scaleProperty, scale.toFixed(3));
+      });
+    }
+
+    function rebase(from, to) {
+      var left = track.scrollLeft + centres[to] - centres[from];
+      track.scrollTo({ left: left, behavior: 'instant' });
+      // The compositor can commit the scroll after this task. Paint scales for the destination now.
+      updateScale(left);
+    }
+
+    function settle() {
+      var index = nearestItem();
+      var realIndex = (index - copies + count) % count;
+      var target = centres[index] - track.clientWidth / 2;
+      requested = null;
+      // Finish centering the visible copy before exchanging it for the identical real card.
+      if (target >= 0 && target <= track.scrollWidth - track.clientWidth &&
+          Math.abs(track.scrollLeft - target) > 1) {
+        scrollToItem(index, true);
         return;
       }
+      if (index !== copies + realIndex) {
+        rebase(index, copies + realIndex);
+      }
+      if (realIndex !== active) {
+        active = realIndex;
+        if (onSelect) onSelect(active, true);
+      }
+    }
 
-      var nextLayer = layers[1 - activeLayer];
-      if (!nextLayer) return;
-      var request = ++bgRequest;
+    function onScroll() {
+      if (!frame) frame = requestAnimationFrame(function () { updateScale(); });
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 140);
+    }
+
+    function move(direction) {
+      var from = requested === null ? nearestItem() : requested;
+      var target = from + direction;
+      if (target < 0 || target >= items.length) {
+        var real = copies + (from - copies + count) % count;
+        rebase(from, real);
+        from = real;
+        target = from + direction;
+      }
+      requested = target;
+      scrollToItem(target, true);
+    }
+
+    function measure() {
+      clearTimeout(settleTimer);
+      requested = null;
+      centres = items.map(function (item) { return item.offsetLeft + item.offsetWidth / 2; });
+      trackWidth = track.clientWidth;
+      scrollToItem(copies + active, false);
+      updateScale(centres[copies + active] - trackWidth / 2);
+    }
+
+    if (previous) previous.addEventListener('click', function () { move(-1); });
+    if (next) next.addEventListener('click', function () { move(1); });
+    track.addEventListener('scroll', onScroll, { passive: true });
+    track.addEventListener('pointerdown', function () { requested = null; }, { passive: true });
+    window.addEventListener('resize', measure, { passive: true });
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () {
+        if (track.clientWidth !== trackWidth) measure();
+      }).observe(track);
+    }
+    motionPreference.addEventListener('change', measure);
+    measure();
+    if (onSelect) onSelect(0, false);
+  }
+
+  $$('[data-carousel]').forEach(function (group) {
+    var track = $('[data-track]', group);
+    if (track) initCarousel(group, Array.from(track.children), '--kv-review-scale');
+  });
+
+  $$('[data-blog-slider]').forEach(function (section) {
+    var track = $('[data-track]', section);
+    var feature = $('[data-blog-feature]', section);
+    if (!track || !feature) return;
+
+    var title = $('[data-blog-title]', feature);
+    var copy = $('[data-blog-copy]', feature);
+    var link = $('[data-blog-cta]', feature);
+    var layers = $$('[data-blog-bg-img]', section);
+    var dotsWrap = $('[data-dots]', section);
+    var cards = $$('[data-slide]', track);
+    var activeLayer = 0;
+    var pendingImage = 0;
+    var swapTimer;
+    var dots = cards.map(function () {
+      var dot = document.createElement('span');
+      if (dotsWrap && cards.length > 1) dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    function updateBackground(src) {
+      var request = ++pendingImage;
+      var current = layers[activeLayer];
+      var replacement = layers[1 - activeLayer];
+      if (!src || !current || !replacement || current.getAttribute('src') === src) return;
+
       var preload = new Image();
       preload.onload = function () {
-        if (request !== bgRequest) return;
-        nextLayer.src = src;
-        nextLayer.classList.add('is-active');
-        if (current) current.classList.remove('is-active');
+        if (request !== pendingImage) return;
+        replacement.src = src;
+        replacement.classList.add('is-active');
+        current.classList.remove('is-active');
         activeLayer = 1 - activeLayer;
       };
       preload.src = src;
     }
 
-    /* --------------------------------------------------- layout measure */
-    function measure() {
-      allItems = $$('[data-slide]', track);
-      if (USE_LOOP && CLONES > 0) {
-        var head = document.createDocumentFragment();
-        var tail = document.createDocumentFragment();
-        for (var i = count - CLONES; i < count; i++) head.appendChild(cards[i].cloneNode(true));
-        for (var i = 0; i < CLONES; i++) tail.appendChild(cards[i].cloneNode(true));
-        track.insertBefore(head, track.firstChild);
-        track.appendChild(tail);
-        allItems = $$('[data-slide]', track);
-      }
-      realCentres = allItems.slice(CLONES, CLONES + count).map(function (it) {
-        return it.offsetLeft + it.offsetWidth / 2;
-      });
-      if (count > 1) STEP = realCentres[1] - realCentres[0];
-      else STEP = cards[0] ? cards[0].offsetWidth : 0;
-      var half = track.clientWidth / 2;
-      MIN_SCROLL = realCentres[0] - half;
-      MAX_SCROLL = realCentres[count - 1] - half;
-    }
-
-    /* --------------------------------------------------- centre scaling */
-    function applyScales() {
-      if (STEP === 0) return;
-      var tc = track.scrollLeft + track.clientWidth / 2;
-      allItems.forEach(function (it) {
-        var centre = it.offsetLeft + it.offsetWidth / 2;
-        var d = centre - tc;
-        var steps = d / (STEP * 1.6);
-        var t = Math.max(0, Math.min(1, 1 - Math.abs(steps)));
-        var ease = t * t * (3 - 2 * t);
-        var scale = MIN_SCALE + (1 - MIN_SCALE) * ease;
-        it.style.setProperty('--kv-blog-scale', scale.toFixed(3));
-      });
-    }
-
-    function scheduleScale() {
-      if (scaleTimer) return;
-      scaleTimer = requestAnimationFrame(function () {
-        scaleTimer = null;
-        applyScales();
-      });
-    }
-
-    /* --------------------------------------------------- infinite wrap */
-    function handleWrap() {
-      if (!USE_LOOP) return false;
-      var sl = track.scrollLeft;
-      var moved = false;
-      if (sl < MIN_SCROLL) {
-        track.scrollLeft = sl + count * STEP;
-        moved = true;
-      } else if (sl > MAX_SCROLL) {
-        track.scrollLeft = sl - count * STEP;
-        moved = true;
-      }
-      return moved;
-    }
-
-    /* --------------------------------------------------- render ui */
-    function renderUI(index) {
-      active = index;
-      var slide = slides[index + 1];
-      if (!slide) return;
-      if (cta) cta.href = slide.url;
-      if (swapTimer) clearTimeout(swapTimer);
-      feature.classList.add('is-swapping');
-      swapTimer = setTimeout(function () {
-        titleEl.textContent = slide.title;
-        copyEl.textContent = slide.copy;
+    initCarousel(section, cards, '--kv-blog-scale', function (index, animate) {
+      var card = cards[index];
+      function updateFeature() {
+        title.textContent = card.dataset.title;
+        copy.textContent = card.dataset.copy;
+        link.href = card.dataset.url;
         feature.classList.remove('is-swapping');
-      }, 160);
-      setBackground(slide.image);
-      cards.forEach(function (card, i) {
-        card.classList.toggle('is-active', i === index);
-      });
-      dots.forEach(function (dot, i) {
-        dot.classList.toggle('is-active', i === index);
-      });
-    }
-
-    function scrollToIndex(index, animate) {
-      if (index < 0) index = count - 1;
-      if (index >= count) index = 0;
-      if (index === active) return;
-      var target = realCentres[index] - track.clientWidth / 2;
-      scrolling = true;
-      track.scrollTo({ left: target, behavior: (animate && !reduceMotion) ? 'smooth' : 'auto' });
-      renderUI(index);
-      scheduleScale();
-      setTimeout(function () { scrolling = false; }, 400);
-    }
-
-    /* nearest real card index for current scrollLeft */
-    function nearestIndex() {
-      var sl = track.scrollLeft + track.clientWidth / 2;
-      var best = 0;
-      var bestDist = Math.abs(realCentres[0] - sl);
-      for (var i = 1; i < count; i++) {
-        var dist = Math.abs(realCentres[i] - sl);
-        if (dist < bestDist) { bestDist = dist; best = i; }
+        updateBackground(card.dataset.image);
       }
-      return best;
-    }
 
-    /* prev / next */
-    if (prev) {
-      prev.addEventListener('click', function () { scrollToIndex(active - 1, true); });
-    }
-    if (next) {
-      next.addEventListener('click', function () { scrollToIndex(active + 1, true); });
-    }
+      clearTimeout(swapTimer);
+      if (animate && !motionPreference.matches) {
+        feature.classList.add('is-swapping');
+        swapTimer = setTimeout(updateFeature, 160);
+      } else {
+        updateFeature();
+      }
 
-    /* scroll: continuous scale + wrap + snap to centre on end */
-    track.addEventListener('scroll', function () {
-      if (scrolling) { scheduleScale(); return; }
-      scheduleScale();
-      if (handleWrap()) { scheduleScale(); return; }
-      if (snapTimer) clearTimeout(snapTimer);
-      snapTimer = setTimeout(function () {
-        var idx = nearestIndex();
-        if (idx !== active) scrollToIndex(idx, true);
-      }, 160);
-    }, { passive: true });
-
-    measure();
-    track.scrollLeft = MIN_SCROLL;
-    applyScales();
-    renderUI(0);
-
-    window.addEventListener('resize', function () {
-      measure();
-      track.scrollLeft = MIN_SCROLL + active * STEP;
-      applyScales();
-    }, { passive: true });
+      $$('[data-slide]', track).forEach(function (item) {
+        item.classList.toggle('is-active', Number(item.dataset.carouselIndex || 0) === index);
+      });
+      dots.forEach(function (dot, position) { dot.classList.toggle('is-active', position === index); });
+    });
   });
 
   /* ------------------------------------------------------ review expand */
   $$('[data-review-more]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var card = btn.closest('.kv-review');
-      var text = card.querySelector('p');
-      var open = card.classList.toggle('is-open');
-      text.classList.toggle('is-clamped', !open);
-      btn.textContent = open ? 'Read less' : 'Read more';
+      var open = !card.classList.contains('is-open');
+      var copies = card.dataset.carouselIndex === undefined ? [card] :
+        $$('[data-carousel-index="' + card.dataset.carouselIndex + '"]', card.parentElement);
+      copies.forEach(function (copy) {
+        copy.classList.toggle('is-open', open);
+        $('p', copy).classList.toggle('is-clamped', !open);
+        var control = $('[data-review-more]', copy);
+        control.setAttribute('aria-expanded', String(open));
+        control.textContent = open ? 'Read less' : 'Read more';
+      });
     });
   });
 
@@ -717,6 +611,7 @@ import './kv-motion.js';
     var toggleBtn = $('#kvGalleryToggle');
     var seek = $('#kvGallerySeek');
     var time = $('#kvGalleryTime');
+    var error = $('#kvGalleryError');
     if (!media || !video || !btn) return;
 
     function clock(sec) {
@@ -749,13 +644,14 @@ import './kv-motion.js';
         video.pause();
         return;
       }
-      media.classList.add('is-video');
+      if (error) error.hidden = true;
       var started = video.play();
       if (started && started.catch) {
         started.catch(function () {
-          // no playable source yet — stay on the still with the play icon
+          if (error) error.hidden = false;
           media.classList.remove('is-video');
           reflect(false);
+          if (document.activeElement === toggleBtn) btn.focus({ preventScroll: true });
         });
       }
     }
@@ -764,8 +660,10 @@ import './kv-motion.js';
     if (toggleBtn) toggleBtn.addEventListener('click', toggle);
     video.addEventListener('click', toggle);
     video.addEventListener('play', function () {
+      var moveFocus = document.activeElement === btn;
       media.classList.add('is-video');
       reflect(true);
+      if (moveFocus && toggleBtn) toggleBtn.focus({ preventScroll: true });
     });
     video.addEventListener('pause', function () { reflect(false); });
     video.addEventListener('ended', function () { reflect(false); });
@@ -786,9 +684,6 @@ import './kv-motion.js';
   })();
 
   /* --------------------------------------------------- location crown tab */
-  /* #kvLocCrownBtn (part of .kv-split__body) toggles the green take-over
-     panel #kvLocCrownPanel, which is positioned pure-CSS over the split.
-     No measuring needed — resize stays automatic. */
   (function () {
     var btn = $('#kvLocCrownBtn');
     var panel = $('#kvLocCrownPanel');
@@ -812,34 +707,17 @@ import './kv-motion.js';
     window.addEventListener('resize', syncRide);
 
     var open = false;
-    var closeTimer = 0;
 
     function setOpen(next) {
-      if (next) syncRide();
-      open = !!next;
-      if (split) split.classList.toggle('is-loc-open', open);
-      /* the close ride is an animation, gated so it never plays on page load */
-      clearTimeout(closeTimer);
-      if (split) {
-        if (open) {
-          split.classList.remove('kv-loc-closing');
-        } else {
-          split.classList.add('kv-loc-closing');
-          closeTimer = setTimeout(function () { split.classList.remove('kv-loc-closing'); }, 900);
-        }
-      }
+      syncRide();
+      open = next;
+      split.classList.toggle('is-loc-open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       btn.setAttribute('aria-label', open ? 'Hide the full location content' : 'Show the full location content');
       panel.setAttribute('aria-hidden', open ? 'false' : 'true');
     }
 
-    btn.addEventListener('click', function () {
-      setOpen(!open);
-      if (open && closer) {
-        /* wait for the wipe to make the panel focusable */
-        setTimeout(function () { if (open && closer) closer.focus({ preventScroll: true }); }, 380);
-      }
-    });
+    btn.addEventListener('click', function () { setOpen(!open); });
     if (closer) closer.addEventListener('click', function () {
       setOpen(false);
       btn.focus({ preventScroll: true });
@@ -1056,4 +934,98 @@ import './kv-motion.js';
   } else {
     init();
   }
+})();
+
+/* Wipe each pinned image away as the next amenity chapter comes into view. */
+(function () {
+  const zones = document.querySelector('[data-amenity-zones]');
+  if (!zones) return;
+
+  const media = window.matchMedia('(min-width: 901px) and (min-height: 600px) and (prefers-reduced-motion: no-preference)');
+  const nextChapters = [...zones.querySelectorAll('.kv-amenities-page__chapter-copy')].slice(1);
+  const images = [...zones.querySelectorAll('.kv-amenities-page__media img')];
+  let frame = 0;
+
+  images.forEach((image, index) => {
+    image.style.zIndex = images.length - index;
+  });
+
+  function syncImage() {
+    frame = 0;
+    const start = window.innerHeight * 0.9;
+    const end = window.innerHeight * 0.2;
+    const insets = nextChapters.map((chapter) => {
+      const progress = (start - chapter.getBoundingClientRect().top) / (start - end);
+      return Math.min(1, Math.max(0, progress)) * 100;
+    });
+    insets.forEach((inset, index) => {
+      images[index].style.setProperty('--amenity-image-inset', `${inset}%`);
+    });
+  }
+
+  function scheduleSync() {
+    if (!frame) frame = window.requestAnimationFrame(syncImage);
+  }
+
+  function configure() {
+    zones.classList.toggle('is-scroll-linked', media.matches);
+    if (media.matches) {
+      window.addEventListener('scroll', scheduleSync, { passive: true });
+      window.addEventListener('resize', scheduleSync);
+      scheduleSync();
+    } else {
+      window.removeEventListener('scroll', scheduleSync);
+      window.removeEventListener('resize', scheduleSync);
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    }
+  }
+
+  media.addEventListener('change', configure);
+  configure();
+})();
+
+/* Native scrolling keeps the amenities gallery swipeable and keyboard accessible. */
+(function () {
+  const gallery = document.querySelector('[data-amenities-gallery]');
+  if (!gallery) return;
+
+  const track = gallery.querySelector('#amenities-gallery-track');
+  const controls = gallery.querySelector('[data-gallery-controls]');
+  const previous = gallery.querySelector('[data-gallery-prev]');
+  const next = gallery.querySelector('[data-gallery-next]');
+  const thumbnails = [...gallery.querySelectorAll('[data-gallery-slide]')];
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function activeIndex() {
+    return Math.round(track.scrollLeft / track.clientWidth);
+  }
+
+  function updateControls() {
+    const index = activeIndex();
+    previous.setAttribute('aria-disabled', String(index === 0));
+    next.setAttribute('aria-disabled', String(index === thumbnails.length - 1));
+    thumbnails.forEach((thumbnail, position) => {
+      thumbnail.setAttribute('aria-current', String(index === position));
+    });
+  }
+
+  function showSlide(index) {
+    if (index < 0 || index >= thumbnails.length) return;
+    track.scrollTo({
+      left: index * track.clientWidth,
+      behavior: motion.matches ? 'instant' : 'smooth',
+    });
+  }
+
+  previous.addEventListener('click', () => showSlide(activeIndex() - 1));
+  next.addEventListener('click', () => showSlide(activeIndex() + 1));
+  thumbnails.forEach((thumbnail, index) => {
+    thumbnail.addEventListener('click', () => showSlide(index));
+  });
+  track.addEventListener('scroll', updateControls, { passive: true });
+  window.addEventListener('resize', updateControls, { passive: true });
+  track.classList.add('is-enhanced');
+  controls.hidden = false;
+  updateControls();
 })();

@@ -102,7 +102,7 @@
       $$('path,circle,rect,line,polyline,ellipse', svg).forEach(function (shape, i) {
         var len = 0;
         try { len = shape.getTotalLength ? shape.getTotalLength() : 0; } catch (e) { len = 0; }
-        if (!len) return;
+        if (!len || typeof shape.animate !== 'function') return;
 
         shape.style.strokeDasharray = len + ' ' + len;
         shape.style.strokeDashoffset = len;
@@ -139,6 +139,14 @@
     }, { threshold: 0.05, rootMargin: '0px 0px -8% 0px' });
 
     targets.forEach(function (el) { io.observe(el); });
+    document.addEventListener('focusin', function (event) {
+      for (var el = event.target; el instanceof Element; el = el.parentElement) {
+        if (!el.hasAttribute('data-mv') || el.classList.contains('is-in')) continue;
+        io.unobserve(el);
+        el.style.transitionDelay = '0ms';
+        activate(el);
+      }
+    });
   } else {
     targets.forEach(activate);
   }

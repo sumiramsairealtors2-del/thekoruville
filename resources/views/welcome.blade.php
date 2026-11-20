@@ -79,58 +79,51 @@
 
 {{-- ==================================================== HERO ==================================================== --}}
 <section class="kv-hero" id="home">
-  <div class="kv-hero__frame" data-mv="scale">
+  <div class="kv-hero__frame">
+    @php
+      $heroImages = [
+        ['image' => 'kv/kr2.webp', 'mobile' => 'kv/plot-1-860.webp', 'width' => 1282, 'height' => 766, 'alt' => 'Architectural rendering of The Koru Ville in Kilawali'],
+        ['image' => 'kv/gallery-1920.webp', 'mobile' => 'kv/about-1000.webp', 'width' => 1920, 'height' => 816, 'alt' => 'Architectural rendering of The Koru Ville at dusk'],
+        ['image' => 'kv/why-1040.webp', 'mobile' => 'kv/plot-2-860.webp', 'width' => 1040, 'height' => 1040, 'alt' => 'Architectural rendering of a villa overlooking wooded hills'],
+      ];
+    @endphp
 
-    <div class="kv-hero__slide is-active" aria-hidden="false" data-mv-parallax="-46">
-      <picture>
-        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-01-mobile-900x1600.webp') }}">
-        <img src="{{ asset('https://thekoruville.com/assets/img/thekoruville.jpg') }}"
-             width="1920" height="1080"
-             alt="The Koru Ville resort-themed township at Kilawali, Uttarakhand" fetchpriority="high">
-      </picture>
-    </div>
-    <div class="kv-hero__slide" aria-hidden="true" data-mv-parallax="-46">
-      <picture>
-        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-02-mobile-900x1600.webp') }}">
-        <img src="{{ asset('https://thekoruville.com/assets/img/thekoruville.webp') }}"
-             width="1920" height="1080" alt="The Koru Ville at dusk" loading="lazy">
-      </picture>
-    </div>
-    <div class="kv-hero__slide" aria-hidden="true" data-mv-parallax="-46">
-      <picture>
-        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/hero-03-mobile-900x1600.webp') }}">
-        <img src="{{ asset('https://thekoruville.com/assets/img/villaview.webp') }}"
-             width="1920" height="1080" alt="The Koru Ville clubhouse and landscaped grounds" loading="lazy">
-      </picture>
-    </div>
+    @foreach ($heroImages as $heroImage)
+      <div @class(['kv-hero__slide', 'is-active' => $loop->first])
+           aria-hidden="{{ $loop->first ? 'false' : 'true' }}" data-mv-parallax="-30">
+        <picture>
+          <source media="(max-width: 720px)" srcset="{{ asset('assets/img/'.$heroImage['mobile']) }}">
+          <img src="{{ asset('assets/img/'.$heroImage['image']) }}"
+               width="{{ $heroImage['width'] }}" height="{{ $heroImage['height'] }}" alt="{{ $heroImage['alt'] }}"
+               @if($loop->first) fetchpriority="high" @else loading="lazy" @endif>
+        </picture>
+      </div>
+    @endforeach
 
     <div class="kv-hero__copy">
-      <h1 data-mv="words" data-mv-word-delay="60">The Koru Ville</h1>
-      <p class="kv-hero__sub" data-mv="blur" data-mv-delay="320">Resort-Themed Plots at the Gateway to Jim Corbett</p>
-      <p class="kv-hero__lede" data-mv="blur" data-mv-delay="410">An upcoming resort-themed plotted township where you build your own home, just 15 minutes by drive from Phato Gate, one of Jim Corbett's most sought-after safari entry points.</p>
-      <div class="kv-hero__actions" data-mv="fade" data-mv-delay="500">
+      <h1 data-mv="words" data-mv-word-delay="45">The Koru Ville</h1>
+      <p class="kv-hero__sub" data-mv="blur" data-mv-delay="180">Resort-Themed Plots at the Gateway to Jim Corbett</p>
+      <p class="kv-hero__lede" data-mv="blur" data-mv-delay="240">An upcoming resort-themed plotted township where you build your own home, just 15 minutes by drive from Phato Gate, one of Jim Corbett's most sought-after safari entry points.</p>
+      <div class="kv-hero__actions" data-mv="fade" data-mv-delay="300">
         <button type="button" class="kv-btn" data-kv-open="enquiry" data-mv-magnet="8">Enquire About Plots</button>
         <button type="button" class="kv-btn" data-kv-open="brochure" data-mv-magnet="8">Download Brochure</button>
       </div>
     </div>
 
-    <div class="kv-hero__dots" role="tablist" aria-label="Hero images" data-mv="fade" data-mv-delay="640">
+    <div class="kv-hero__dots" role="group" aria-label="Hero images">
+      <button type="button" class="kv-hero__arrow kv-hero__arrow--prev" aria-label="Previous image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
       <button type="button" aria-current="true" aria-label="Image 1"></button>
       <button type="button" aria-current="false" aria-label="Image 2"></button>
       <button type="button" aria-current="false" aria-label="Image 3"></button>
+      <button type="button" class="kv-hero__arrow kv-hero__arrow--next" aria-label="Next image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <button type="button" class="kv-hero__rotation" data-hero-rotation aria-label="Pause slideshow" hidden>
+        <span aria-hidden="true">Ⅱ</span>
+      </button>
     </div>
-
-  </div>
-
-  <div class="kv-hero__nav">
-    <button type="button" class="kv-hero__arrow kv-hero__arrow--prev" aria-label="Previous image">
-      @include('partials.kv.crown', ['shapeClass' => 'kv-hero__arrow-shape', 'shapeVariant' => 'tab'])
-      <svg class="kv-hero__arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <button type="button" class="kv-hero__arrow kv-hero__arrow--next" aria-label="Next image">
-      @include('partials.kv.crown', ['shapeClass' => 'kv-hero__arrow-shape', 'shapeVariant' => 'tab'])
-      <svg class="kv-hero__arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-    </button>
   </div>
 </section>
 
@@ -163,12 +156,9 @@
 <section class="kv-panel kv-panel--olive" id="why-this-location">
   <div class="kv-split">
     <div class="kv-split__media" data-mv="scale">
-      <picture>
-        <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/location-mobile-900x765.webp') }}">
-        <img src="{{ asset('https://thekoruville.com/assets/img/koru_villa_1.webp') }}"
-             width="1400" height="1020"
-             alt="Landscaped grounds at The Koru Ville, Kilawali" loading="lazy" data-mv-parallax="52">
-      </picture>
+      <img src="{{ asset('assets/img/koru_villa_1.webp') }}"
+           width="1408" height="768"
+           alt="Illustration of the hills and reservoir near Kilawali" loading="lazy" data-mv-parallax="36">
     </div>
 
     <div class="kv-split__body" data-mv-group="80">
@@ -218,12 +208,9 @@
       <article class="kv-plot" data-mv="up" data-mv-tilt="4">
         <div class="kv-plot__media">
           <span class="kv-plot__badge">Starting size</span>
-          <picture>
-            <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-01-mobile-760x836.webp') }}">
-            <img src="{{ asset('https://thekoruville.com/assets/img/mayura.webp') }}"
-                 width="900" height="1013"
-                 alt="111 sq.yd residential plot at The Koru Ville" loading="lazy">
-          </picture>
+          <img src="{{ asset('assets/img/kv/plot-1-860.webp') }}"
+               width="860" height="1148"
+               alt="Architectural illustration for the 111 sq yd plot option" loading="lazy" decoding="async">
         </div>
         <div class="kv-plot__body">
           @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
@@ -244,12 +231,9 @@
       <article class="kv-plot" data-mv="up" data-mv-tilt="4">
         <div class="kv-plot__media">
           <span class="kv-plot__badge">Most popular</span>
-          <picture>
-            <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-02-mobile-760x836.webp') }}">
-            <img src="{{ asset('https://thekoruville.com/assets/img/simha.webp') }}"
-                 width="900" height="1013"
-                 alt="125 sq.yd residential plot at The Koru Ville" loading="lazy">
-          </picture>
+          <img src="{{ asset('assets/img/kv/plot-2-860.webp') }}"
+               width="860" height="1147"
+               alt="Architectural illustration for the 125 sq yd plot option" loading="lazy" decoding="async">
         </div>
         <div class="kv-plot__body">
           @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
@@ -270,12 +254,9 @@
       <article class="kv-plot" data-mv="up" data-mv-tilt="4">
         <div class="kv-plot__media">
           <span class="kv-plot__badge">Largest layout</span>
-          <picture>
-            <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/plot-03-mobile-760x836.webp') }}">
-            <img src="{{ asset('https://thekoruville.com/assets/img/mriga.webp') }}"
-                 width="900" height="1013"
-                 alt="139 sq.yd residential plot at The Koru Ville" loading="lazy">
-          </picture>
+          <img src="{{ asset('assets/img/kv/plot-3-860.webp') }}"
+               width="860" height="1147"
+               alt="Architectural illustration for the 139 sq yd plot option" loading="lazy" decoding="async">
         </div>
         <div class="kv-plot__body">
           @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
@@ -301,9 +282,9 @@
 <section class="kv-gallery" id="gallery">
   <div class="kv-gallery__media" id="kvGalleryMedia" data-mv="scale">
     <picture>
-      <source media="(max-width: 720px)" srcset="{{ asset('assets/img/slots/gallery-mobile-900x1125.webp') }}">
-      <img src="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
-           width="1920" height="820"
+      <source media="(max-width: 720px)" srcset="{{ asset('assets/img/kv/about-1000.webp') }}">
+      <img src="{{ asset('assets/img/kv/gallery-1920.webp') }}"
+           width="1920" height="816"
            alt="The Koru Ville grounds at Kilawali" loading="lazy" data-mv-parallax="34">
     </picture>
 
@@ -311,15 +292,15 @@
          button starts it and then stays on as its play/pause control. --}}
     <video class="kv-gallery__video" id="kvGalleryVideo"
            playsinline preload="metadata"
-           poster="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
+           poster="{{ asset('assets/img/kv/gallery-1920.webp') }}"
            aria-label="The Koru Ville site film">
       {{-- ?v= busts the cache when the film file is replaced --}}
       <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/The-Koru-Ville-Teaser.mp4')) ?: 1 }}" type="video/mp4">
     </video>
 
-    <div class="kv-gallery__label" aria-hidden="true" data-mv="fade" data-mv-delay="260">
+    <div class="kv-gallery__label" aria-hidden="true">
       @include('partials.kv.crown', ['shapeClass' => 'kv-gallery__shape', 'shapeVariant' => 'tab'])
-      <span>Gallery</span>
+      <span data-mv="fade" data-mv-delay="160">Gallery</span>
     </div>
 
     <button type="button" class="kv-gallery__play" id="kvGalleryPlay"
@@ -339,6 +320,7 @@
       <span class="kv-gallery__time" id="kvGalleryTime">0:00 / 0:00</span>
     </div>
 
+    <p class="kv-gallery__error" id="kvGalleryError" role="status" hidden>The site film couldn’t play. Try again.</p>
     <span class="kv-gallery__caption">The Koru Ville · Kilawali</span>
   </div>
 </section>
@@ -425,8 +407,7 @@
 @php
   $posts = \App\Models\Post::where('is_published', true)->latest('updated_at')->take(5)->get();
   $featured = $posts->first();
-  $cards = $posts->slice(1)->values();
-  if ($cards->count() < 3) { $cards = $posts->take(3); }
+  $cards = $posts->take(4);
 
   $postSummary = function ($post) {
       $text = $post->meta_description ?: strip_tags($post->content ?? '');
@@ -454,11 +435,7 @@
   </div>
 
   <div class="kv-blog__inner">
-    <div class="kv-blog__feature" data-mv="left" data-mv-delay="240" data-blog-feature
-         data-title="{{ $featuredTitle }}"
-         data-copy="{{ $featuredCopy }}"
-         data-url="{{ $featuredUrl }}"
-         data-image="{{ $featuredImage }}">
+    <div class="kv-blog__feature" data-mv="left" data-mv-delay="240" data-blog-feature>
       <h3 class="kv-blog__heading" data-blog-title aria-live="polite">{{ $featuredTitle }}</h3>
       <p data-blog-copy>{{ $featuredCopy }}</p>
       <a href="{{ $featuredUrl }}" class="kv-btn kv-btn--outline kv-blog__cta" data-blog-cta>
@@ -597,7 +574,7 @@
               </div>
             </div>
             <p class="is-clamped">{{ $review['text'] }}</p>
-            <button type="button" class="kv-review__more" data-review-more>Read more</button>
+            <button type="button" class="kv-review__more" data-review-more aria-expanded="false">Read more</button>
           </article>
         @endforeach
       </div>

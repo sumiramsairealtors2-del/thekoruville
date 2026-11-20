@@ -5,6 +5,7 @@
 @section('hero', '1')
 
 @section('head')
+@vite('resources/css/blog.css')
 <script type="application/ld+json">
 {
   "@@context": "https://schema.org",
@@ -51,7 +52,20 @@
       <h2 class="kv-display">Insights on land, location &amp; living</h2>
     </div>
 
-    <div class="kv-bloggrid">
+    <div class="blog-filter-bar">
+      <form action="{{ route('posts.index') }}" method="GET" class="blog-search-form" role="search">
+        <label class="sr-only" for="blog-search">Search blog</label>
+        <input type="search" name="q" id="blog-search" class="blog-search-input" placeholder="Search articles…" value="{{ $query }}" autocomplete="off">
+        <button type="submit" class="blog-search-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <p id="blog-search-status" role="status" class="sr-only"></p>
+    <div id="blog-search-results">
+    @fragment('blog-results')
+    <div class="kv-bloggrid" data-result-count="{{ $posts->total().' '.Str::plural('article', $posts->total()) }}">
       @forelse($posts as $post)
         <article class="kv-postcard kv-reveal">
           <a href="{{ route('posts.show', $post) }}" class="kv-postcard__media" tabindex="-1" aria-hidden="true">
@@ -72,7 +86,13 @@
           </div>
         </article>
       @empty
-        <div class="kv-empty">No articles published yet. Check back soon.</div>
+        <div class="kv-empty">
+          @if($query !== '')
+            No articles found for “{{ $query }}”.
+          @else
+            No articles published yet. Check back soon.
+          @endif
+        </div>
       @endforelse
     </div>
 
@@ -81,6 +101,103 @@
         {{ $posts->onEachSide(1)->links('pagination.kv') }}
       </div>
     @endif
+    @endfragment
+    </div>
+
+    <script>
+      (() => {
+        const input = document.getElementById('blog-search');
+        const form = input.form;
+        const button = form.querySelector('.blog-search-btn');
+        const results = document.getElementById('blog-search-results');
+        const status = document.getElementById('blog-search-status');
+        const articleCount = document.querySelector('#blog .kv-pagehero__meta span');
+        let timer;
+        let pending;
+
+        function setExpanded(expanded) {
+          form.classList.toggle('is-collapsed', !expanded);
+          input.inert = !expanded;
+          button.type = expanded ? 'submit' : 'button';
+          button.setAttribute('aria-expanded', String(expanded));
+          button.setAttribute('aria-label', expanded ? 'Search' : 'Open blog search');
+        }
+
+        function scheduleSearch(delay) {
+          clearTimeout(timer);
+          pending?.abort();
+          status.classList.add('sr-only');
+          status.textContent = 'Searching…';
+          results.setAttribute('aria-busy', 'true');
+          timer = setTimeout(updateResults, delay);
+        }
+
+        async function updateResults() {
+          const query = input.value.trim();
+          const url = new URL(form.action);
+          if (query) url.searchParams.set('q', query);
+
+          const endpoint = new URL(url);
+          endpoint.searchParams.set('_results', '1');
+          const request = new AbortController();
+          pending = request;
+
+          try {
+            const response = await fetch(endpoint, { signal: request.signal });
+            if (!response.ok) throw new Error('Blog search failed');
+
+            const fragment = document.createElement('template');
+            fragment.innerHTML = await response.text();
+            if (request.signal.aborted) return;
+
+            const grid = fragment.content.querySelector('[data-result-count]');
+            if (!grid) throw new Error('Missing search results');
+            grid.querySelectorAll('.kv-reveal').forEach((card) => card.classList.add('is-in'));
+            results.replaceChildren(fragment.content);
+            if (articleCount) articleCount.textContent = grid.dataset.resultCount;
+            status.textContent = `${grid.dataset.resultCount} found.`;
+            window.history.replaceState(window.history.state, '', url);
+          } catch {
+            if (request.signal.aborted) return;
+            status.classList.remove('sr-only');
+            status.textContent = 'Search results could not be updated. Try again.';
+          } finally {
+            if (!request.signal.aborted) results.removeAttribute('aria-busy');
+          }
+        }
+
+        button.setAttribute('aria-controls', input.id);
+        setExpanded(input.value.trim() !== '');
+
+        button.addEventListener('click', (event) => {
+          if (!input.inert) return;
+          event.preventDefault();
+          setExpanded(true);
+          input.focus({ preventScroll: true });
+        });
+
+        input.addEventListener('input', (event) => {
+          if (!event.isComposing) scheduleSearch(250);
+        });
+        input.addEventListener('compositionend', () => scheduleSearch(250));
+
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          scheduleSearch(0);
+        });
+
+        form.addEventListener('keydown', (event) => {
+          if (event.key !== 'Escape' || event.isComposing || input.inert) return;
+          event.preventDefault();
+          button.focus();
+          setExpanded(false);
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!input.inert && !form.contains(event.target)) setExpanded(false);
+        });
+      })();
+    </script>
   </div>
 </section>
 

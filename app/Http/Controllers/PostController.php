@@ -9,9 +9,27 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('is_published', true)->latest()->paginate(9);
+        $submittedQuery = request()->query('q');
+        $query = is_string($submittedQuery) ? trim($submittedQuery) : '';
 
-        return view('posts.index', compact('posts'));
+        $posts = Post::where('is_published', true)
+            ->when($query !== '', function ($posts) use ($query) {
+                $pattern = '%'.$query.'%';
+
+                $posts->where(function ($matches) use ($pattern) {
+                    $matches->whereLike('title', $pattern)
+                        ->orWhereLike('content', $pattern)
+                        ->orWhereLike('meta_description', $pattern);
+                });
+            })
+            ->latest()->paginate(9);
+
+        if ($query !== '') {
+            $posts->appends(['q' => $query]);
+        }
+
+        return view('posts.index', compact('posts', 'query'))
+            ->fragmentIf(request()->query('_results') === '1', 'blog-results');
     }
 
     public function show(Post $post)

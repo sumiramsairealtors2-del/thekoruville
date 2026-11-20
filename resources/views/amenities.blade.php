@@ -1,164 +1,166 @@
 @extends('layouts.kv')
 
 @section('title', 'Amenities | The Koru Ville, Kilawali')
-@section('description', 'Resort-style amenities at The Koru Ville: open plunge pool, retreat restaurant, signature clubhouse, landscaped lawns, gated security, modern washrooms and bedrooms near Jim Corbett.')
+@section('description', 'Explore The Koru Ville’s resort-style amenities near Jim Corbett, including a shared swimming pool, signature clubhouse, landscaped lawns and private plunge pools.')
 @section('hero', '1')
 
 @section('content')
 
-<div class="kv-subpage">
+@php
+  $amenityZones = [
+    [
+      'id' => 'pool-and-lawns',
+      'title' => 'Pool & Landscaped Grounds',
+      'image' => 'assets/img/kv/plot-1-860.webp',
+      'features' => [
+        'Swimming Pool' => 'A shared resort-style pool for owners and guests.',
+        'Landscaped Lawns' => 'Open greens and tree-lined paths for a quiet walk.',
+      ],
+    ],
+    [
+      'id' => 'clubhouse-and-dining',
+      'title' => 'Clubhouse & Dining',
+      'image' => 'assets/img/kv/about-1000.webp',
+      'features' => [
+        'The Signature Clubhouse' => 'A shared space for recreation, relaxation and gatherings.',
+        'The Retreat Restaurant' => 'Alfresco dining with warm timber finishes.',
+      ],
+    ],
+    [
+      'id' => 'community',
+      'title' => 'A Gated Community',
+      'image' => 'assets/img/kv/why-800.webp',
+      'features' => [
+        'Gated Security' => 'A gated entrance and round-the-clock CCTV monitoring.',
+        'Internal Roads' => 'Wide roads connect the residential plots and shared spaces.',
+      ],
+    ],
+  ];
+  $amenityGallery = [
+    ['image' => 'assets/img/Sunset Villa Overlooking a Tropical Valley.png', 'title' => 'Poolside at Sunset'],
+    ['image' => 'assets/img/kv/gallery-1440.webp', 'title' => 'Villas & Landscaped Grounds'],
+    ['image' => 'assets/img/kv/why-1040.webp', 'title' => 'A Villa Among the Hills'],
+  ];
+@endphp
 
-  @include('partials.kv.pagehero', [
-    'eyebrow' => 'World-Class Amenities',
-    'title' => 'Amenities',
-    'lede' => 'Shared spaces designed to make the township feel like a retreat from the day you move in.',
-    'image' => 'assets/img/slots/gallery-desktop-1920x820.webp',
-    'imageMobile' => 'assets/img/slots/gallery-mobile-900x1125.webp',
-    'imageWidth' => 1920,
-    'imageHeight' => 820,
-    'alt' => 'The Koru Ville community grounds at Kilawali',
-  ])
-
-  {{-- INTRO --}}
-  <section class="kv-panel kv-panel--cream">
+<div class="kv-subpage kv-amenities-page">
+  <section class="kv-page-masthead" aria-labelledby="amenities-title">
     <div class="kv-shell">
-      <div class="kv-amenity-intro" data-mv-group="100">
-        <div class="kv-amenity-intro__copy" data-mv="left">
-          <span class="kv-eyebrow" data-mv="fade">Designed for Retreat Living</span>
-          <h2 class="kv-display kv-display--md" data-mv="words">A Resort-Style Community</h2>
-          <p class="kv-lede" data-mv="blur">Even though owners build their own individual homes, the surrounding community is designed to already feel like a resort — from private plunge pools to a signature clubhouse.</p>
+      <div class="kv-page-masthead__grid">
+        <div data-mv="up">
+          <span class="kv-eyebrow">The Koru Ville · Kilawali</span>
+          <h1 id="amenities-title">Amenities</h1>
         </div>
-        <div class="kv-amenity-intro__figure" data-mv="right" data-mv-tilt="6">
-          <div class="kv-figure-wrap">
-            <div class="kv-figure__ring"></div>
-            <img src="{{ asset('assets/img/slots/gallery-desktop-1920x820.webp') }}"
-                 alt="Resort amenities at The Koru Ville" loading="lazy"
-                 data-mv-parallax="24">
-          </div>
+        <p data-mv="up" data-mv-delay="100">Resort-style spaces for slow mornings, time outdoors and evenings together.</p>
+      </div>
+
+      <nav class="kv-page-masthead__links" aria-label="Explore amenities" data-mv="up">
+        <a href="#pool-and-lawns">Pool &amp; grounds <span aria-hidden="true">↓</span></a>
+        <a href="#clubhouse-and-dining">Clubhouse &amp; dining <span aria-hidden="true">↓</span></a>
+        <a href="#community">Gated community <span aria-hidden="true">↓</span></a>
+        <a href="#villa-amenities">Private villas <span aria-hidden="true">↓</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <section id="amenities" class="kv-subsection kv-amenities-page__showcase" aria-labelledby="amenities-heading">
+    <div class="kv-shell">
+      <div class="kv-amenities-page__intro" data-mv="up">
+        <span class="kv-eyebrow">Around the township</span>
+        <h2 id="amenities-heading" class="kv-display kv-display--md">Resort-Style Living</h2>
+        <p>Explore the shared spaces that connect daily life at The Koru Ville, from the landscaped grounds to the clubhouse.</p>
+      </div>
+
+      <div class="kv-amenities-page__zones" data-amenity-zones>
+        <div class="kv-amenities-page__media" aria-hidden="true">
+          @foreach ($amenityZones as $zone)
+            <img src="{{ asset($zone['image']) }}" alt="" loading="lazy" decoding="async">
+          @endforeach
         </div>
+
+        <div class="kv-amenities-page__chapters">
+          @foreach ($amenityZones as $zone)
+            <article id="{{ $zone['id'] }}" class="kv-amenities-page__chapter">
+              <img class="kv-amenities-page__inline-image" src="{{ asset($zone['image']) }}"
+                   alt="" loading="lazy" decoding="async">
+              <div class="kv-amenities-page__chapter-copy" data-mv="up">
+                <h3>{{ $zone['title'] }}</h3>
+                <dl class="kv-amenities-page__features">
+                  @foreach ($zone['features'] as $feature => $description)
+                    <div>
+                      <dt>{{ $feature }}</dt>
+                      <dd>{{ $description }}</dd>
+                    </div>
+                  @endforeach
+                </dl>
+              </div>
+            </article>
+          @endforeach
+        </div>
+      </div>
+      <p class="kv-amenities-page__caption">Architectural illustrations of The Koru Ville.</p>
+    </div>
+  </section>
+
+  <section id="villa-amenities" class="kv-subsection kv-subsection--cream2" aria-labelledby="villa-amenities-heading">
+    <div class="kv-shell kv-amenities-page__villa">
+      <img src="{{ asset('assets/img/kv/gallery-1440.webp') }}" width="1440" height="612"
+           alt="Architectural rendering of villas set among landscaped gardens" loading="lazy" decoding="async"
+           data-mv="scale">
+      <div data-mv="up">
+        <span class="kv-eyebrow">At home</span>
+        <h2 id="villa-amenities-heading" class="kv-display kv-display--md">Private Villa Features</h2>
+        <dl class="kv-amenities-page__features">
+          <div><dt>Private Plunge Pool</dt><dd>Step out to your own open-air pool.</dd></div>
+          <div><dt>Bedrooms & Living Areas</dt><dd>Quiet interiors with views of the landscaped gardens.</dd></div>
+          <div><dt>Modern Washrooms</dt><dd>Minimalist finishes and a clean, practical layout.</dd></div>
+        </dl>
+        <a href="{{ url('/pricing') }}" class="kv-btn kv-btn--olive">View layout & price</a>
       </div>
     </div>
   </section>
 
-  {{-- AMENITY GRID --}}
-  <section class="kv-panel kv-panel--cream kv-amenities">
-    <div class="kv-shell">
-      <div class="kv-amenities__head" data-mv-group="100">
-        <div>
-          <span class="kv-eyebrow" data-mv="fade">Shared Spaces</span>
-          <h2 class="kv-display kv-display--md" data-mv="words">Every Detail, A Resort Moment</h2>
-        </div>
-        <p class="kv-lede" data-mv="blur">Thoughtfully designed amenities woven through landscaped lawns and tree-lined avenues.</p>
+  <section class="kv-subsection kv-amenities-gallery" aria-labelledby="amenities-gallery-title">
+    <div class="kv-shell" data-amenities-gallery>
+      <div class="kv-amenities-gallery__head" data-mv="up">
+        <h2 id="amenities-gallery-title" class="kv-display kv-display--md">Amenities Gallery</h2>
+        <p>Architectural illustrations of the poolside, grounds and villas.</p>
       </div>
 
-      <div class="kv-amenity-grid" data-mv-group="140" data-mv-draw>
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10a3 3 0 0 1 6 0v18"/><path d="M12 16h6M12 22h6"/><path d="M16 28v8"/><path d="M26 30c0-2 2-3 4-3s4 1 4 3"/><path d="M7 36c2 2 4 2 6 0s4-2 6 0 4 2 6 0 4-2 6 0 4 2 6 0"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>Swimming Pool</h3>
-              <p>A resort-themed pool for owners and guests, set within lush tropical landscapes.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
+      <ul id="amenities-gallery-track" class="kv-amenities-gallery__track" tabindex="0" aria-labelledby="amenities-gallery-title">
+        @foreach ($amenityGallery as $slide)
+          <li>
+            <figure>
+              <img src="{{ asset($slide['image']) }}" alt="" loading="lazy" decoding="async">
+              <figcaption>{{ $slide['title'] }}</figcaption>
+            </figure>
+          </li>
+        @endforeach
+      </ul>
 
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 32c4-6 10-9 18-9s14 3 18 9"/><path d="M24 23V8"/><path d="M24 12c-5 0-9-2-11-5 5-1 9 1 11 5Z"/><path d="M24 16c5 0 9-2 11-5-5-1-9 1-11 5Z"/><path d="M4 38h40"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>Landscaped Lawns</h3>
-              <p>Green, open surroundings woven through the layout for quiet strolls and morning light.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8v14M12 8v6a4 4 0 0 0 8 0V8"/><path d="M16 22v18"/><path d="M32 8c3 0 5 3 5 7s-2 7-5 7v18"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>The Retreat Restaurant</h3>
-              <p>A sophisticated alfresco dining destination with premium design and warm wooden finishes.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4l16 6v12c0 10-7 17-16 22C15 39 8 32 8 22V10l16-6Z"/><path d="M17 23l5 5 10-11"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>Gated Security</h3>
-              <p>Round-the-clock, CCTV-monitored gated security for complete peace of mind.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 42h36"/><path d="M10 42V20l14-9 14 9v22"/><path d="M18 42V30h12v12"/><path d="M20 21h8"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>The Signature Clubhouse</h3>
-              <p>A contemporary sanctuary for recreation, relaxation, and social gatherings.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 40V16M36 40V16M24 40V16"/><path d="M12 16h24"/><path d="M12 28h6M30 28h6"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>Open Plunge Pool</h3>
-              <p>A private plunge pool nestled amidst lush tropical landscapes for resort-inspired living.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 8V44M20 12h8M20 24h8M20 36h8"/><path d="M24 44c4 0 8-4 8-8s-4-8-8-8-8 4-8 8 4 8 8 8Z"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>Modern Style Washroom</h3>
-              <p>A refined wellness retreat with minimalist architecture and premium materials.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="kv-amenity-card" data-mv="up" data-mv-tilt="6">
-          <div class="kv-amenity__wrap">
-            <div class="kv-amenity__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v32M36 8v32M24 40V8M24 24V8M24 24V40"/><path d="M12 16h24M12 32h24"/></svg>
-            </div>
-            <div class="kv-amenity__body">
-              <h3>Bedroom &amp; Living Area</h3>
-              <p>Tranquil havens overlooking beautifully landscaped gardens with refined craftsmanship.</p>
-              <a href="#" class="kv-amenity__link">Discover <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
+      <div class="kv-amenities-gallery__controls" data-gallery-controls hidden>
+        <button type="button" class="kv-amenities-gallery__arrow" data-gallery-prev aria-label="Previous image" aria-controls="amenities-gallery-track">←</button>
+        <div class="kv-amenities-gallery__thumbnails" role="group" aria-label="Choose a gallery image">
+          @foreach ($amenityGallery as $slide)
+            <button type="button" data-gallery-slide aria-label="{{ $slide['title'] }}" aria-controls="amenities-gallery-track">
+              <img src="{{ asset($slide['image']) }}" alt="" loading="lazy" decoding="async">
+            </button>
+          @endforeach
+        </div>
+        <button type="button" class="kv-amenities-gallery__arrow" data-gallery-next aria-label="Next image" aria-controls="amenities-gallery-track">→</button>
       </div>
     </div>
   </section>
 
+  <section class="kv-subsection kv-subsection--olive kv-amenities-page__visit" aria-labelledby="amenities-visit-heading">
+    <div class="kv-shell kv-cta-row" data-mv="up">
+      <div>
+        <h2 id="amenities-visit-heading" class="kv-display kv-display--md">Plan a Visit</h2>
+        <p>Walk the site in Kilawali and ask our team about the planned amenities and villa layouts.</p>
+      </div>
+      <button type="button" class="kv-btn kv-btn--gold" data-kv-open="enquiry">Enquire about a visit</button>
+    </div>
+  </section>
 </div>
 
 @endsection
