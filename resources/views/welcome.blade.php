@@ -405,7 +405,7 @@
 
 {{-- ==================================================== BLOG ==================================================== --}}
 @php
-  $posts = \App\Models\Post::where('is_published', true)->latest('updated_at')->take(5)->get();
+  $posts = \App\Models\Post::publishedForWebsite()->latest('updated_at')->take(5)->get();
   $featured = $posts->first();
   $cards = $posts->take(4);
 
@@ -414,7 +414,7 @@
       return \Illuminate\Support\Str::limit(trim(preg_replace('/\s+/', ' ', $text)), 150, '…');
   };
   $postImage = function ($post, $fallback = 'assets/img/kv/gallery-1440.webp') {
-      return $post && $post->image ? asset('storage/'.$post->image) : asset($fallback);
+      return $post && $post->image ? $post->imageUrl() : asset($fallback);
   };
 
   $featuredTitle = $featured ? $featured->title : 'Notes from the Koru Ville';
@@ -466,7 +466,7 @@
              data-image="{{ $postImage($post) }}">
             <div class="kv-post__media">
               @if($post->image)
-                <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" loading="lazy">
+                <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}" loading="lazy">
               @else
                 <img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="{{ $post->title }}" loading="lazy">
               @endif

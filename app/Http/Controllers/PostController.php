@@ -12,7 +12,7 @@ class PostController extends Controller
         $submittedQuery = request()->query('q');
         $query = is_string($submittedQuery) ? trim($submittedQuery) : '';
 
-        $posts = Post::where('is_published', true)
+        $posts = Post::publishedForWebsite()
             ->when($query !== '', function ($posts) use ($query) {
                 $pattern = '%'.$query.'%';
 
@@ -32,17 +32,15 @@ class PostController extends Controller
             ->fragmentIf(request()->query('_results') === '1', 'blog-results');
     }
 
-    public function show(Post $post)
+    public function show(string $post)
     {
-        if (! $post->is_published) {
-            abort(404);
-        }
+        $post = Post::publishedForWebsite()->where('slug', $post)->firstOrFail();
 
         [$content, $toc] = $this->prepareContent($post->content ?? '');
 
         $readMinutes = max(1, (int) ceil(str_word_count(strip_tags($content)) / 200));
 
-        $prevPost = Post::where('is_published', true)
+        $prevPost = Post::publishedForWebsite()
             ->where(function ($query) use ($post) {
                 $query->where('created_at', '<', $post->created_at)
                     ->orWhere(function ($query) use ($post) {
@@ -54,7 +52,7 @@ class PostController extends Controller
             ->orderByDesc('id')
             ->first();
 
-        $nextPost = Post::where('is_published', true)
+        $nextPost = Post::publishedForWebsite()
             ->where(function ($query) use ($post) {
                 $query->where('created_at', '>', $post->created_at)
                     ->orWhere(function ($query) use ($post) {
@@ -66,7 +64,7 @@ class PostController extends Controller
             ->orderBy('id')
             ->first();
 
-        $related = Post::where('is_published', true)
+        $related = Post::publishedForWebsite()
             ->where('id', '!=', $post->id)
             ->orderByDesc('created_at')
             ->take(3)

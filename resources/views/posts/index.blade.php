@@ -70,7 +70,7 @@
         <article class="kv-postcard kv-reveal">
           <a href="{{ route('posts.show', $post) }}" class="kv-postcard__media" tabindex="-1" aria-hidden="true">
             @if($post->image)
-              <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" loading="lazy">
+              <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}" loading="lazy">
             @else
               <img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="" loading="lazy">
             @endif

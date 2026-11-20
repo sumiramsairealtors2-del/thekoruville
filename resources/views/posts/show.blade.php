@@ -21,7 +21,9 @@
   $heroRatio = null; // only set when a real uploaded image is used
   $heroImgW = null;
   $heroImgH = null;
-  if (!empty($post->image)) {
+  if ($post->image && $post->getConnectionName() === 'live_blog') {
+      $heroImage = $heroImageDesktop = $heroImageTablet = $heroImageMobile = $post->imageUrl();
+  } elseif ($post->image) {
       $heroPath = public_path('storage/'.$post->image);
       if (is_file($heroPath)) {
           $dims = @getimagesize($heroPath);
@@ -29,7 +31,7 @@
               $heroImgW = $dims[0];
               $heroImgH = $dims[1];
               $heroRatio = round($heroImgW / $heroImgH, 4);
-              $heroImageDesktop = $heroImageTablet = $heroImageMobile = asset('storage/'.$post->image);
+              $heroImageDesktop = $heroImageTablet = $heroImageMobile = $post->imageUrl();
               $heroImage = $heroImageDesktop;
           }
       }
@@ -294,7 +296,7 @@
             <article class="kv-postcard">
               <a href="{{ route('posts.show', $relatedPost) }}" class="kv-postcard__media" tabindex="-1" aria-hidden="true">
                 @if($relatedPost->image)
-                  <img src="{{ asset('storage/'.$relatedPost->image) }}" alt="{{ $relatedPost->title }}" loading="lazy">
+                  <img src="{{ $relatedPost->imageUrl() }}" alt="{{ $relatedPost->title }}" loading="lazy">
                 @else
                   <img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="" loading="lazy">
                 @endif

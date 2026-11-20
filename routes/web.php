@@ -80,7 +80,7 @@ Route::get('/sitemap.xml', function () {
     |--------------------------------------------------------------------------
     */
 
-    $posts = Post::query()
+    $posts = Post::publishedForWebsite()
         ->orderByDesc('updated_at')
         ->get();
 

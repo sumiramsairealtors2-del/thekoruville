@@ -44,6 +44,21 @@ return [
             'transaction_mode' => 'DEFERRED',
         ],
 
+        'live_blog' => [
+            'driver' => 'mysql',
+            'host' => env('LIVE_BLOG_DB_HOST', 'localhost'),
+            'port' => env('LIVE_BLOG_DB_PORT', '3306'),
+            'database' => env('LIVE_BLOG_DB_DATABASE'),
+            'username' => env('LIVE_BLOG_DB_USERNAME'),
+            'password' => env('LIVE_BLOG_DB_PASSWORD'),
+            'unix_socket' => env('LIVE_BLOG_DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'image_base_url' => env('LIVE_BLOG_IMAGE_BASE_URL', 'https://thekoruville.com/storage'),
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
