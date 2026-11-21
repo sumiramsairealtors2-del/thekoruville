@@ -283,6 +283,11 @@
 
 {{-- ================================================== GALLERY ================================================== --}}
 <section class="kv-gallery" id="gallery">
+  <div class="kv-gallery__label" aria-hidden="true">
+    @include('partials.kv.crown', ['shapeClass' => 'kv-gallery__shape', 'shapeVariant' => 'tab'])
+    <span data-mv="fade" data-mv-delay="160">Gallery</span>
+  </div>
+
   <div class="kv-gallery__media" id="kvGalleryMedia" data-mv="scale">
     <picture>
       <source media="(max-width: 720px)" srcset="{{ asset('assets/img/kv/about-1000.webp') }}">
@@ -300,11 +305,6 @@
       {{-- ?v= busts the cache when the film file is replaced --}}
       <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/The-Koru-Ville-Teaser.mp4')) ?: 1 }}" type="video/mp4">
     </video>
-
-    <div class="kv-gallery__label" aria-hidden="true">
-      @include('partials.kv.crown', ['shapeClass' => 'kv-gallery__shape', 'shapeVariant' => 'tab'])
-      <span data-mv="fade" data-mv-delay="160">Gallery</span>
-    </div>
 
     <button type="button" class="kv-gallery__play" id="kvGalleryPlay"
             aria-label="Play the site film">
