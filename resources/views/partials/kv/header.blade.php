@@ -30,7 +30,7 @@
 
   <div class="kv-header__logo" aria-label="The Koru Ville — home">
     <a href="{{ url('/') }}">
-      <img src="{{ asset('assets/img/website.png') }}" alt="The Koru Ville" loading="lazy">
+      <img src="{{ asset('assets/img/website.webp') }}" alt="The Koru Ville" loading="lazy">
     </a>
   </div>
 
