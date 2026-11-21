@@ -1,5 +1,5 @@
 {{-- Header: olive crown + centred logo plaque, links float over the hero --}}
-<header class="kv-header{{ !empty($solid) ? ' kv-header--solid' : '' }}{{ !empty($light) ? ' kv-header--light' : '' }}" id="kvHeader">
+<header class="kv-header{{ !empty($solid) ? ' kv-header--solid' : '' }}{{ !empty($light) ? ' kv-header--light' : '' }}{{ !empty($errorPage) ? ' kv-header--error' : '' }}" id="kvHeader">
 
 
   <div class="kv-crown" aria-hidden="false">

@@ -51,7 +51,7 @@ import './kv-motion.js';
   /* ------------------------------------------------------------ scroll navbar pill */
   (function scrollNavbar() {
     var header = $('#kvHeader');
-    if (!header) return;
+    if (!header || header.classList.contains('kv-header--error')) return;
     var lastScrollY = window.scrollY;
     var ticking = false;
     var threshold = 60;

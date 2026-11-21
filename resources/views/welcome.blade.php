@@ -145,8 +145,8 @@
       </div>
 
       <div class="kv-about__copy" data-mv="left">
-        <p>Spread across 3.5 acres, <strong>The Koru Ville</strong> is a resort-themed residential plotted township along the Kashipur–Ramnagar highway belt, just outside the notified <strong>Jim Corbett National Park</strong> boundary — close enough to feel the forest every day, without ever crossing into the reserve itself.</p>
-        <p class="kv-about__note">111 / 125 / 139 sq.yd &nbsp;·&nbsp; Kilawali, Kashipur</p>
+        <p>Welcome to The Koru Ville at Kilawali — an exclusive resort style community of plots and villas in Kashipur, Uttarakhand, just 15 minutes by drive from Phato Gate, one of the Jim Corbett safari gates.</p>
+        {{-- <p class="kv-about__note">111 / 125 / 139 sq.yd &nbsp;·&nbsp; Kilawali, Kashipur</p> --}}
       </div>
     </div>
   </div>
@@ -173,7 +173,7 @@
         </button>
       </div>
       <span class="kv-eyebrow" data-mv="fade">Why This Location</span>
-      <p data-mv="blur">Proximity without isolation — the park trailheads in one direction, Kashipur's markets, hospitals and rail link in the other.</p>
+      <p data-mv="blur">Kilawali: Close to the Forest, Connected to What Matters</p>
     </div>
 
     {{-- green take-over panel: sweeps in right → left over the whole split --}}
@@ -183,9 +183,12 @@
       </button>
       <div class="kv-loc-crown__panel-inner">
         <h2 class="kv-loc-crown__panel-title">Kilawali, at the Gateway to Jim Corbett</h2>
-        <p class="kv-loc-crown__panel-text">Proximity without isolation — Kilawali sits along a working highway corridor that connects you to the park in one direction and Kashipur's markets, hospitals and rail link in the other.</p>
+        {{-- <p class="kv-loc-crown__panel-text">Kilawali blends natural beauty with excellent connectivity, offering easy access to Jim Corbett, Kashipur, and nearby hill stations.Its strategic location makes it ideal for peaceful living, tourism, and investment opportunities.</p> --}}
         <ul class="kv-split__list">
-          <li><span>01</span><div><b>Nature &amp; wildlife</b><br>Phato Gate 15 min · Tumaria Dam walking distance · Garjia Devi Temple short drive</div></li>
+          <li><span>01</span><div><b>Perfect Balance of Nature &amp; Convenience</b><br>Kilawali offers a perfect balance of being close to the forest without feeling disconnected from everyday convenience.</div></li>
+          <li><span>02</span><div><b>Prime Location &amp; Excellent Connectivity</b><br>Existing at a prime location along the highway corridor, the beautiful village connects directly to the Phato Gate of Jim Corbett and allows access to Kashipur markets, hospitals, and the railway station.</div></li>
+          <li><span>03</span><div><b>Nature, Accessibility &amp; Opportunity</b><br>Unlike deeper forest belt locations where connectivity can become a compromise, or more established areas near Ramnagar where land is increasingly limited, Kilawali sits comfortably between nature, accessibility, and opportunity.</div></li>
+          <li><span>04</span><div><b>Gateway to the Kumaon Hill Stations</b><br>Nainital, Bhimtal, Sattal and Mukteshwar are among the Kumaon hill stations near Kashipur that families can pair with a Corbett getaway.</div></li>
           {{-- <li><span>02</span><div><b>Everyday essentials</b><br>Nearest school ~15 min · AIIMS Hospital ~34 min</div></li> --}}
           {{-- <li><span>03</span><div><b>Rail &amp; air</b><br>Gaushala 11 km · Kashipur Junction 20 km · Ramnagar 23 km · Pantnagar Airport 66 km</div></li> --}}
         </ul>
