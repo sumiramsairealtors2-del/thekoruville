@@ -198,7 +198,8 @@ import './kv-motion.js';
     var modal = $('#kvModal-enquiry');
     if (!modal) return;
     setTimeout(function () {
-      if (!enquiryDismissed && !document.querySelector('.kv-modal.is-open')) openModal('enquiry');
+      var videoActive = $('.kv-gallery__media:is(.is-playing,.is-floating)');
+      if (!enquiryDismissed && !videoActive && !$('.kv-modal.is-open')) openModal('enquiry');
     }, 5000);
   })();
 
@@ -318,7 +319,7 @@ import './kv-motion.js';
         .then(function (res) {
           if (!res.ok) throw new Error('HTTP ' + res.status);
           form.reset();
-          setStatus(form, 'ok', 'Thank you — our team will contact you shortly.');
+          setStatus(form, 'ok', form.dataset.success || 'Thank you — our team will contact you shortly.');
           var modal = form.closest('.kv-modal');
           if (modal) setTimeout(function () { closeModal(modal); }, 1200);
         })
@@ -600,19 +601,37 @@ import './kv-motion.js';
     });
   }
 
-  /* ------------------------------------------------- gallery film (inline) */
-  /* #kvGalleryPlay starts the film in the section itself — no lightbox/modal.
-     Once started it stays on screen as the play/pause control, and the video
-     keeps its last frame when paused. */
+  /* --------------------------------------------------------- gallery film */
   (function () {
     var media = $('#kvGalleryMedia');
     var video = $('#kvGalleryVideo');
     var btn = $('#kvGalleryPlay');
     var toggleBtn = $('#kvGalleryToggle');
+    var dismissBtn = $('#kvGalleryDismiss');
     var seek = $('#kvGallerySeek');
     var time = $('#kvGalleryTime');
     var error = $('#kvGalleryError');
     if (!media || !video || !btn) return;
+
+    // Observe the gallery slot, which stays in place while the same player floats.
+    function refreshFloating() {
+      var bounds = media.getBoundingClientRect();
+      var outside = bounds.bottom <= 0 || bounds.top >= document.documentElement.clientHeight;
+      var wasFloating = media.classList.contains('is-floating');
+      var floating = outside && media.classList.contains('is-video') && !video.ended &&
+        (!video.paused || wasFloating);
+      media.classList.toggle('is-floating', floating);
+      if (wasFloating && !floating && document.activeElement === dismissBtn && toggleBtn) {
+        toggleBtn.focus({ preventScroll: true });
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(refreshFloating).observe(media);
+    } else {
+      window.addEventListener('scroll', refreshFloating, { passive: true });
+      window.addEventListener('resize', refreshFloating);
+    }
 
     function clock(sec) {
       sec = isFinite(sec) && sec > 0 ? sec : 0;
@@ -624,7 +643,6 @@ import './kv-motion.js';
     function reflect(playing) {
       media.classList.toggle('is-playing', playing);
       if (!toggleBtn) return;
-      toggleBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
       toggleBtn.setAttribute('aria-label', playing ? 'Pause the site film' : 'Play the site film');
     }
 
@@ -647,9 +665,10 @@ import './kv-motion.js';
       if (error) error.hidden = true;
       var started = video.play();
       if (started && started.catch) {
-        started.catch(function () {
+        started.catch(function (failure) {
+          if (failure.name === 'AbortError') return;
           if (error) error.hidden = false;
-          media.classList.remove('is-video');
+          media.classList.remove('is-video', 'is-floating');
           reflect(false);
           if (document.activeElement === toggleBtn) btn.focus({ preventScroll: true });
         });
@@ -658,15 +677,23 @@ import './kv-motion.js';
 
     btn.addEventListener('click', toggle);
     if (toggleBtn) toggleBtn.addEventListener('click', toggle);
+    if (dismissBtn) dismissBtn.addEventListener('click', function () {
+      video.pause();
+      media.classList.remove('is-floating');
+    });
     video.addEventListener('click', toggle);
     video.addEventListener('play', function () {
       var moveFocus = document.activeElement === btn;
       media.classList.add('is-video');
       reflect(true);
+      refreshFloating();
       if (moveFocus && toggleBtn) toggleBtn.focus({ preventScroll: true });
     });
     video.addEventListener('pause', function () { reflect(false); });
-    video.addEventListener('ended', function () { reflect(false); });
+    video.addEventListener('ended', function () {
+      reflect(false);
+      refreshFloating();
+    });
     video.addEventListener('timeupdate', sync);
     video.addEventListener('loadedmetadata', sync);
     video.addEventListener('durationchange', sync);
@@ -713,7 +740,7 @@ import './kv-motion.js';
       open = next;
       split.classList.toggle('is-loc-open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.setAttribute('aria-label', open ? 'Hide the full location content' : 'Show the full location content');
+      btn.setAttribute('aria-label', open ? 'Hide nearby places' : 'Explore nearby places');
       panel.setAttribute('aria-hidden', open ? 'false' : 'true');
     }
 

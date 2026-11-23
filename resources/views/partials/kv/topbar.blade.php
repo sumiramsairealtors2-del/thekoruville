@@ -3,11 +3,13 @@
   <div class="kv-topbar__track">
     @php
       $kvTicker = [
-        'Resort-themed plots from 111 sq.yd',
-        '15 minutes from Phato Gate, Jim Corbett',
-        '3.5 acres at Kilawali, Kashipur',
-        'RERA Reg. No.: UKREP10260000768',
-        'Book your private site visit',
+        '🌿 BOOKINGS OPEN',
+        '🏠 The Koru Ville – Resort-Themed Residential Township',
+        '📍 Kilawali, Uttarakhand',
+        '🐅 Just 15 Minutes from Phato Gate, Jim Corbett',
+        '💧 Near Tumaria Dam',
+        '📢 RERA Registration: UKREP10260000768',
+        '🚀 Enquire Now for Pricing & Layout',
       ];
     @endphp
     @foreach($kvTicker as $item)

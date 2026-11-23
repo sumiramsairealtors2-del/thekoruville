@@ -13,7 +13,7 @@
   width in kv.css scales the curve uniformly at any viewport width.
 
   Usage:
-    @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
+    @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'plot'])
 --}}
 @php
     $crownShapes = [
@@ -26,6 +26,11 @@
         'crown' => [
             '0 0 320 53',
             'M0 0H320V17C304.09 17.72 291.09 24.92 282.11 36.08C274.44 45.69 261.16 53 247 53H73C58.84 53 45.56 45.69 37.89 36.08C28.91 24.92 15.91 17.72 0 17V0Z',
+        ],
+        // Villa card: an upward curve behind the centered emblem.
+        'plot' => [
+            '0 0 320 44',
+            'M0 44V36H62C91 36 92 1 118 1H202C228 1 229 36 258 36H320V44Z',
         ],
         // Hanging tab (gallery label / hero arrows): 320 x 91.
         'tab' => [

@@ -1,7 +1,7 @@
 @extends('layouts.kv')
 
 @section('title', 'Residential Plots Near Jim Corbett | The Koru Ville')
-@section('description', 'Discover residential freehold plots near Jim Corbett at The Koru Ville, Kilawali. Enjoy nature, excellent connectivity to Kashipur, and resort-style living.')
+@section('description', 'Looking for plots near Jim Corbett? The Koru Ville offers resort-style residential plots in Kilawali, Kashipur. 15 mins from Phato Gate. Enquire now!')
 @section('home', '1')
 
 @section('head')
@@ -43,34 +43,42 @@
   }]
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [{
-    "@type": "Question",
-    "name": "What is The Koru Ville?",
-    "acceptedAnswer": { "@type": "Answer", "text": "The Koru Ville is an upcoming resort-themed residential plotted township coming up in Kilawali, Uttarakhand, at the gateway to Jim Corbett National Park." }
-  },{
-    "@type": "Question",
-    "name": "Where exactly is the project located?",
-    "acceptedAnswer": { "@type": "Answer", "text": "The Koru Ville is located in Kilawali, Uttarakhand - 244712, along the Kashipur-Ramnagar highway corridor." }
-  },{
-    "@type": "Question",
-    "name": "How far is the project from Jim Corbett National Park?",
-    "acceptedAnswer": { "@type": "Answer", "text": "The Koru Ville is just 15 minutes by drive from Phato Gate, one of the few Jim Corbett safari gates open all year round, including through the monsoon season." }
-  },{
-    "@type": "Question",
-    "name": "What plot sizes are available?",
-    "acceptedAnswer": { "@type": "Answer", "text": "The Koru Ville plots are available starting from 111 sq. yd, with additional sizes at 125 sq. yd and 139 sq. yd." }
-  },{
-    "@type": "Question",
-    "name": "Is Kilawali located inside Jim Corbett National Park?",
-    "acceptedAnswer": { "@type": "Answer", "text": "No. The Koru Ville sits just outside the notified park boundary, along the highway corridor that serves as the gateway to the park." }
-  }]
-}
-</script>
 @endverbatim
+@php
+  $faqs = [
+    ['What is The Koru Ville?', 'The Koru Ville is a resort-style community of plots and villas in Kilawali, Kashipur, Uttarakhand, spread across 3.5 acres. Buyers choose from three plot categories — Mayoora, Mriga or Simha — each built to a fixed design by the project team. The township also includes a clubhouse, a common pool and a restaurant-themed plot cluster. Bookings are now open.'],
+    ['Where are The Koru Ville plots in Kashipur Uttarakhand located?', 'The Koru Ville plots are in Kilawali, Kashipur, Uttarakhand – 244712, along the Kashipur–Ramnagar highway corridor in Udham Singh Nagar district. The project sits just outside the notified boundary of Jim Corbett National Park, at the park\'s gateway.'],
+    ['How far is the project from Jim Corbett National Park?', 'The Koru Ville is just 15 minutes by drive from Phato Gate, one of the few Jim Corbett safari gates open all year round, including through the monsoon season.'],
+    ['What plot sizes are available?', 'The Koru Ville plots are available starting from 111 sq. yd, with additional sizes at 125 sq. yd and 139 sq. yd.'],
+    ['Is Kilawali located inside Jim Corbett National Park?', 'No. The Koru Ville is located just outside the notified boundary of Jim Corbett National Park, along the highway corridor that serves as the gateway to the park — not inside the reserve itself.'],
+    ['Is the project suitable for full-time living or only weekend stays?', 'Both. With a school roughly 15 minutes away and a hospital around 34 minutes out, along with nearby rail and highway access, The Koru Ville Kilawali is designed to support full-time residents as well as weekend and holiday owners.'],
+    ['How large is the township?', 'The township spans 3.5 acres of thoughtfully planned, resort-themed residential plots.'],
+    ['When will the project officially launch?', 'The project is now launched and bookings are open. Final pricing, the allotment process, and site visit scheduling are shared with buyers at the time of enquiry — contact our team for the latest details.'],
+    ['What makes residential plots in Jim Corbett different from plots elsewhere in Uttarakhand?', 'Plots in the Jim Corbett belt sit in the Terai region, where sal forests, seasonal rivers, and proximity to India\'s oldest national park create a cooler climate and a different pace of life compared to plains-based townships elsewhere in the state. The draw here isn\'t just land — it\'s direct access to a wildlife corridor that has attracted visitors for close to a century, along with the highway and market infrastructure that has grown up around it.'],
+    ['What should buyers verify before purchasing residential plots in Jim Corbett?', 'As with any land purchase near an eco-sensitive zone, buyers should confirm clear land title, check zoning status with a local advocate, and verify that the project has the necessary regulatory approvals before booking. It\'s also worth visiting the site in person to confirm access roads and terrain match what\'s shown in marketing material, rather than relying on photos alone.'],
+    ['What can owners of residential plots in Jim Corbett actually do in the area?', 'Beyond the safari itself, the region around Jim Corbett is suited to birdwatching, riverside walks near the dam, and short treks through the surrounding forest belt. For owners who visit periodically rather than living full-time, this gives the plot a purpose even outside of construction — a base for repeat visits tied to the park\'s activities and seasons.'],
+    ['What is the official website for The Koru Ville?', 'The official website for The Koru Ville is www.thekoruville.com. The Koru Ville is a resort-themed residential plotted township located in Kilawali, Uttarakhand, at the gateway to Jim Corbett National Park. Any other website, landing page, or listing claiming to represent The Koru Ville is not authorized.'],
+    ['What is the RERA status of The Koru Ville?', 'The Koru Ville is registered with RERA. The registration number is UKREP10260000768.'],
+    ['Can The Koru Ville be used as a weekend home near Jim Corbett?', 'Yes. The Koru Ville is planned as a second home or holiday retreat, with villas that have private pools and a project team that looks after the community between visits. Delhi NCR is roughly 5–6 hours by road. Owner stay days and rental terms are shared in full at the time of booking.'],
+    ['What are the Jim Corbett safari zones?', 'Jim Corbett\'s safari zones include Dhikala, Bijrani, Jhirna, Dhela, Durga Devi, Garjia and Phato, and some operators also list Sitabani, Pakhro and Sonanadi. Opening dates differ by zone and season, so check the Uttarakhand Forest Department\'s official booking portal before planning. Phato Gate, the nearest gate to The Koru Ville, is about 15 minutes by drive.'],
+    ['Which is the best gate for a Jim Corbett safari?', 'No single gate is best for everyone; it depends on the season and what you want to see. Sources list Jhirna and Dhela as open through the year, while Dhikala and Bijrani run in the cooler months. Phato Gate is the most convenient from The Koru Ville, about 15 minutes by drive.'],
+    ['Which hill stations are near Kashipur?', 'Kumaon hill stations such as Nainital, Bhimtal, Sattal, Mukteshwar and Ranikhet are popular trips from the Kashipur–Ramnagar belt. Travel times depend on the route and season, so check them on a map before planning a visit.'],
+    ['What is the Ramnagar Dehradun Express?', 'The Ramnagar–Dehradun Express is the first direct express train between Ramnagar and Dehradun, flagged off on 18 July 2026. It runs on Wednesdays and Fridays (trains 15310 and 15309) and halts at Kashipur, Roshanpur, Pipalsana, Moradabad, Najibabad and Haridwar. Please check the current timetable on IRCTC or National Train Enquiry System before travelling.'],
+    ['Does The Koru Ville offer properties in Jim Corbett?', 'offers residential plots with fixed villa designs at the gateway to Jim Corbett, in Kilawali, Kashipur, just outside the notified boundary of Jim Corbett National Park. As with any land purchase, buyers should confirm the title, zoning and approvals before booking.'],
+    ['Looking for plots near me in the Kashipur–Ramnagar area?', 'The Koru Ville\'s plots are in Kilawali on the Kashipur–Ramnagar corridor. You can find the site on the map in the contact section and book a private site visit through the enquiry form or by phone.'],
+  ];
+
+  $faqSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'FAQPage',
+    'mainEntity' => array_map(fn ($faq) => [
+      '@type' => 'Question',
+      'name' => $faq[0],
+      'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq[1]],
+    ], $faqs),
+  ];
+@endphp
+<script type="application/ld+json">@json($faqSchema)</script>
 @endsection
 
 @section('content')
@@ -101,9 +109,9 @@
     @endforeach
 
     <div class="kv-hero__copy">
+      <span class="kv-eyebrow">The Koru Ville &middot; Kilawali, Uttarakhand</span>
       <h1 data-mv="words" data-mv-word-delay="45">The Koru Ville</h1>
       <p class="kv-hero__sub" data-mv="blur" data-mv-delay="180">Resort-Themed Plots at the Gateway to Jim Corbett</p>
-      <p class="kv-hero__lede" data-mv="blur" data-mv-delay="240">An upcoming resort-themed plotted township where you build your own home, just 15 minutes by drive from Phato Gate, one of Jim Corbett's most sought-after safari entry points.</p>
       <div class="kv-hero__actions" data-mv="fade" data-mv-delay="300">
         <button type="button" class="kv-btn" data-kv-open="enquiry" data-mv-magnet="8">Enquire About Plots</button>
         <button type="button" class="kv-btn" data-kv-open="brochure" data-mv-magnet="8">Download Brochure</button>
@@ -130,246 +138,198 @@
 {{-- ==================================================== ABOUT ==================================================== --}}
 <section class="kv-panel kv-panel--cream kv-about" id="about">
   <div class="kv-shell">
-    <span class="kv-eyebrow" data-mv="fade">About Us</span>
-
     <div class="kv-about__grid" data-mv-group="110">
       <div class="kv-stats" data-mv="right" data-mv-count-group>
         <div class="kv-stat">
           <b><span data-mv-count="3.5" data-mv-decimals="1">3.5</span> Acres</b>
-          <span>Resort-themed township</span>
+          <span>Resort-Themed Township</span>
         </div>
         <div class="kv-stat">
           <b><span data-mv-count="15">15</span> Min</b>
           <span>Drive to Phato Gate</span>
         </div>
+        <a href="{{ route('about') }}" class="kv-link-arrow kv-about__link">
+          About The Koru Ville
+          <i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
+        </a>
       </div>
 
       <div class="kv-about__copy" data-mv="left">
-        <p>Welcome to The Koru Ville at Kilawali — an exclusive resort style community of plots and villas in Kashipur, Uttarakhand, just 15 minutes by drive from Phato Gate, one of the Jim Corbett safari gates.</p>
-        {{-- <p class="kv-about__note">111 / 125 / 139 sq.yd &nbsp;·&nbsp; Kilawali, Kashipur</p> --}}
-      </div>
-    </div>
-  </div>
-</section>
-
-{{-- ============================================ WHY THIS LOCATION ============================================ --}}
-<section class="kv-panel kv-panel--olive" id="why-this-location">
-  <div class="kv-split">
-    <div class="kv-split__media" data-mv="scale">
-      <img src="{{ asset('assets/img/koru_villa_1.webp') }}"
-           width="1408" height="768"
-           alt="Illustration of the hills and reservoir near Kilawali" loading="lazy" data-mv-parallax="36">
-    </div>
-
-    <div class="kv-split__body" data-mv-group="80">
-      {{-- the crown tab is part of the body: a 270° spine tab on its left edge.
-           On desktop it sits absolutely at the body's left edge; stacked it
-           rests inside this slot between the eyebrow and the overview text --}}
-      <div class="kv-loc-crown__slot" id="kvLocCrownSlot">
-        <button class="kv-loc-crown__btn" id="kvLocCrownBtn" type="button" aria-expanded="false" aria-controls="kvLocCrownPanel" aria-label="Show the full location content">
-          @include('partials.kv.crown', ['shapeClass' => 'kv-loc-crown__shape', 'shapeVariant' => 'tab-side'])
-          <span class="kv-loc-crown__label" aria-hidden="true">Kilawali &mdash; at the Gateway</span>
-          <svg class="kv-loc-crown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 4v10.17l-5.59-5.58L4 10l8 8 8-8-1.41-1.41L13 14.17V4z"/></svg>
-        </button>
-      </div>
-      <span class="kv-eyebrow" data-mv="fade">Why This Location</span>
-      <p data-mv="blur">Kilawali: Close to the Forest, Connected to What Matters</p>
-    </div>
-
-    {{-- green take-over panel: sweeps in right → left over the whole split --}}
-    <div class="kv-loc-crown__panel" id="kvLocCrownPanel" aria-hidden="true">
-      <button class="kv-loc-crown__close" type="button" aria-label="Close the full location content">
-        <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-      </button>
-      <div class="kv-loc-crown__panel-inner">
-        <h2 class="kv-loc-crown__panel-title">Kilawali, at the Gateway to Jim Corbett</h2>
-        {{-- <p class="kv-loc-crown__panel-text">Kilawali blends natural beauty with excellent connectivity, offering easy access to Jim Corbett, Kashipur, and nearby hill stations.Its strategic location makes it ideal for peaceful living, tourism, and investment opportunities.</p> --}}
-        <ul class="kv-split__list">
-          <li><span>01</span><div><b>Perfect Balance of Nature &amp; Convenience</b><br>Kilawali offers a perfect balance of being close to the forest without feeling disconnected from everyday convenience.</div></li>
-          <li><span>02</span><div><b>Prime Location &amp; Excellent Connectivity</b><br>Existing at a prime location along the highway corridor, the beautiful village connects directly to the Phato Gate of Jim Corbett and allows access to Kashipur markets, hospitals, and the railway station.</div></li>
-          <li><span>03</span><div><b>Nature, Accessibility &amp; Opportunity</b><br>Unlike deeper forest belt locations where connectivity can become a compromise, or more established areas near Ramnagar where land is increasingly limited, Kilawali sits comfortably between nature, accessibility, and opportunity.</div></li>
-          <li><span>04</span><div><b>Gateway to the Kumaon Hill Stations</b><br>Nainital, Bhimtal, Sattal and Mukteshwar are among the Kumaon hill stations near Kashipur that families can pair with a Corbett getaway.</div></li>
-          {{-- <li><span>02</span><div><b>Everyday essentials</b><br>Nearest school ~15 min · AIIMS Hospital ~34 min</div></li> --}}
-          {{-- <li><span>03</span><div><b>Rail &amp; air</b><br>Gaushala 11 km · Kashipur Junction 20 km · Ramnagar 23 km · Pantnagar Airport 66 km</div></li> --}}
+        <p>Welcome to The Koru Ville Kilawali &mdash; an exclusive resort style community of plots and villas in Kashipur, Uttarakhand, just 15 minutes by drive from Phato Gate, one of the Jim Corbett safari gates.</p>
+        <ul class="kv-about__figures">
+          <li><strong>(111-139) sq.yd</strong> Plots Onwards</li>
+          <li><strong>Starting Price</strong> 34,990*/Sq.Yd</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
+{{-- ============================================ WHY THIS LOCATION ============================================ --}}
+<section class="kv-panel kv-panel--olive kv-location" id="why-this-location" aria-labelledby="kvLocationTitle">
+  <figure class="kv-location__media" data-mv="fade">
+    <img src="{{ asset('assets/img/koru_villa_1.webp') }}"
+         width="1408" height="768"
+         alt="Illustration of the hills and reservoir near Kilawali" loading="lazy">
+    <figcaption>Kilawali, Uttarakhand</figcaption>
+  </figure>
+
+  <div class="kv-location__body" data-mv-group="80">
+    <div>
+      <span class="kv-eyebrow" data-mv="fade">Why This Location</span>
+      <h2 id="kvLocationTitle" class="kv-display" data-mv="words">Kilawali: Close to the Forest, Connected to What Matters</h2>
+    </div>
+    <a href="{{ route('about') }}#kilawali" class="kv-link-arrow kv-location-link">
+      Explore the Location
+      <i aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i>
+    </a>
+  </div>
+</section>
+
 {{-- ==================================================== PLOTS ==================================================== --}}
-<section class="kv-panel kv-panel--cream kv-plots" id="plots">
-  <div class="kv-shell">
+<section class="kv-panel kv-panel--cream kv-plots" id="stand-out">
+  <div class="kv-shell" id="plots">
     <div class="kv-section-head" data-mv-group="90">
-      <span class="kv-eyebrow" data-mv="fade">What's Coming</span>
-      <h2 class="kv-display kv-display--lg" data-mv="words">Plot Options Built Around How You Live</h2>
-      <p class="kv-lede" data-mv="blur">From a compact weekend retreat to a larger family home, every plot sits inside a resort-themed layout — not a plain residential grid.</p>
+      <span class="kv-eyebrow" data-mv="fade">Plot Categories & Villa Designs</span>
+      <h2 class="kv-display kv-display--lg" data-mv="words">Residential Plots Near Jim Corbett: Mayoora, Mriga & Simha</h2>
     </div>
 
-    <div class="kv-cards" data-mv-group="120">
+    <div class="kv-cards">
 
-      <article class="kv-plot" data-mv="up" data-mv-tilt="4">
+      <article class="kv-plot" data-mv="plot">
         <div class="kv-plot__media">
-          <span class="kv-plot__badge">Starting size</span>
           <img src="{{ asset('assets/img/kv/plot-1-860.webp') }}"
                width="860" height="1148"
                alt="Architectural illustration for the 111 sq yd plot option" loading="lazy" decoding="async">
         </div>
         <div class="kv-plot__body">
-          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
+          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'plot'])
           <span class="kv-plot__emblem" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
+            @include('partials.kv.plot-mayoora-emblem')
           </span>
-          <h3>111 sq.yd</h3>
-          <p>The Mayoora plot — a compact retreat inside the resort-themed layout.</p>
+          <h3>Mayoora</h3>
+          <p>Cosy duplex, plunge pool</p>
           <div class="kv-plot__meta">
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Residential</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>111 sq.yd</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z"/><circle cx="12" cy="10" r="2.4"/></svg>Freehold</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>2BHK</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>1,000 sq.ft</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 15c2 0 2-2 4.5-2s2.5 2 4.5 2 2-2 4.5-2 2.5 2 4.5 2M3 20c2 0 2-2 4.5-2s2.5 2 4.5 2 2-2 4.5-2 2.5 2 4.5 2M9 12V5a2 2 0 0 0-4 0m9 8V5a2 2 0 0 0-4 0"/></svg>Private Pool</span>
           </div>
-          <button type="button" class="kv-btn kv-btn--outline" data-kv-open="enquiry">Explore Now</button>
+          <button type="button" class="kv-link-arrow kv-plot__enquire" data-kv-open="enquiry" aria-label="Enquiry Now for the 111 sq yd plot">
+            Enquiry Now
+            <i aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i>
+          </button>
         </div>
       </article>
 
-      <article class="kv-plot" data-mv="up" data-mv-tilt="4">
+      <article class="kv-plot kv-plot--featured" data-mv="plot">
         <div class="kv-plot__media">
-          <span class="kv-plot__badge">Most popular</span>
-          <img src="{{ asset('assets/img/kv/plot-2-860.webp') }}"
-               width="860" height="1147"
-               alt="Architectural illustration for the 125 sq yd plot option" loading="lazy" decoding="async">
-        </div>
-        <div class="kv-plot__body">
-          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
-          <span class="kv-plot__emblem" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
-          </span>
-          <h3>125 sq.yd</h3>
-          <p>A Mriga Plot — ideal for a family home with outdoor space.</p>
-          <div class="kv-plot__meta">
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Residential</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>125 sq.yd</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z"/><circle cx="12" cy="10" r="2.4"/></svg>Freehold</span>
-          </div>
-          <button type="button" class="kv-btn kv-btn--outline" data-kv-open="enquiry">Explore Now</button>
-        </div>
-      </article>
-
-      <article class="kv-plot" data-mv="up" data-mv-tilt="4">
-        <div class="kv-plot__media">
-          <span class="kv-plot__badge">Largest layout</span>
+          <span class="kv-plot__badge">Largest plot</span>
           <img src="{{ asset('assets/img/kv/plot-3-860.webp') }}"
                width="860" height="1147"
                alt="Architectural illustration for the 139 sq yd plot option" loading="lazy" decoding="async">
         </div>
         <div class="kv-plot__body">
-          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'crown'])
+          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'plot'])
           <span class="kv-plot__emblem" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="24" cy="24" r="21" opacity=".5"/><path d="M25.4 24 L25.7 24.6 L25.7 25.5 L25.2 26.3 L24.4 27 L23.2 27.4 L21.8 27.2 L20.5 26.5 L19.4 25.2 L18.9 23.4 L19.1 21.5 L20 19.6 L21.7 18.1 L23.9 17.2 L26.4 17.2 L29 18.2 L31 20.1 L32.4 22.8 L32.7 25.9 L31.8 29.1 L29.7 31.8 L26.7 33.8 L23 34.5 L19.2 33.8 L15.7 31.8 L13.1 28.5 L11.8 24.4 L12.1 19.9 L14 15.7 L17.3 12.3 L21.8 10.3 L26.9 10 L31.9 11.6 L36.1 14.9 L38.9 19.7 L39.9 25.2 L38.8 31 L35.7 36 L30.8 39.8 L24.8 41.6 L18.4 41.1"/></svg>
+            @include('partials.kv.plot-simha-emblem')
           </span>
-          <h3>139 sq.yd</h3>
-          <p>The Simha layout — generous space for a full family residence.</p>
+          <h3>Simha</h3>
+          <p>Most space, private pool.</p>
           <div class="kv-plot__meta">
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Residential</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>139 sq.yd</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z"/><circle cx="12" cy="10" r="2.4"/></svg>Freehold</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>3BHK</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>1,250 sq.ft</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 15c2 0 2-2 4.5-2s2.5 2 4.5 2 2-2 4.5-2 2.5 2 4.5 2M3 20c2 0 2-2 4.5-2s2.5 2 4.5 2 2-2 4.5-2 2.5 2 4.5 2M9 12V5a2 2 0 0 0-4 0m9 8V5a2 2 0 0 0-4 0"/></svg>Private Pool</span>
           </div>
-          <button type="button" class="kv-btn kv-btn--outline" data-kv-open="enquiry">Explore Now</button>
+          <button type="button" class="kv-link-arrow kv-plot__enquire" data-kv-open="enquiry" aria-label="Enquiry Now for the 139 sq yd plot">
+            Enquiry Now
+            <i aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i>
+          </button>
         </div>
       </article>
 
+      <article class="kv-plot" data-mv="plot">
+        <div class="kv-plot__media">
+          <img src="{{ asset('assets/img/kv/plot-2-860.webp') }}"
+               width="860" height="1147"
+               alt="Architectural illustration for the 125 sq yd plot option" loading="lazy" decoding="async">
+        </div>
+        <div class="kv-plot__body">
+          @include('partials.kv.crown', ['shapeClass' => 'kv-plot__crown', 'shapeVariant' => 'plot'])
+          <span class="kv-plot__emblem" aria-hidden="true">
+            @include('partials.kv.plot-mriga-emblem')
+          </span>
+          <h3>Mriga</h3>
+          <p>Room to relax, hill views.</p>
+          <div class="kv-plot__meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>2BHK</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>1,125 sq.ft</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 15c2 0 2-2 4.5-2s2.5 2 4.5 2 2-2 4.5-2 2.5 2 4.5 2M3 20c2 0 2-2 4.5-2s2.5 2 4.5 2 2-2 4.5-2 2.5 2 4.5 2M9 12V5a2 2 0 0 0-4 0m9 8V5a2 2 0 0 0-4 0"/></svg>Private Pool</span>
+          </div>
+          <button type="button" class="kv-link-arrow kv-plot__enquire" data-kv-open="enquiry" aria-label="Enquiry Now for the 125 sq yd plot">
+            Enquiry Now
+            <i aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i>
+          </button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="kv-home__section-link">
+      <a href="{{ route('pricing') }}#villa-floor-plans" class="kv-link-arrow">
+        View Plot Sizes and Villa Floor Plans
+        <i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
+      </a>
     </div>
   </div>
 </section>
 
 {{-- ================================================== GALLERY ================================================== --}}
-<section class="kv-gallery" id="gallery">
-  <div class="kv-gallery__label" aria-hidden="true">
-    @include('partials.kv.crown', ['shapeClass' => 'kv-gallery__shape', 'shapeVariant' => 'tab'])
-    <span data-mv="fade" data-mv-delay="160">Gallery</span>
-  </div>
-
-  <div class="kv-gallery__media" id="kvGalleryMedia" data-mv="scale">
+<section class="kv-gallery" id="gallery" aria-labelledby="kvGalleryTitle">
+  <div class="kv-gallery__media" id="kvGalleryMedia">
+    <h2 class="kv-gallery__label" id="kvGalleryTitle">
+      @include('partials.kv.crown', ['shapeClass' => 'kv-gallery__shape', 'shapeVariant' => 'tab'])
+      <span>Gallery</span>
+    </h2>
     <picture>
       <source media="(max-width: 720px)" srcset="{{ asset('assets/img/kv/about-1000.webp') }}">
       <img src="{{ asset('assets/img/kv/gallery-1920.webp') }}"
            width="1920" height="816"
-           alt="The Koru Ville grounds at Kilawali" loading="lazy" data-mv-parallax="34">
+           alt="Architectural rendering of The Koru Ville at dusk" loading="lazy">
     </picture>
-
-    {{-- The film plays here, in the section — no lightbox, no modal. The centre
-         button starts it and then stays on as its play/pause control. --}}
-    <video class="kv-gallery__video" id="kvGalleryVideo"
-           playsinline preload="metadata"
-           poster="{{ asset('assets/img/kv/gallery-1920.webp') }}"
-           aria-label="The Koru Ville site film">
-      {{-- ?v= busts the cache when the film file is replaced --}}
-      <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/The-Koru-Ville-Teaser.mp4')) ?: 1 }}" type="video/mp4">
-    </video>
-
-    <button type="button" class="kv-gallery__play" id="kvGalleryPlay"
-            aria-label="Play the site film">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12Z"/></svg>
+    <button type="button" class="kv-gallery__play" id="kvGalleryPlay" aria-label="Play the site film">
+      <svg viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M8 5.2v13.6L19 12Z"/></svg>
     </button>
-
-    {{-- inline player controls: play/pause + a scrubbable timeline --}}
-    <div class="kv-gallery__controls">
-      <button type="button" class="kv-gallery__toggle" id="kvGalleryToggle"
-              aria-label="Pause the site film" aria-pressed="false">
-        <svg class="kv-gallery__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12Z"/></svg>
-        <svg class="kv-gallery__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
-      </button>
-      <input type="range" class="kv-gallery__seek" id="kvGallerySeek"
-             min="0" max="1000" step="1" value="0" aria-label="Seek through the site film">
-      <span class="kv-gallery__time" id="kvGalleryTime">0:00 / 0:00</span>
-    </div>
-
     <p class="kv-gallery__error" id="kvGalleryError" role="status" hidden>The site film couldn’t play. Try again.</p>
-    <span class="kv-gallery__caption">The Koru Ville · Kilawali</span>
+
+    <div class="kv-gallery__player">
+      <video class="kv-gallery__video" id="kvGalleryVideo"
+             playsinline preload="metadata"
+             poster="{{ asset('assets/img/kv/gallery-1920.webp') }}"
+             aria-label="The Koru Ville site film">
+        <source src="{{ route('media.gallery') }}?v={{ @filemtime(public_path('assets/video/The-Koru-Ville-Teaser.mp4')) ?: 1 }}" type="video/mp4">
+      </video>
+
+      <button type="button" class="kv-gallery__dismiss" id="kvGalleryDismiss" aria-label="Close floating video">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="white" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m2 2 10 10M12 2 2 12"/></svg>
+      </button>
+
+      <div class="kv-gallery__controls">
+        <button type="button" class="kv-gallery__toggle" id="kvGalleryToggle" aria-label="Pause the site film">
+          <svg class="kv-gallery__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12Z"/></svg>
+          <svg class="kv-gallery__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
+        </button>
+        <input type="range" class="kv-gallery__seek" id="kvGallerySeek"
+               min="0" max="1000" step="1" value="0" aria-label="Seek through the site film">
+        <span class="kv-gallery__time" id="kvGalleryTime">0:00 / 0:00</span>
+      </div>
+    </div>
   </div>
-</section>
-
-{{-- ================================================= AMENITIES ================================================= --}}
-<section class="kv-amenities" id="amenities">
-  <div class="kv-shell">
-    <div class="kv-amenities__head" data-mv-group="90">
-      <div>
-        <span class="kv-eyebrow" data-mv="fade">World-Class Amenities</span>
-        <h2 class="kv-display kv-display--md" data-mv="words">A Resort-Style Community</h2>
-      </div>
-      <p class="kv-lede" data-mv="blur">Even though owners build their own individual homes, the surrounding community is designed to already feel like a retreat.</p>
-    </div>
-
-    <div class="kv-amenities__grid" data-mv-group="90" data-mv-draw>
-      <div class="kv-amenity" data-mv="up">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 20V10a3 3 0 0 1 6 0v18"/><path d="M12 16h6M12 22h6"/><path d="M16 28v8"/><path d="M26 30c0-2 2-3 4-3s4 1 4 3"/><path d="M7 36c2 2 4 2 6 0s4-2 6 0 4 2 6 0 4-2 6 0 4 2 6 0"/></svg>
-        <h3>Swimming Pool</h3>
-        <p>A resort-themed pool for owners and guests.</p>
-      </div>
-      <div class="kv-amenity" data-mv="up">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 32c4-6 10-9 18-9s14 3 18 9"/><path d="M24 23V8"/><path d="M24 12c-5 0-9-2-11-5 5-1 9 1 11 5Z"/><path d="M24 16c5 0 9-2 11-5-5-1-9 1-11 5Z"/><path d="M4 38h40"/></svg>
-        <h3>Landscaped Lawns</h3>
-        <p>Green, open surroundings woven through the layout.</p>
-      </div>
-      <div class="kv-amenity" data-mv="up">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"><path d="M16 8v14M12 8v6a4 4 0 0 0 8 0V8"/><path d="M16 22v18"/><path d="M32 8c3 0 5 3 5 7s-2 7-5 7v18"/></svg>
-        <h3>Dining Cluster</h3>
-        <p>A dedicated cluster around shared dining spaces.</p>
-      </div>
-      <div class="kv-amenity" data-mv="up">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 17-16 22C15 39 8 32 8 22V10l16-6Z"/><path d="M17 23l5 5 10-11"/></svg>
-        <h3>Gated Security</h3>
-        <p>Round-the-clock, CCTV-monitored gated security.</p>
-      </div>
-      <div class="kv-amenity" data-mv="up">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 42h36"/><path d="M10 42V20l14-9 14 9v22"/><path d="M18 42V30h12v12"/><path d="M20 21h8"/></svg>
-        <h3>Clubhouse</h3>
-        <p>A shared resort-style clubhouse at the heart of it all.</p>
-      </div>
-      <div class="kv-amenity__viewmore" aria-label="View more amenities">
-        <p>Explore every shared space — pool, lawns, dining cluster, security and clubhouse.</p>
-        <a href="{{ url('/amenities') }}" class="kv-amenity__viewmore-link">View more <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
+  <div class="kv-gallery__footer">
+    <p>The Koru Ville · Kilawali</p>
+    <a href="{{ route('amenities') }}" class="kv-link-arrow">
+      Explore Amenities
+      <i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
+    </a>
   </div>
 </section>
 
@@ -379,7 +339,6 @@
     <div class="kv-section-head" data-mv-group="90">
       <span class="kv-eyebrow" data-mv="fade">Site Layout &amp; Investment</span>
       <h2 class="kv-display kv-display--lg" data-mv="words">Layout Plan &amp; Pricing</h2>
-      <p class="kv-lede" data-mv="blur">The layout sets out defined residential plots, including a restaurant-themed cluster, within one gated boundary connected by wide internal roads.</p>
     </div>
 
     <div class="kv-unlock-grid" data-mv-group="120">
@@ -387,9 +346,9 @@
         <div class="kv-unlock__bg"><img src="{{ asset('assets/img/kv/unlock-price.webp') }}" alt="" aria-hidden="true" loading="lazy" data-mv-parallax="24"></div>
         <svg class="lock" viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="13" width="16" height="15" rx="1.5"/><path d="M8 13V9a4 4 0 0 1 8 0v4"/><circle cx="12" cy="20" r="1.6" fill="currentColor"/></svg>
         <div>
-          <h3>Unlock Price List</h3>
-          <p>Share a few details to unlock the current, plot-wise price breakup.</p>
-          <button type="button" class="kv-btn" data-kv-open="unlock" data-unlock="price">Unlock Now</button>
+          <h3>Price List</h3>
+          <p>Get the current, plot-wise price breakup for residential and restaurant-themed plots.</p>
+          <button type="button" class="kv-btn" data-kv-open="unlock" data-unlock="price">Unlock Price List</button>
         </div>
       </div>
 
@@ -397,9 +356,9 @@
         <div class="kv-unlock__bg"><img src="{{ asset('assets/img/kv/unlock-layout.webp') }}" alt="" aria-hidden="true" loading="lazy" data-mv-parallax="24"></div>
         <svg class="lock" viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="13" width="16" height="15" rx="1.5"/><path d="M8 13V9a4 4 0 0 1 8 0v4"/><circle cx="12" cy="20" r="1.6" fill="currentColor"/></svg>
         <div>
-          <h3>Unlock Layout Plan</h3>
-          <p>Share a few details to unlock the full site layout and plot numbering.</p>
-          <button type="button" class="kv-btn" data-kv-open="unlock" data-unlock="layout">Unlock Now</button>
+          <h3>Layout Plan</h3>
+          <p>Share a few details to unlock the full site layout and plot numbering for The Koru Ville.</p>
+          <button type="button" class="kv-btn" data-kv-open="unlock" data-unlock="layout">Unlock Layout Plan</button>
         </div>
       </div>
     </div>
@@ -408,24 +367,22 @@
 
 {{-- ==================================================== BLOG ==================================================== --}}
 @php
-  $posts = \App\Models\Post::publishedForWebsite()->latest('updated_at')->take(5)->get();
+  $posts = \App\Models\Post::publishedForWebsite()->latest()->take(3)->get();
   $featured = $posts->first();
-  $cards = $posts->take(4);
 
   $postSummary = function ($post) {
-      $text = $post->meta_description ?: strip_tags($post->content ?? '');
-      return \Illuminate\Support\Str::limit(trim(preg_replace('/\s+/', ' ', $text)), 150, '…');
+      return $post->meta_description ?? \Illuminate\Support\Str::limit(strip_tags($post->content ?? ''), 100);
   };
   $postImage = function ($post, $fallback = 'assets/img/kv/gallery-1440.webp') {
       return $post && $post->image ? $post->imageUrl() : asset($fallback);
   };
 
-  $featuredTitle = $featured ? $featured->title : 'Notes from the Koru Ville';
-  $featuredCopy = $featured ? $postSummary($featured) : 'Guides and location intelligence on residential plots near Jim Corbett, Kilawali and Kashipur.';
+  $featuredTitle = $featured?->title ?? '';
+  $featuredCopy = $featured ? $postSummary($featured) : 'No recent articles found. Please publish a blog post in your admin panel.';
   $featuredUrl = $featured ? url('/blog/'.$featured->slug) : url('/blog');
   $featuredImage = $postImage($featured);
 @endphp
-<div class="kv-blog-wrap" data-blog-slider>
+<div class="kv-blog-wrap" id="recent-posts" data-blog-slider>
 <section class="kv-blog" id="blog">
   <div class="kv-blog__bg" data-blog-bg>
     <img src="{{ $featuredImage }}" alt="" aria-hidden="true" loading="lazy" class="is-active" data-blog-bg-img>
@@ -433,16 +390,19 @@
   </div>
 
   <div class="kv-blog__label" data-mv="fade">
-    <span class="kv-eyebrow">Blog</span>
-    <h2 class="kv-display" data-mv="words" data-mv-word-delay="70">Explore the Blog</h2>
+    <span class="kv-eyebrow">News &amp; Articles</span>
+    <h2 class="kv-display" data-mv="words" data-mv-word-delay="70">Latest Insights from The Koru Ville</h2>
+    <p class="kv-blog__intro">Discover more about living near Jim Corbett, investment opportunities, and local developments in Kilawali.</p>
   </div>
 
   <div class="kv-blog__inner">
     <div class="kv-blog__feature" data-mv="left" data-mv-delay="240" data-blog-feature>
-      <h3 class="kv-blog__heading" data-blog-title aria-live="polite">{{ $featuredTitle }}</h3>
+      @if($featured)
+        <h3 class="kv-blog__heading" data-blog-title aria-live="polite">{{ $featuredTitle }}</h3>
+      @endif
       <p data-blog-copy>{{ $featuredCopy }}</p>
       <a href="{{ $featuredUrl }}" class="kv-btn kv-btn--outline kv-blog__cta" data-blog-cta>
-        Read More
+        {{ $featured ? 'Read More' : 'View All Articles' }}
         <span class="kv-blog__cta-arrow" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -453,6 +413,7 @@
 
 {{-- The post carousel is its own section: side rail on desktop, a separate
      block under the featured panel on phones and tablets. --}}
+@if($posts->isNotEmpty())
 <section class="kv-blog__posts" aria-label="More articles">
     <div class="kv-blog__rail" data-mv="right" data-mv-delay="320">
       <button type="button" class="kv-blog__arrow kv-blog__arrow--prev" data-prev aria-label="Previous article">
@@ -460,7 +421,7 @@
       </button>
 
       <div class="kv-blog__track" data-track>
-        @forelse($cards as $post)
+        @foreach($posts as $post)
           <a class="kv-post" href="{{ url('/blog/'.$post->slug) }}"
              data-slide
              data-title="{{ $post->title }}"
@@ -476,20 +437,11 @@
             </div>
             <div class="kv-post__body">
               @include('partials.kv.crown', ['shapeClass' => 'kv-post__crown', 'shapeVariant' => 'crown'])
-              <h3>{{ \Illuminate\Support\Str::limit($post->title, 48) }}</h3>
+              <h3>{{ $post->title }}</h3>
               <span>{{ $post->updated_at?->format('M Y') }}</span>
             </div>
           </a>
-        @empty
-          <a class="kv-post" href="{{ url('/blog') }}">
-            <div class="kv-post__media"><img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="The Koru Ville blog" loading="lazy"></div>
-            <div class="kv-post__body">
-              @include('partials.kv.crown', ['shapeClass' => 'kv-post__crown', 'shapeVariant' => 'crown'])
-              <h3>Why Residential Plots Near Jim Corbett Hold Their Value</h3>
-              <span>Insights</span>
-            </div>
-          </a>
-        @endforelse
+        @endforeach
       </div>
 
       <button type="button" class="kv-blog__arrow kv-blog__arrow--next" data-next aria-label="Next article">
@@ -498,7 +450,9 @@
 
       <div class="kv-blog__dots" data-dots aria-hidden="true"></div>
     </div>
+  <a href="{{ route('posts.index') }}" class="kv-btn kv-btn--olive kv-blog__all">View All Articles</a>
 </section>
+@endif
 </div>
 
 {{-- ==================================================== MAP ==================================================== --}}
@@ -523,69 +477,9 @@
     </div>
 
     <div class="kv-map__chips" data-mv-group="70">
-      <span class="kv-chip" data-mv="fade">15 min drive to Phato Gate</span>
-      <span class="kv-chip" data-mv="fade">Walking distance to Tumaria Dam</span>
-      <span class="kv-chip" data-mv="fade">Guided site visits daily</span>
-    </div>
-  </div>
-</section>
-
-{{-- ================================================== REVIEWS ================================================== --}}
-<section class="kv-reviews">
-  <div class="kv-shell">
-    <div class="kv-reviews__head" data-mv="fade">
-      <svg class="kv-reviews__g" viewBox="0 0 48 48" aria-hidden="true">
-        <path fill="#4285F4" d="M45 24c0-1.6-.1-2.8-.4-4H24v7.6h12c-.2 2-1.5 5-4.4 7l6.7 5.2C42.7 36.1 45 30.6 45 24Z"/>
-        <path fill="#34A853" d="M24 46c6.2 0 11.4-2 15.3-5.6l-6.7-5.2c-1.9 1.3-4.4 2.2-8.6 2.2-5.9 0-10.9-3.9-12.7-9.3l-7 5.4C8.3 41.1 15.5 46 24 46Z"/>
-        <path fill="#FBBC05" d="M11.3 28.1A13.8 13.8 0 0 1 10.6 24c0-1.4.2-2.8.6-4.1l-7-5.4A21.7 21.7 0 0 0 2 24c0 3.5.8 6.8 2.3 9.5l7-5.4Z"/>
-        <path fill="#EA4335" d="M24 10.2c3.3 0 6 .9 8.2 2.9l6-6C34.5 3.5 29.8 2 24 2 15.5 2 8.3 6.9 4.3 14.5l7 5.4C13.1 14.1 18.1 10.2 24 10.2Z"/>
-      </svg>
-      <h2>Google Reviews</h2>
-      <span class="kv-reviews__score">4.9</span>
-      <div class="kv-reviews__stars" aria-label="5 out of 5 stars">
-        @for($i=0;$i<5;$i++)<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 3 6.6 7 .9-5.2 5 1.4 7L12 18l-6.2 3.5 1.4-7L2 9.5l7-.9L12 2Z"/></svg>@endfor
-      </div>
-    </div>
-
-    <div class="kv-reviews__rail" data-mv="up" data-mv-delay="140" data-carousel>
-      <div class="kv-reviews__track" data-track>
-        @php
-          $kvReviews = [
-            ['name'=>'Aman Verma','text'=>'A well-planned, thematic township in a beautiful setting near Jim Corbett. The team was transparent about the layout and pricing, and the site visit was genuinely useful.'],
-            ['name'=>'Priya Nair','text'=>'The location is genuinely close to the park boundary while still connected to Kashipur. Exactly what we were looking for — quiet, green and easy to reach.'],
-            ['name'=>'Rahul Singh','text'=>'Visited the site in person — the resort-style layout and wide internal roads stood out. A good early-stage opportunity for anyone wanting land near Corbett.'],
-          ];
-        @endphp
-
-        @foreach($kvReviews as $review)
-          <article class="kv-review">
-            <div class="kv-review__top">
-              <div class="kv-review__avatar">{{ strtoupper(substr($review['name'],0,1)) }}</div>
-              <div class="kv-review__who">
-                <div>
-                  <h3>{{ $review['name'] }}</h3>
-                  <div class="kv-reviews__stars" aria-label="5 out of 5 stars">
-                    @for($i=0;$i<5;$i++)<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 3 6.6 7 .9-5.2 5 1.4 7L12 18l-6.2 3.5 1.4-7L2 9.5l7-.9L12 2Z"/></svg>@endfor
-                  </div>
-                </div>
-                <svg class="kv-review__google" viewBox="0 0 48 48" aria-hidden="true">
-                  <path fill="#4285F4" d="M45 24c0-1.6-.1-2.8-.4-4H24v7.6h12c-.2 2-1.5 5-4.4 7l6.7 5.2C42.7 36.1 45 30.6 45 24Z"/>
-                  <path fill="#34A853" d="M24 46c6.2 0 11.4-2 15.3-5.6l-6.7-5.2c-1.9 1.3-4.4 2.2-8.6 2.2-5.9 0-10.9-3.9-12.7-9.3l-7 5.4C8.3 41.1 15.5 46 24 46Z"/>
-                  <path fill="#FBBC05" d="M11.3 28.1A13.8 13.8 0 0 1 10.6 24c0-1.4.2-2.8.6-4.1l-7-5.4A21.7 21.7 0 0 0 2 24c0 3.5.8 6.8 2.3 9.5l7-5.4Z"/>
-                  <path fill="#EA4335" d="M24 10.2c3.3 0 6 .9 8.2 2.9l6-6C34.5 3.5 29.8 2 24 2 15.5 2 8.3 6.9 4.3 14.5l7 5.4C13.1 14.1 18.1 10.2 24 10.2Z"/>
-                </svg>
-              </div>
-            </div>
-            <p class="is-clamped">{{ $review['text'] }}</p>
-            <button type="button" class="kv-review__more" data-review-more aria-expanded="false">Read more</button>
-          </article>
-        @endforeach
-      </div>
-
-      <div class="kv-reviews__arrows">
-        <button type="button" data-prev aria-label="Previous reviews"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg></button>
-        <button type="button" data-next aria-label="Next reviews"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg></button>
-      </div>
+      <span class="kv-chip" data-mv="fade">15 Min Drive to Phato Gate</span>
+      <span class="kv-chip" data-mv="fade">Walking Distance to Tumaria Dam</span>
+      <span class="kv-chip" data-mv="fade">Guided Site Visits Daily</span>
     </div>
   </div>
 </section>
@@ -599,17 +493,11 @@
     </div>
 
     <div class="kv-faq__box" data-mv="up" data-mv-group="60">
-      @php
-        $faqs = [
-          ['What is The Koru Ville?', 'The Koru Ville is an upcoming resort-themed residential plotted township coming up in Kilawali, Uttarakhand, at the gateway to Jim Corbett National Park.'],
-          ['Where exactly is the project located?', 'The Koru Ville is located in Kilawali, Uttarakhand — 244712, along the Kashipur–Ramnagar highway corridor.'],
-          ['How far is the project from Jim Corbett National Park?', 'The Koru Ville is just 15 minutes by drive from Phato Gate, one of the few Jim Corbett safari gates open all year round, including through the monsoon season.'],
-          ['What plot sizes are available?', 'The Koru Ville plots are available starting from 111 sq. yd, with additional sizes at 125 sq. yd and 139 sq. yd.'],
-          ['Is the project suitable for full-time living or only weekend stays?', 'Both. With a school roughly 15 minutes away and a hospital around 34 minutes out, along with nearby rail and highway access, The Koru Ville is designed to support full-time residents as well as weekend and holiday owners.'],
-        ];
-      @endphp
-
       @foreach($faqs as $faq)
+        @if($loop->index === 5)
+          <details class="kv-faq__more">
+            <summary><span>Read More FAQs</span><span>Show Less</span></summary>
+        @endif
         <div class="kv-faq__item" data-mv="fade">
           <button type="button" class="kv-faq__q" aria-expanded="false">
             <span>{{ $faq[0] }}</span><i>+</i>
@@ -618,6 +506,9 @@
             <div><p>{{ $faq[1] }}</p></div>
           </div>
         </div>
+        @if($loop->last)
+          </details>
+        @endif
       @endforeach
     </div>
   </div>
@@ -630,7 +521,7 @@
       <div data-mv="left" data-mv-group="80">
         <span class="kv-eyebrow" data-mv="fade">Get In Touch</span>
         <h2 data-mv="words" data-mv-word-delay="50">Plan a Private Visit</h2>
-        <p data-mv="blur">Plots near Jim Corbett are more than an investment — they're land you shape into a home on your own terms. Our team will help you shortlist a plot, walk the site and understand pricing — no pressure, just information.</p>
+        <p data-mv="blur">Plots near Jim Corbett National Park are more than just an investment — Buyers and investors have a chance to build a luxury villa that reflects their lifestyle. The Koru Ville is a thoughtfully designed thematic township for those seeking a closer connection to nature and a welcome escape from the city’s hustle. Our team will help you explore suitable plots, experience the site personally, and understand the pricing clearly.</p>
 
         <div class="kv-contact__rows" data-mv-group="60">
           <div class="kv-contact__row" data-mv="fade">
@@ -653,7 +544,7 @@
       </div>
 
       <div class="kv-form" data-mv="right" data-mv-delay="120">
-        <form data-kv-form data-source="The Koru Ville Website — Contact Section" novalidate>
+        <form data-kv-form data-source="The Koru Ville Website — Contact Section" data-success="Thank You. We've received your enquiry. Our team will call you within 24 hours." novalidate>
           <div class="kv-field">
             <label for="cName">Full Name</label>
             <input type="text" id="cName" name="name" autocomplete="name" required>

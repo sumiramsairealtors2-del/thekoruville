@@ -89,7 +89,7 @@
 
     <div class="kv-footer__bottom">
       <span>&copy; {{ date('Y') }} The Koru Ville. All rights reserved. — Land of New Beginnings.</span>
-      <span>RERA Reg. No. — UKREP10260000768</span>
+      <span>This project is Registered As The Koru Ville Under UKRERA NO. UKREP10260000768</span>
     </div>
   </div>
 </footer>
