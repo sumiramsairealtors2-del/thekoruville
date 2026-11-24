@@ -325,42 +325,47 @@
     </div>
   </div>
   <div class="kv-gallery__footer">
-    <p>The Koru Ville · Kilawali</p>
-    <a href="{{ route('amenities') }}" class="kv-link-arrow">
-      Explore Amenities
-      <i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
-    </a>
+    <p>A closer look at The Koru Ville</p>
+    <button type="button" class="kv-link-arrow kv-gallery__visit" data-kv-open="enquiry">
+      Book a Site Visit
+      <i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i>
+    </button>
   </div>
 </section>
 
 {{-- ============================================ LAYOUT & PRICING ============================================ --}}
-<section class="kv-invest" id="layout-price">
+<section class="kv-invest" id="layout-price" aria-labelledby="kvPricingTitle">
   <div class="kv-shell">
     <div class="kv-section-head" data-mv-group="90">
       <span class="kv-eyebrow" data-mv="fade">Site Layout &amp; Investment</span>
-      <h2 class="kv-display kv-display--lg" data-mv="words">Layout Plan &amp; Pricing</h2>
+      <h2 class="kv-display" id="kvPricingTitle" data-mv="words">Layout Plan &amp; Pricing</h2>
     </div>
 
-    <div class="kv-unlock-grid" data-mv-group="120">
-      <div class="kv-unlock" data-mv="scale">
-        <div class="kv-unlock__bg"><img src="{{ asset('assets/img/kv/unlock-price.webp') }}" alt="" aria-hidden="true" loading="lazy" data-mv-parallax="24"></div>
-        <svg class="lock" viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="13" width="16" height="15" rx="1.5"/><path d="M8 13V9a4 4 0 0 1 8 0v4"/><circle cx="12" cy="20" r="1.6" fill="currentColor"/></svg>
-        <div>
-          <h3>Price List</h3>
-          <p>Get the current, plot-wise price breakup for residential and restaurant-themed plots.</p>
-          <button type="button" class="kv-btn" data-kv-open="unlock" data-unlock="price">Unlock Price List</button>
-        </div>
-      </div>
+    @php
+      $pricingDocuments = [
+        ['key' => 'price', 'title' => 'Price List', 'description' => 'Get the current, plot-wise price breakup for residential and restaurant-themed plots.'],
+        ['key' => 'layout', 'title' => 'Layout Plan', 'description' => 'Share a few details to unlock the full site layout and plot numbering for The Koru Ville.'],
+      ];
+    @endphp
 
-      <div class="kv-unlock" data-mv="scale">
-        <div class="kv-unlock__bg"><img src="{{ asset('assets/img/kv/unlock-layout.webp') }}" alt="" aria-hidden="true" loading="lazy" data-mv-parallax="24"></div>
-        <svg class="lock" viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="13" width="16" height="15" rx="1.5"/><path d="M8 13V9a4 4 0 0 1 8 0v4"/><circle cx="12" cy="20" r="1.6" fill="currentColor"/></svg>
-        <div>
-          <h3>Layout Plan</h3>
-          <p>Share a few details to unlock the full site layout and plot numbering for The Koru Ville.</p>
-          <button type="button" class="kv-btn" data-kv-open="unlock" data-unlock="layout">Unlock Layout Plan</button>
-        </div>
-      </div>
+    <div class="kv-unlock-grid" data-mv-group="110">
+      @foreach($pricingDocuments as $document)
+        <article class="kv-unlock" data-mv="scale">
+          <div class="kv-unlock__preview" aria-hidden="true">
+            <img src="{{ asset('assets/img/kv/unlock-'.$document['key'].'.webp') }}" alt="" loading="lazy" decoding="async">
+          </div>
+          <span class="kv-unlock__lock" aria-hidden="true">
+            <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="13" width="16" height="15" rx="1.5"/><path d="M8 13V9a4 4 0 0 1 8 0v4"/><circle cx="12" cy="20" r="1.4" fill="currentColor"/></svg>
+          </span>
+          <div class="kv-unlock__body">
+            <h3>{{ $document['title'] }}</h3>
+            <p>{{ $document['description'] }}</p>
+            <button type="button" class="kv-btn kv-btn--outline kv-unlock__action" data-kv-open="unlock" data-unlock="{{ $document['key'] }}">
+              Unlock {{ $document['title'] }}
+            </button>
+          </div>
+        </article>
+      @endforeach
     </div>
   </div>
 </section>
@@ -380,19 +385,25 @@
   $featuredTitle = $featured?->title ?? '';
   $featuredCopy = $featured ? $postSummary($featured) : 'No recent articles found. Please publish a blog post in your admin panel.';
   $featuredUrl = $featured ? url('/blog/'.$featured->slug) : url('/blog');
-  $featuredImage = $postImage($featured);
 @endphp
 <div class="kv-blog-wrap" id="recent-posts" data-blog-slider>
-<section class="kv-blog" id="blog">
-  <div class="kv-blog__bg" data-blog-bg>
-    <img src="{{ $featuredImage }}" alt="" aria-hidden="true" loading="lazy" class="is-active" data-blog-bg-img>
-    <img alt="" aria-hidden="true" loading="lazy" data-blog-bg-img>
+<section class="kv-blog" id="blog" aria-labelledby="kvBlogTitle">
+  <div class="kv-blog__bg" aria-hidden="true">
+    @forelse($posts as $post)
+      <img src="{{ $postImage($post) }}" alt="" loading="lazy" decoding="async" @class(['is-active' => $loop->first]) data-blog-bg-img>
+    @empty
+      <img src="{{ $postImage(null) }}" alt="" loading="lazy" class="is-active">
+    @endforelse
   </div>
 
-  <div class="kv-blog__label" data-mv="fade">
+  <div class="kv-blog__label">
     <span class="kv-eyebrow">News &amp; Articles</span>
-    <h2 class="kv-display" data-mv="words" data-mv-word-delay="70">Latest Insights from The Koru Ville</h2>
-    <p class="kv-blog__intro">Discover more about living near Jim Corbett, investment opportunities, and local developments in Kilawali.</p>
+    <h2 class="kv-display" id="kvBlogTitle">Latest Blogs</h2>
+    <p class="kv-blog__intro">Explore life near Jim Corbett, property insights and local news.</p>
+    <a href="{{ route('posts.index') }}" class="kv-link-arrow kv-blog__all">
+      View All Articles
+      <i aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i>
+    </a>
   </div>
 
   <div class="kv-blog__inner">
@@ -401,12 +412,14 @@
         <h3 class="kv-blog__heading" data-blog-title aria-live="polite">{{ $featuredTitle }}</h3>
       @endif
       <p data-blog-copy>{{ $featuredCopy }}</p>
-      <a href="{{ $featuredUrl }}" class="kv-btn kv-btn--outline kv-blog__cta" data-blog-cta>
-        {{ $featured ? 'Read More' : 'View All Articles' }}
-        <span class="kv-blog__cta-arrow" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </a>
+      @if($featured)
+        <a href="{{ $featuredUrl }}" class="kv-btn kv-btn--outline kv-blog__cta" data-blog-cta>
+          Read More
+          <span class="kv-blog__cta-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      @endif
     </div>
   </div>
 </section>
@@ -426,8 +439,7 @@
              data-slide
              data-title="{{ $post->title }}"
              data-copy="{{ $postSummary($post) }}"
-             data-url="{{ url('/blog/'.$post->slug) }}"
-             data-image="{{ $postImage($post) }}">
+             data-url="{{ url('/blog/'.$post->slug) }}">
             <div class="kv-post__media">
               @if($post->image)
                 <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}" loading="lazy">
@@ -438,7 +450,9 @@
             <div class="kv-post__body">
               @include('partials.kv.crown', ['shapeClass' => 'kv-post__crown', 'shapeVariant' => 'crown'])
               <h3>{{ $post->title }}</h3>
-              <span>{{ $post->updated_at?->format('M Y') }}</span>
+              @if($post->updated_at)
+                <time datetime="{{ $post->updated_at->format('Y-m-d') }}">{{ $post->updated_at->format('M Y') }}</time>
+              @endif
             </div>
           </a>
         @endforeach
@@ -450,59 +464,115 @@
 
       <div class="kv-blog__dots" data-dots aria-hidden="true"></div>
     </div>
-  <a href="{{ route('posts.index') }}" class="kv-btn kv-btn--olive kv-blog__all">View All Articles</a>
 </section>
 @endif
 </div>
 
 {{-- ==================================================== MAP ==================================================== --}}
-<section class="kv-panel kv-panel--cream2 kv-map" id="map">
+<section class="kv-panel kv-panel--cream2 kv-map" id="map" aria-labelledby="kvMapTitle">
   <div class="kv-shell">
-    <div class="kv-section-head" data-mv-group="90">
-      <span class="kv-eyebrow" data-mv="fade">Virtual Tour</span>
-      <h2 class="kv-display kv-display--lg" data-mv="words">Walk the Site Before You Visit</h2>
-      <p class="kv-lede" data-mv="blur">Explore the project's prime location in Kilawali on the map below, or book a private site visit for a guided tour.</p>
-    </div>
-
-    <div data-mv="scale">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3179.9305532452545!2d78.9545938!3d29.314656299999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6bbfe6b542d9f67f%3A0x79cc09e76313c64a!2sThe%20KoruVille!5e1!3m2!1sen!2sin!4v1783059642503!5m2!1sen!2sin"
-              referrerpolicy="no-referrer-when-downgrade" title="The Koru Ville location map" allowfullscreen loading="lazy"></iframe>
-    </div>
-
-    <div class="kv-map__link">
-      <a href="https://maps.app.goo.gl/JKDBpER1bCGxZoM29" target="_blank" rel="noopener noreferrer" class="kv-link-arrow">
+    <div class="kv-map__header">
+      <div>
+        <span class="kv-eyebrow">Virtual Tour</span>
+        <h2 class="kv-display" id="kvMapTitle">Walk the Site Before You Visit</h2>
+        <p>Explore the project's prime location in Kilawali on the map below, or book a private site visit for a guided tour.</p>
+      </div>
+      <a href="https://maps.app.goo.gl/JKDBpER1bCGxZoM29" target="_blank" rel="noopener noreferrer" class="kv-link-arrow kv-map__directions">
         Open in Google Maps
-        <i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
+        <i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M8 6h10v10"/></svg></i>
       </a>
     </div>
 
-    <div class="kv-map__chips" data-mv-group="70">
-      <span class="kv-chip" data-mv="fade">15 Min Drive to Phato Gate</span>
-      <span class="kv-chip" data-mv="fade">Walking Distance to Tumaria Dam</span>
-      <span class="kv-chip" data-mv="fade">Guided Site Visits Daily</span>
+    <div class="kv-map__frame">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3179.9305532452545!2d78.9545938!3d29.314656299999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6bbfe6b542d9f67f%3A0x79cc09e76313c64a!2sThe%20KoruVille!5e1!3m2!1sen!2sin!4v1783059642503!5m2!1sen!2sin"
+              referrerpolicy="no-referrer-when-downgrade" title="The Koru Ville location map" allowfullscreen loading="lazy"></iframe>
+      <ul class="kv-map__facts">
+        <li><strong>15 Min Drive</strong> to Phato Gate</li>
+        <li><strong>Walking Distance</strong> to Tumaria Dam</li>
+        <li><strong>Guided Site Visits</strong> Daily</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{{-- ================================================== REVIEWS ================================================== --}}
+<section class="kv-reviews" id="reviews" aria-labelledby="kvReviewsTitle">
+  <div class="kv-shell">
+    <div class="kv-reviews__head" data-mv="fade">
+      <svg class="kv-reviews__g" viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#4285F4" d="M45 24c0-1.6-.1-2.8-.4-4H24v7.6h12c-.2 2-1.5 5-4.4 7l6.7 5.2C42.7 36.1 45 30.6 45 24Z"/>
+        <path fill="#34A853" d="M24 46c6.2 0 11.4-2 15.3-5.6l-6.7-5.2c-1.9 1.3-4.4 2.2-8.6 2.2-5.9 0-10.9-3.9-12.7-9.3l-7 5.4C8.3 41.1 15.5 46 24 46Z"/>
+        <path fill="#FBBC05" d="M11.3 28.1A13.8 13.8 0 0 1 10.6 24c0-1.4.2-2.8.6-4.1l-7-5.4A21.7 21.7 0 0 0 2 24c0 3.5.8 6.8 2.3 9.5l7-5.4Z"/>
+        <path fill="#EA4335" d="M24 10.2c3.3 0 6 .9 8.2 2.9l6-6C34.5 3.5 29.8 2 24 2 15.5 2 8.3 6.9 4.3 14.5l7 5.4C13.1 14.1 18.1 10.2 24 10.2Z"/>
+      </svg>
+      <h2 id="kvReviewsTitle">Google Reviews</h2>
+      <span class="kv-reviews__score" aria-label="4.9 out of 5">4.9</span>
+      <div class="kv-reviews__stars" aria-hidden="true">
+        @for($i=0;$i<5;$i++)<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 3 6.6 7 .9-5.2 5 1.4 7L12 18l-6.2 3.5 1.4-7L2 9.5l7-.9L12 2Z"/></svg>@endfor
+      </div>
+    </div>
+
+    <div class="kv-reviews__rail" data-mv="up" data-mv-delay="140" data-carousel>
+      <div class="kv-reviews__track" data-track>
+        @php
+          $kvReviews = [
+            ['name'=>'Aman Verma','text'=>'A well-planned, thematic township in a beautiful setting near Jim Corbett. The team was transparent about the layout and pricing, and the site visit was genuinely useful.'],
+            ['name'=>'Priya Nair','text'=>'The location is genuinely close to the park boundary while still connected to Kashipur. Exactly what we were looking for — quiet, green and easy to reach.'],
+            ['name'=>'Rahul Singh','text'=>'Visited the site in person — the resort-style layout and wide internal roads stood out. A good early-stage opportunity for anyone wanting land near Corbett.'],
+          ];
+        @endphp
+
+        @foreach($kvReviews as $review)
+          <article class="kv-review">
+            <div class="kv-review__top">
+              <div class="kv-review__avatar">{{ strtoupper(substr($review['name'],0,1)) }}</div>
+              <div class="kv-review__who">
+                <div>
+                  <h3>{{ $review['name'] }}</h3>
+                  <div class="kv-reviews__stars" aria-label="5 out of 5 stars">
+                    @for($i=0;$i<5;$i++)<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 3 6.6 7 .9-5.2 5 1.4 7L12 18l-6.2 3.5 1.4-7L2 9.5l7-.9L12 2Z"/></svg>@endfor
+                  </div>
+                </div>
+                <svg class="kv-review__google" viewBox="0 0 48 48" aria-hidden="true">
+                  <path fill="#4285F4" d="M45 24c0-1.6-.1-2.8-.4-4H24v7.6h12c-.2 2-1.5 5-4.4 7l6.7 5.2C42.7 36.1 45 30.6 45 24Z"/>
+                  <path fill="#34A853" d="M24 46c6.2 0 11.4-2 15.3-5.6l-6.7-5.2c-1.9 1.3-4.4 2.2-8.6 2.2-5.9 0-10.9-3.9-12.7-9.3l-7 5.4C8.3 41.1 15.5 46 24 46Z"/>
+                  <path fill="#FBBC05" d="M11.3 28.1A13.8 13.8 0 0 1 10.6 24c0-1.4.2-2.8.6-4.1l-7-5.4A21.7 21.7 0 0 0 2 24c0 3.5.8 6.8 2.3 9.5l7-5.4Z"/>
+                  <path fill="#EA4335" d="M24 10.2c3.3 0 6 .9 8.2 2.9l6-6C34.5 3.5 29.8 2 24 2 15.5 2 8.3 6.9 4.3 14.5l7 5.4C13.1 14.1 18.1 10.2 24 10.2Z"/>
+                </svg>
+              </div>
+            </div>
+            <p>{{ $review['text'] }}</p>
+          </article>
+        @endforeach
+      </div>
+
+      <div class="kv-reviews__arrows">
+        <button type="button" data-prev aria-label="Previous reviews"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg></button>
+        <button type="button" data-next aria-label="Next reviews"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
 
 {{-- ==================================================== FAQ ==================================================== --}}
-<section class="kv-panel kv-panel--cream kv-faq" id="faq">
-  <div class="kv-shell">
-    <div class="kv-section-head" data-mv-group="90">
-      <span class="kv-eyebrow" data-mv="fade">Common Questions</span>
-      <h2 class="kv-display kv-display--lg" data-mv="words">Frequently Asked Questions</h2>
+<section class="kv-panel kv-panel--cream kv-faq" id="faq" aria-labelledby="kvFaqTitle">
+  <div class="kv-shell kv-faq__grid">
+    <div class="kv-faq__heading">
+      <span class="kv-eyebrow">Common Questions</span>
+      <h2 class="kv-display" id="kvFaqTitle">Frequently Asked Questions</h2>
     </div>
 
-    <div class="kv-faq__box" data-mv="up" data-mv-group="60">
+    <div class="kv-faq__box">
       @foreach($faqs as $faq)
         @if($loop->index === 5)
           <details class="kv-faq__more">
             <summary><span>Read More FAQs</span><span>Show Less</span></summary>
         @endif
-        <div class="kv-faq__item" data-mv="fade">
-          <button type="button" class="kv-faq__q" aria-expanded="false">
-            <span>{{ $faq[0] }}</span><i>+</i>
+        <div class="kv-faq__item">
+          <button type="button" class="kv-faq__q" aria-expanded="false" aria-controls="kvFaqAnswer{{ $loop->iteration }}">
+            <span>{{ $faq[0] }}</span><i aria-hidden="true">+</i>
           </button>
-          <div class="kv-faq__a">
+          <div class="kv-faq__a" id="kvFaqAnswer{{ $loop->iteration }}" aria-hidden="true">
             <div><p>{{ $faq[1] }}</p></div>
           </div>
         </div>
@@ -515,50 +585,50 @@
 </section>
 
 {{-- ================================================== CONTACT ================================================== --}}
-<section class="kv-panel kv-panel--cream2 kv-contact" id="contact">
+<section class="kv-panel kv-panel--cream2 kv-contact" id="contact" aria-labelledby="kvContactTitle">
   <div class="kv-shell">
     <div class="kv-contact__grid">
-      <div data-mv="left" data-mv-group="80">
-        <span class="kv-eyebrow" data-mv="fade">Get In Touch</span>
-        <h2 data-mv="words" data-mv-word-delay="50">Plan a Private Visit</h2>
-        <p data-mv="blur">Plots near Jim Corbett National Park are more than just an investment — Buyers and investors have a chance to build a luxury villa that reflects their lifestyle. The Koru Ville is a thoughtfully designed thematic township for those seeking a closer connection to nature and a welcome escape from the city’s hustle. Our team will help you explore suitable plots, experience the site personally, and understand the pricing clearly.</p>
+      <div class="kv-contact__intro" data-mv="up">
+        <span class="kv-eyebrow">Get In Touch</span>
+        <h2 class="kv-display" id="kvContactTitle">Plan a Private Visit</h2>
+        <p>Plots near Jim Corbett National Park are more than just an investment — Buyers and investors have a chance to build a luxury villa that reflects their lifestyle. The Koru Ville is a thoughtfully designed thematic township for those seeking a closer connection to nature and a welcome escape from the city’s hustle. Our team will help you explore suitable plots, experience the site personally, and understand the pricing clearly.</p>
 
-        <div class="kv-contact__rows" data-mv-group="60">
-          <div class="kv-contact__row" data-mv="fade">
+        <div class="kv-contact__rows">
+          <div class="kv-contact__row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.3Z"/></svg>
             <div><b>Office</b><a href="tel:+918377000300">+91 8377 000300</a></div>
           </div>
-          <div class="kv-contact__row" data-mv="fade">
+          <div class="kv-contact__row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
             <div><b>Email</b><a href="mailto:info@thekoruville.com">info@thekoruville.com</a></div>
           </div>
-          <div class="kv-contact__row" data-mv="fade">
+          <div class="kv-contact__row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>
             <div><b>Corporate Office</b><span>G-192, Sector 63, Noida, Uttar Pradesh – 201301</span></div>
           </div>
-          <div class="kv-contact__row" data-mv="fade">
+          <div class="kv-contact__row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>
             <div><b>Site Address</b><a href="https://maps.app.goo.gl/JKDBpER1bCGxZoM29" target="_blank" rel="noopener noreferrer">The Koru Ville, Kilawali, Kashipur, Uttarakhand – 244712</a></div>
           </div>
         </div>
       </div>
 
-      <div class="kv-form" data-mv="right" data-mv-delay="120">
+      <div class="kv-form" data-mv="up" data-mv-delay="100">
         <form data-kv-form data-source="The Koru Ville Website — Contact Section" data-success="Thank You. We've received your enquiry. Our team will call you within 24 hours." novalidate>
           <div class="kv-field">
             <label for="cName">Full Name</label>
-            <input type="text" id="cName" name="name" autocomplete="name" required>
-            <p class="kv-form__error"></p>
+            <input type="text" id="cName" name="name" autocomplete="name" aria-describedby="cNameError" required>
+            <p class="kv-form__error" id="cNameError"></p>
           </div>
           <div class="kv-field">
             <label for="cEmail">Email</label>
-            <input type="email" id="cEmail" name="email" autocomplete="email" required>
-            <p class="kv-form__error"></p>
+            <input type="email" id="cEmail" name="email" autocomplete="email" aria-describedby="cEmailError" required>
+            <p class="kv-form__error" id="cEmailError"></p>
           </div>
           <div class="kv-field">
             <label for="cPhone">Phone</label>
-            <input type="tel" id="cPhone" name="mobile" autocomplete="tel" required>
-            <p class="kv-form__error"></p>
+            <input type="tel" id="cPhone" name="mobile" autocomplete="tel" inputmode="tel" aria-describedby="cPhoneError" required>
+            <p class="kv-form__error" id="cPhoneError"></p>
           </div>
           <div class="kv-field">
             <label for="cMessage">Message</label>

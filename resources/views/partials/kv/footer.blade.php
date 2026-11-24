@@ -47,43 +47,41 @@
         </ul>
       </div>
 
-      <div class="kv-footer__legal-group">
-        <div>
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
-            <li><a href="{{ url('/terms-and-conditions') }}">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-
-        {{-- Compact RERA details, sitting to the right of Legal --}}
-        <div class="kv-footer__rera" id="rera-details">
-          <div class="kv-footer__rera-info">
-            <h4>RERA Details</h4>
-
-            <a class="kv-footer__rera-no"
-               href="https://up-rera.in/projects"
-               target="_blank"
-               rel="noopener noreferrer">
-              UKREP10260000768
-            </a>
-
-            <p class="kv-footer__rera-meta">Launch 04-11-2025</p>
-            <p class="kv-footer__rera-meta">
-              KOTAK MAHINDRA BANK<br>
-              A/C 9150397619<br>
-              IFSC KKBK0005028
-            </p>
-          </div>
-
-          <div class="kv-footer__rera-qr">
-            <img src="{{ asset('assets/img/rera-qr.png') }}"
-                 alt="QR code linking to the UP-RERA project registration"
-                 width="84" height="84" loading="lazy">
-            <span>Scan to verify</span>
-          </div>
-        </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
+          <li><a href="{{ url('/terms-and-conditions') }}">Terms &amp; Conditions</a></li>
+        </ul>
       </div>
+
+      @php($reraProjectUrl = 'https://uttarakhandrera.uk.gov.in/viewProjectDetailPage?nzXq%2B3U4JpgDH2Hfj%2FEtsg%3D%3D')
+      <section class="kv-footer__rera" id="rera-details" aria-labelledby="kvReraTitle">
+        <div class="kv-footer__rera-info">
+          <h4 id="kvReraTitle">RERA Details</h4>
+
+          <a class="kv-footer__rera-no"
+             href="{{ $reraProjectUrl }}"
+             target="_blank"
+             rel="noopener noreferrer">
+            UKREP10260000768
+          </a>
+
+          <p class="kv-footer__rera-meta">Launch 04-11-2025</p>
+          <p class="kv-footer__rera-meta">
+            KOTAK MAHINDRA BANK<br>
+            A/C 9150397619<br>
+            IFSC KKBK0005028
+          </p>
+        </div>
+
+        <a class="kv-footer__rera-qr" href="{{ $reraProjectUrl }}" target="_blank" rel="noopener noreferrer">
+          <img src="{{ asset('assets/img/rera-qr.png') }}"
+               alt="QR code for the Uttarakhand RERA project record"
+               width="84" height="84" loading="lazy">
+          <span>Scan to verify</span>
+        </a>
+      </section>
 
     </div>
 

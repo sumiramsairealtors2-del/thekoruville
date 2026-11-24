@@ -337,14 +337,16 @@ import './kv-motion.js';
     btn.addEventListener('click', function () {
       var item = btn.closest('.kv-faq__item');
       var open = item.classList.contains('is-open');
-      $$('.kv-faq__item', item.parentElement).forEach(function (other) {
+      $$('.kv-faq__item', item.closest('.kv-faq__box')).forEach(function (other) {
         other.classList.remove('is-open');
         var q = other.querySelector('.kv-faq__q');
         if (q) q.setAttribute('aria-expanded', 'false');
+        $('.kv-faq__a', other).setAttribute('aria-hidden', 'true');
       });
       if (!open) {
         item.classList.add('is-open');
         btn.setAttribute('aria-expanded', 'true');
+        $('.kv-faq__a', item).setAttribute('aria-hidden', 'false');
       }
     });
   });
@@ -357,7 +359,7 @@ import './kv-motion.js';
     if (cards.length < 2) {
       if (previous) previous.hidden = true;
       if (next) next.hidden = true;
-      if (cards.length && onSelect) onSelect(0, false);
+      if (cards.length && onSelect) onSelect(0);
       return;
     }
 
@@ -427,28 +429,42 @@ import './kv-motion.js';
       updateScale(left);
     }
 
+    function select(index) {
+      var realIndex = (index - copies + count) % count;
+      if (realIndex === active) return;
+      active = realIndex;
+      if (onSelect) onSelect(active);
+    }
+
     function settle() {
       var index = nearestItem();
       var realIndex = (index - copies + count) % count;
       var target = centres[index] - track.clientWidth / 2;
       requested = null;
       // Finish centering the visible copy before exchanging it for the identical real card.
-      if (target >= 0 && target <= track.scrollWidth - track.clientWidth &&
-          Math.abs(track.scrollLeft - target) > 1) {
+      if (target < 0 || target > track.scrollWidth - track.clientWidth) {
+        scrollToItem(copies + realIndex, false);
+        return;
+      }
+      if (Math.abs(track.scrollLeft - target) > 1) {
         scrollToItem(index, true);
         return;
       }
       if (index !== copies + realIndex) {
         rebase(index, copies + realIndex);
       }
-      if (realIndex !== active) {
-        active = realIndex;
-        if (onSelect) onSelect(active, true);
-      }
+      select(index);
     }
 
     function onScroll() {
-      if (!frame) frame = requestAnimationFrame(function () { updateScale(); });
+      if (!frame) frame = requestAnimationFrame(function () {
+        updateScale();
+        if (onSelect) {
+          var index = nearestItem();
+          var position = track.scrollLeft + track.clientWidth / 2;
+          if (Math.abs(centres[index] - position) <= 1) select(index);
+        }
+      });
       clearTimeout(settleTimer);
       settleTimer = setTimeout(settle, 140);
     }
@@ -487,7 +503,7 @@ import './kv-motion.js';
     }
     motionPreference.addEventListener('change', measure);
     measure();
-    if (onSelect) onSelect(0, false);
+    if (onSelect) onSelect(0);
   }
 
   $$('[data-carousel]').forEach(function (group) {
@@ -506,71 +522,23 @@ import './kv-motion.js';
     var layers = $$('[data-blog-bg-img]', section);
     var dotsWrap = $('[data-dots]', section);
     var cards = $$('[data-slide]', track);
-    var activeLayer = 0;
-    var pendingImage = 0;
-    var swapTimer;
     var dots = cards.map(function () {
       var dot = document.createElement('span');
       if (dotsWrap && cards.length > 1) dotsWrap.appendChild(dot);
       return dot;
     });
 
-    function updateBackground(src) {
-      var request = ++pendingImage;
-      var current = layers[activeLayer];
-      var replacement = layers[1 - activeLayer];
-      if (!src || !current || !replacement || current.getAttribute('src') === src) return;
-
-      var preload = new Image();
-      preload.onload = function () {
-        if (request !== pendingImage) return;
-        replacement.src = src;
-        replacement.classList.add('is-active');
-        current.classList.remove('is-active');
-        activeLayer = 1 - activeLayer;
-      };
-      preload.src = src;
-    }
-
-    initCarousel(section, cards, '--kv-blog-scale', function (index, animate) {
+    initCarousel(section, cards, '--kv-blog-scale', function (index) {
       var card = cards[index];
-      function updateFeature() {
-        title.textContent = card.dataset.title;
-        copy.textContent = card.dataset.copy;
-        link.href = card.dataset.url;
-        feature.classList.remove('is-swapping');
-        updateBackground(card.dataset.image);
-      }
-
-      clearTimeout(swapTimer);
-      if (animate && !motionPreference.matches) {
-        feature.classList.add('is-swapping');
-        swapTimer = setTimeout(updateFeature, 160);
-      } else {
-        updateFeature();
-      }
+      title.textContent = card.dataset.title;
+      copy.textContent = card.dataset.copy;
+      link.href = card.dataset.url;
+      layers.forEach(function (layer, position) { layer.classList.toggle('is-active', position === index); });
 
       $$('[data-slide]', track).forEach(function (item) {
         item.classList.toggle('is-active', Number(item.dataset.carouselIndex || 0) === index);
       });
       dots.forEach(function (dot, position) { dot.classList.toggle('is-active', position === index); });
-    });
-  });
-
-  /* ------------------------------------------------------ review expand */
-  $$('[data-review-more]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var card = btn.closest('.kv-review');
-      var open = !card.classList.contains('is-open');
-      var copies = card.dataset.carouselIndex === undefined ? [card] :
-        $$('[data-carousel-index="' + card.dataset.carouselIndex + '"]', card.parentElement);
-      copies.forEach(function (copy) {
-        copy.classList.toggle('is-open', open);
-        $('p', copy).classList.toggle('is-clamped', !open);
-        var control = $('[data-review-more]', copy);
-        control.setAttribute('aria-expanded', String(open));
-        control.textContent = open ? 'Read less' : 'Read more';
-      });
     });
   });
 
