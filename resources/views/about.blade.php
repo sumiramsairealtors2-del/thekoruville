@@ -4,290 +4,335 @@
 @section('description', 'The Koru Ville is a gated, resort-style plotted township in Kilawali, Udham Singh Nagar, on the Kashipur–Ramnagar road. It is about 15 minutes from Phato Gate, one of the Jim Corbett safari gates, and within walking distance of Tumaria Dam.')
 @section('hero', '1')
 
+@section('head')
+<style>
+  .kv-about-page {
+    --paper: var(--kv-cream);
+    --ink: #282b20;
+    --olive: #4e572e;
+    --inset: clamp(18px, 3.8vw, 54px);
+    --gap: clamp(10px, 1.25vw, 18px);
+    --radius: 16px;
+    margin: var(--kv-frame-top) var(--kv-frame) 0;
+    padding: max(0px, calc(var(--kv-header) + 16px - var(--kv-frame-top))) 0 40px;
+    border-radius: var(--kv-radius) var(--kv-radius) 0 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 1rem/1.55 var(--kv-font-display);
+  }
+
+  .kv-about-page .about-shell { max-width: 1320px; margin-inline: auto; padding-inline: max(0px, calc(clamp(12px, 3vw, 44px) - var(--kv-frame))); }
+  .kv-about-page .about-body { padding: 0 var(--inset); }
+  .kv-about-page section[id] { scroll-margin-top: 100px; }
+  .kv-about-page :is(h1, h2, h3, p, figure) { margin: 0; }
+  .kv-about-page :is(h1, h2, h3) {
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: .97;
+    text-transform: none;
+  }
+
+  .kv-about-page h2 { font-size: clamp(2.2rem, 4vw, 4.1rem); }
+  .kv-about-page h2 + p { margin-top: 16px; }
+  .kv-about-page img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .kv-about-page .about-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 44px;
+    padding: 8px 21px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    color: inherit;
+    font: 600 .9rem/1.25 var(--kv-font-display);
+    text-decoration: none;
+    transition: background-color .2s, color .2s;
+  }
+
+  .kv-about-page .about-button:hover { background: var(--paper); color: var(--ink); }
+  .kv-about-page :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+
+  .kv-about-page .about-feature {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: #24271c;
+    color: #fffaf0;
+  }
+
+  .kv-about-page .about-backdrop,
+  .kv-about-page .about-feature::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .kv-about-page .about-feature::after { content: ""; }
+  .kv-about-page .about-hero { --kv-diagonal-heading-size: clamp(2rem, 4.35vw, 4.7rem); }
+
+  .kv-about-page .about-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(22px, 4vw, 56px);
+    padding-block: clamp(24px, 3vw, 42px) clamp(34px, 4vw, 58px);
+  }
+
+  .kv-about-page .about-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
+  .kv-about-page .about-card { position: relative; overflow: hidden; aspect-ratio: .91; border-radius: 12px; background: var(--olive); }
+  .kv-about-page .about-card figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 28px 13px 13px;
+    background: linear-gradient(transparent, #11160ef5);
+    color: #fffaf0;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .kv-about-page .about-intro h2 { font-size: clamp(2.1rem, 3.2vw, 3.4rem); }
+  .kv-about-page .about-vision {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.65fr);
+    align-items: center;
+    gap: clamp(20px, 3vw, 42px);
+    padding-top: clamp(26px, 3vw, 44px);
+    border-top: 1px solid #dedacf;
+  }
+
+  .kv-about-page .about-vision h2 { font-size: clamp(2.1rem, 3.3vw, 3.4rem); }
+  .kv-about-page .about-vision h2::after { content: ""; display: block; width: 55px; margin-top: 14px; border-bottom: 2px solid var(--olive); }
+  .kv-about-page .about-photos { display: grid; grid-template-columns: 1.55fr 1fr .65fr; gap: var(--gap); height: clamp(230px, 27vw, 360px); }
+  .kv-about-page .about-photos figure { overflow: hidden; border-radius: 12px; }
+  .kv-about-page .about-feature {
+    display: grid;
+    grid-template-columns: minmax(215px, 1fr) minmax(0, 1.7fr);
+    grid-template-areas: "facts heading" "description description";
+    align-items: center;
+    gap: clamp(20px, 3vw, 38px) clamp(24px, 5vw, 74px);
+    margin-top: clamp(22px, 3vw, 40px);
+    padding: clamp(18px, 3vw, 42px);
+  }
+
+  .kv-about-page .about-feature::after { background: linear-gradient(90deg, #15180f68, #17180fd4 58%, #18180f89); }
+  .kv-about-page .about-facts { grid-area: facts; padding: clamp(15px, 2vw, 26px); border-radius: 12px; background: var(--paper); color: var(--ink); }
+  .kv-about-page .about-facts img { height: clamp(100px, 12vw, 155px); border-radius: 8px; margin-bottom: 14px; }
+  .kv-about-page .about-facts h3 { font-size: 1.8rem; }
+  .kv-about-page .about-facts dl { margin: 12px 0 0; }
+  .kv-about-page .about-facts dl div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 3px 14px; padding-block: 7px; border-top: 1px solid #dedacf; font-size: .875rem; }
+  .kv-about-page .about-facts dd { margin: 0; font-weight: 600; }
+  .kv-about-page .about-feature-copy { grid-area: heading; }
+  .kv-about-page .about-feature-description {
+    grid-area: description;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 14px clamp(20px, 4vw, 56px);
+    padding: clamp(16px, 2.5vw, 30px);
+    border: 1px solid #fffaf033;
+    border-radius: 12px;
+    background: #181b13eb;
+  }
+  .kv-about-page .about-feature .about-button { margin-top: 22px; }
+
+  .kv-about-page .about-values {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+    align-items: start;
+    gap: clamp(24px, 7vw, 104px);
+    margin-block: clamp(32px, 5vw, 66px);
+  }
+
+  .kv-about-page .about-values figure { width: min(100%, 280px); aspect-ratio: 2.05; margin-top: 18px; overflow: hidden; border-radius: 10px; }
+  .kv-about-page .about-values figure + p { max-width: 34ch; margin-top: 12px; }
+  .kv-about-page .about-values details { border-bottom: 1px solid #bcbdb0; }
+  .kv-about-page .about-values summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 2px;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+  }
+
+  .kv-about-page summary::-webkit-details-marker { display: none; }
+  .kv-about-page .about-values summary::after {
+    content: "+";
+    display: grid;
+    flex: 0 0 25px;
+    height: 25px;
+    place-items: center;
+    border: 1px solid #a4a692;
+    border-radius: 50%;
+    line-height: 1;
+  }
+
+  .kv-about-page .about-values details[open] summary::after { content: "−"; }
+  .kv-about-page .about-values details p { max-width: 54ch; padding: 0 14px 16px 2px; }
+
+  .kv-about-page .about-gallery { padding: clamp(14px, 2vw, 26px); border-radius: var(--radius); background: #e4e7d8; }
+  .kv-about-page .about-gallery h2 { margin-bottom: 14px; text-align: center; }
+  .kv-about-page .about-mosaic {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .7fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: clamp(5px, .65vw, 9px);
+    height: clamp(180px, 32vw, 390px);
+  }
+
+  .kv-about-page .about-mosaic figure { overflow: hidden; border-radius: 8px; }
+  .kv-about-page .about-mosaic figure:first-child { grid-row: span 2; }
+  .kv-about-page .about-mosaic figure:nth-child(3),
+  .kv-about-page .about-mosaic figure:nth-child(4) { grid-column: span 2; }
+  .kv-about-page .about-gallery-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-top: 12px; }
+
+  @media (max-width: 900px) {
+    .kv-about-page .about-intro { grid-template-columns: 1fr; }
+    .kv-about-page .about-card { aspect-ratio: 1.25; }
+  }
+
+  @media (max-width: 640px) {
+    .kv-about-page { --inset: 8px; }
+    .kv-about-page .about-card { aspect-ratio: .78; }
+    .kv-about-page .about-card figcaption { padding-inline: 7px; font-size: .875rem; }
+    .kv-about-page :is(.about-vision, .about-feature, .about-values) { grid-template-columns: 1fr; }
+    .kv-about-page .about-photos { height: clamp(155px, 48vw, 255px); }
+    .kv-about-page .about-feature::after { background: #16180f9e; }
+    .kv-about-page .about-feature { grid-template-areas: "heading" "description" "facts"; }
+    .kv-about-page .about-feature-description { grid-template-columns: 1fr; }
+    .kv-about-page .about-mosaic { height: clamp(160px, 55vw, 270px); }
+    .kv-about-page .about-gallery-footer { justify-content: center; text-align: center; }
+  }
+</style>
+@include('partials.kv.diagonal-hero-styles')
+@endsection
+
 @section('content')
+@php
+  $imagePath = 'assets/img/kv/';
+  $cards = [
+    ['why-1040.webp', 'Landscaped clubhouse and pool', 'In Harmony with Nature'],
+    ['kr2.webp', 'Architectural rendering of the planned villas', 'Thoughtfully Planned'],
+    ['about-1000.webp', 'Villa set among trees at dusk', 'A Quieter Way to Live'],
+  ];
+  $gallery = [
+    ['plot-1-860.webp', 'Villa and its landscaped entrance'],
+    ['why-1040.webp', 'Clubhouse pool surrounded by greenery'],
+    ['gallery-1920.webp', 'Aerial rendering of the township masterplan'],
+    ['gallery-1440.webp', 'Villa and gardens at dusk'],
+    ['plot-2-860.webp', 'A villa framed by forested hills'],
+  ];
+@endphp
 
 <div class="kv-about-page">
-  <section class="kv-about-page__story" aria-labelledby="about-title">
-    <div class="kv-shell">
-      <h1 id="about-title" class="kv-about-page__title" data-mv="words">About The Koru Ville</h1>
-
-      <figure class="kv-about-page__image kv-about-page__image--hero" data-mv="scale">
-        <img src="{{ asset('assets/img/kv/gallery-1440.webp') }}"
-             srcset="{{ asset('assets/img/kv/gallery-900.webp') }} 900w, {{ asset('assets/img/kv/gallery-1440.webp') }} 1440w, {{ asset('assets/img/kv/gallery-1920.webp') }} 1920w"
-             sizes="(max-width: 1240px) calc(100vw - 60px), 1180px"
-             width="1440" height="612" fetchpriority="high"
-             alt="Architectural rendering of The Koru Ville villas and landscaped grounds">
-      </figure>
-
-      <p class="kv-about-page__intro" data-mv="up">
-        The Koru Ville is a gated, resort-style plotted township in Kilawali, Udham Singh Nagar, on the Kashipur–Ramnagar road. It is about 15 minutes from Phato Gate, one of the Jim Corbett safari gates, and within walking distance of Tumaria Dam.
-      </p>
-
-      <div class="kv-about-page__details">
-        <div class="kv-about-page__topics" data-mv-group="90">
-          <section class="kv-about-page__topic" data-mv="up">
-            <h2>A Resort Style Community at the Gateway to Jim Corbett</h2>
-            <p>Welcome to The Koru Ville Kilawali &mdash; an exclusive resort style community of plots and villas in Kashipur, Uttarakhand, just 15 minutes by drive from Phato Gate, one of the Jim Corbett safari gates.</p>
-            <p>Choose one of three plot categories, 111, 125 or 139 sq. yd, and the Koru Ville team builds a duplex villa to that category’s fixed design within two years of purchase. Every villa design includes a private pool, and residents share a clubhouse and a common pool across the 3.5-acre township. Planned as a second home near Jim Corbett for families in Delhi NCR and other cities, it comes with owner stay days and a managed rental model, while the project team handles upkeep.</p>
-            <p>Koru is a Māori word for the unfurling fern frond, a symbol of new beginnings.</p>
-          </section>
-        </div>
-
-        <figure class="kv-about-page__image kv-about-page__image--detail" data-mv="scale">
-          <img src="{{ asset('assets/img/kv/why-800.webp') }}"
-               srcset="{{ asset('assets/img/kv/why-520.webp') }} 520w, {{ asset('assets/img/kv/why-800.webp') }} 800w, {{ asset('assets/img/kv/why-1040.webp') }} 1040w"
-               sizes="(max-width: 800px) calc(100vw - 60px), 40vw"
-               width="1040" height="1040" loading="lazy" decoding="async"
-               alt="Architectural rendering of a villa against the wooded hills near Jim Corbett">
-        </figure>
+  <section class="about-hero kv-diagonal-hero" aria-labelledby="about-title">
+    <div class="kv-diagonal-hero-copy">
+      <span class="kv-diagonal-hero-label">About The Koru Ville</span>
+      <h1 id="about-title">A Resort Style Community <span>at the Gateway to Jim Corbett</span></h1>
+      <p>The Koru Ville is a gated, resort-style plotted township in Kilawali, Udham Singh Nagar, on the Kashipur–Ramnagar road. It is about 15 minutes from Phato Gate, one of the Jim Corbett safari gates, and within walking distance of Tumaria Dam.</p>
+      <div class="kv-diagonal-hero-actions">
+        <a class="kv-btn kv-btn--olive" href="#identity">Explore The Koru Ville</a>
       </div>
     </div>
+    <img class="kv-diagonal-hero-image" src="{{ asset($imagePath.'gallery-1440.webp') }}"
+         srcset="{{ asset($imagePath.'gallery-900.webp') }} 900w, {{ asset($imagePath.'gallery-1440.webp') }} 1440w"
+         sizes="(max-width: 720px) 100vw, 56vw" width="1440" height="612"
+         alt="Architectural rendering of a villa among landscaped grounds" fetchpriority="high">
   </section>
 
-  <section class="kv-panel kv-panel--olive" id="kilawali">
-    <div class="kv-split">
-      <div class="kv-split__media" data-mv="scale">
-        <img src="{{ asset('assets/img/koru_villa_1.webp') }}"
-             width="1408" height="768"
-             alt="Illustration of the hills and reservoir near Kilawali" loading="lazy" data-mv-parallax="36">
-      </div>
-
-      <div class="kv-split__body" data-mv-group="80">
-        <div class="kv-loc-crown__slot">
-          <button class="kv-loc-crown__btn" id="kvLocCrownBtn" type="button" aria-expanded="false" aria-controls="kvLocCrownPanel" aria-label="Explore nearby places">
-            @include('partials.kv.crown', ['shapeClass' => 'kv-loc-crown__shape', 'shapeVariant' => 'tab-side'])
-            <svg class="kv-loc-crown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 4v10.17l-5.59-5.58L4 10l8 8 8-8-1.41-1.41L13 14.17V4z"/></svg>
-          </button>
+  <div class="about-shell">
+    <div class="about-body">
+      <section class="about-intro" id="identity" aria-labelledby="about-intro-title">
+        <div class="about-cards">
+          @foreach ($cards as [$file, $alt, $caption])
+            <figure class="about-card">
+              <img src="{{ asset($imagePath.$file) }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+              <figcaption>{{ $caption }}</figcaption>
+            </figure>
+          @endforeach
         </div>
-        <span class="kv-eyebrow" data-mv="fade">Why This Location</span>
-        <h2 class="kv-display kv-display--lg kv-display--light" data-mv="words">Kilawali: Close to the Forest, Connected to What Matters</h2>
-        <p data-mv="blur">Kilawali offers a perfect balance of being close to the forest without feeling disconnected from everyday convenience. Existing at a prime location along the highway corridor, the beautiful village connects directly to the Phato Gate of Jim Corbett and allows access to Kashipur markets, hospitals, and the railway station. Unlike deeper forest belt locations where connectivity can become a compromise, or more established areas near Ramnagar where land is increasingly limited, Kilawali sits comfortably between nature, accessibility, and opportunity. Nainital, Bhimtal, Sattal and Mukteshwar are among the Kumaon hill stations near Kashipur that families can pair with a Corbett getaway.</p>
-      </div>
-
-      {{-- green take-over panel: sweeps in right → left over the whole split --}}
-      <div class="kv-loc-crown__panel" id="kvLocCrownPanel" aria-hidden="true">
-        <button class="kv-loc-crown__close" type="button" aria-label="Close location details">
-          <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-        </button>
-        <div class="kv-loc-crown__panel-inner">
-          <div class="kv-legacy-grid">
-            <article>
-              <h3>Nature and wildlife</h3>
-              <dl>
-                <div>
-                  <dt>Phato Gate (Phato safari zone, Jim Corbett)</dt>
-                  <dd>about 15 minutes by drive</dd>
-                </div>
-                <div>
-                  <dt>Tumaria Dam</dt>
-                  <dd>Walking distance</dd>
-                </div>
-                <div>
-                  <dt>Garjia Devi Temple</dt>
-                  <dd>Short drive</dd>
-                </div>
-              </dl>
-            </article>
-            <article>
-              <h3>Everyday Essentials</h3>
-              <dl>
-                <div>
-                  <dt>Nearest School</dt>
-                  <dd>about 15 minutes</dd>
-                </div>
-                <div>
-                  <dt>AIIMS Hospital</dt>
-                  <dd>about 34 minutes</dd>
-                </div>
-                <div>
-                  <dt>Kashipur Town</dt>
-                  <dd>about 22 km</dd>
-                </div>
-              </dl>
-            </article>
-            <article>
-              <h3>Rail and Air</h3>
-              <dl>
-                <div>
-                  <dt>Gaushala Railway Station</dt>
-                  <dd>about 11 km</dd>
-                </div>
-                <div>
-                  <dt>Kashipur Junction</dt>
-                  <dd>about 20 km</dd>
-                </div>
-                <div>
-                  <dt>Ramnagar Railway Station</dt>
-                  <dd>about 23 km</dd>
-                </div>
-                <div>
-                  <dt>Pantnagar Airport</dt>
-                  <dd>about 66 km</dd>
-                </div>
-              </dl>
-            </article>
-            <article>
-              <h3>Delhi NCR and Hill Stations Near Kashipur</h3>
-              <dl>
-                <div>
-                  <dt>Delhi NCR</dt>
-                  <dd>roughly 5&ndash;6 hrs by road</dd>
-                </div>
-                <div>
-                  <dt>Kashipur&ndash;Ramnagar Highway</dt>
-                  <dd>Direct corridor</dd>
-                </div>
-                <div>
-                  <dt>Nainital</dt>
-                  <dd>about 56 km</dd>
-                </div>
-              </dl>
-            </article>
-          </div>
+        <div>
+          <h2 id="about-intro-title">The meaning of Koru.</h2>
+          <p>Koru is a Māori word for the unfurling fern frond, a symbol of new beginnings.</p>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <section class="kv-panel kv-panel--cream kv-legacy-section" id="strategic-location">
-    <div class="kv-shell">
-      <div class="kv-section-head">
-        <span class="kv-eyebrow">Strategic Location</span>
-        <h2 class="kv-display kv-display--md">The Koru Ville's Strategic Location in Uttarakhand</h2>
-        <p class="kv-lede">A location matters for any real estate purchase, and The Koru Ville sits on the Kashipur&ndash;Ramnagar corridor at the gateway to Jim Corbett, in Kilawali, Udham Singh Nagar district. Key places around the project include Phato Gate, a Jim Corbett safari entry point in the Phato safari zone that is listed as open through the year (please check current dates on the official booking portal); Tumaria Dam, within walking distance; and Kashipur town, about 20 km away, which gives residents access to daily necessities, healthcare facilities such as AIIMS, and other major amenities.</p>
-      </div>
-      <div class="kv-legacy-grid">
-        <article>
-          <h3>Photo Safari Gate</h3>
+      <section class="about-vision" aria-labelledby="about-vision-title">
+        <div>
+          <h2 id="about-vision-title">Discover life at a slower pace.</h2>
+          <p>The township sits on the Kashipur–Ramnagar road, within walking distance of Tumaria Dam.</p>
+        </div>
+        <div class="about-photos">
+          <figure><img src="{{ asset($imagePath.'plot-1-860.webp') }}" alt="Villa and garden in the morning light" loading="lazy" decoding="async"></figure>
+          <figure><img src="{{ asset($imagePath.'why-1040.webp') }}" alt="Clubhouse and pool rendering" loading="lazy" decoding="async"></figure>
+          <figure><img src="{{ asset($imagePath.'plot-2-860.webp') }}" alt="Forested hills behind a villa" loading="lazy" decoding="async"></figure>
+        </div>
+      </section>
+
+      <section class="about-feature" aria-labelledby="about-feature-title">
+        <img class="about-backdrop" src="{{ asset($imagePath.'gallery-1440.webp') }}" alt="" loading="lazy" decoding="async">
+        <div class="about-feature-copy">
+          <h2 id="about-feature-title">A place to belong.<br>A life to rediscover.</h2>
+          <a class="about-button" href="{{ route('amenities') }}">Explore the amenities</a>
+        </div>
+        <p class="about-feature-description">
+          <span>Choose one of three plot categories, 111, 125 or 139 sq. yd, and the Koru Ville team builds a duplex villa to that category’s fixed design within two years of purchase. Every villa design includes a private pool, and residents share a clubhouse and a common pool across the 3.5-acre township.</span>
+          <span>Planned as a second home near Jim Corbett for families in Delhi NCR and other cities, it comes with owner stay days and a managed rental model, while the project team handles upkeep.</span>
+        </p>
+        <div class="about-facts">
+          <img src="{{ asset($imagePath.'gallery-1920.webp') }}" alt="Aerial rendering of the township" loading="lazy" decoding="async">
+          <h3>The project at a glance</h3>
           <dl>
-            <div>
-              <dt>Safari zone</dt>
-              <dd>Phato zone, listed as open through the year</dd>
-            </div>
-            <div>
-              <dt>Dates</dt>
-              <dd>Check the official booking portal</dd>
-            </div>
+            <div><dt>Location</dt><dd>Kilawali, Uttarakhand</dd></div>
+            <div><dt>Township</dt><dd>3.5 acres</dd></div>
+            <div><dt>Phato Gate</dt><dd>About 15 minutes away</dd></div>
           </dl>
-        </article>
-        <article>
-          <h3>Tumaria Dam</h3>
-          <dl>
-            <div>
-              <dt>Position</dt>
-              <dd>Adjacent to the project</dd>
-            </div>
-          </dl>
-        </article>
-        <article>
-          <h3>Kashipur Town</h3>
-          <dl>
-            <div>
-              <dt>Distance</dt>
-              <dd>~20 km</dd>
-            </div>
-            <div>
-              <dt>Access to</dt>
-              <dd>Markets, AIIMS &amp; healthcare</dd>
-            </div>
-          </dl>
-        </article>
-        <article>
-          <h3>Sitabani Reserve Forest</h3>
-          <dl>
-            <div>
-              <dt>Distance</dt>
-              <dd>about 10 km from Ramnagar</dd>
-            </div>
-            <div>
-              <dt>Access to</dt>
-              <dd>Corbett Tiger Reserve, for walks and birdwatching</dd>
-            </div>
-          </dl>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="kv-panel kv-panel--cream kv-legacy-section" id="connectivity">
-    <div class="kv-shell">
-      <div class="kv-section-head">
-        <span class="kv-eyebrow">Why Invest Here</span>
-        <h2 class="kv-display kv-display--md">Why Invest in Residential Plots Near Jim Corbett & Kashipur?</h2>
-        <p class="kv-lede">Kilawali already sits on a working road network. National highways link it to Delhi-NCR, Moradabad, Kashipur and Ramnagar, Ramnagar’s railway station gives it a direct rail connection to the capital, and Pantnagar Airport is a short drive away for domestic flights.</p>
-        <p class="kv-lede">Rail connectivity has also improved. The Ramnagar–Dehradun Express, the first direct express between Ramnagar and Dehradun, was flagged off in July 2026 and halts at Kashipur, Roshanpur, Pipalsana, Moradabad, Najibabad and Haridwar, linking the Kumaon and Garhwal regions by rail. A road connectivity project through Moradabad, Kashipur and Ramnagar, and tourism infrastructure upgrades around Ramnagar, have also been proposed, and their timelines rest with the authorities concerned.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="kv-panel kv-panel--cream kv-legacy-section" id="why-invest">
-    <div class="kv-shell">
-      <div class="kv-section-head">
-        <span class="kv-eyebrow">What's Ahead</span>
-        <h2 class="kv-display kv-display--md">The Ramnagar Dehradun Express and Connectivity Around Ramnagar</h2>
-        <p class="kv-lede">Kilawali already sits on a working road network &mdash; national highways link it to Delhi-NCR, Moradabad, Kashipur and Ramnagar, Ramnagar's railway station gives it a direct rail connection to the capital, and Pantnagar Airport is a short drive away for domestic flights.</p>
-        <p class="kv-lede">Rail connectivity has also improved. The Ramnagar&ndash;Dehradun Express, the first direct express train between Ramnagar and Dehradun, was flagged off in July 2026 and halts at Kashipur, Moradabad, Najibabad and Haridwar, linking the Kumaon and Garhwal regions by rail. Kashipur Junction and Ramnagar are among the Uttarakhand stations being redeveloped. A road connectivity project to improve access from Delhi-NCR and western Uttar Pradesh through Moradabad, Kashipur and Ramnagar, and tourism infrastructure upgrades around Ramnagar, have also been proposed, and their timelines rest with the authorities concerned.</p>
-        <p class="kv-lede">A planned expressway linking Ramnagar and Dehradun would open direct connectivity to the Kumaon and Garhwal regions, an upcoming road connectivity project aims to improve access from Delhi-NCR and western Uttar Pradesh through Moradabad, Kashipur and Ramnagar, and tourism infrastructure upgrades are proposed in and around Ramnagar to expand hospitality and convention facilities in the belt.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="kv-panel kv-panel--cream kv-legacy-section" id="who-invests">
-    <div class="kv-shell">
-      <div class="kv-section-head">
-        <span class="kv-eyebrow">Who It Suits</span>
-        <h2 class="kv-display kv-display--md">What Kind of Second Home Are You Looking For?</h2>
-        <p class="kv-lede">A second home investment earns its value based on how you use your real estate asset on leisure days. Some families often visit to feel like guests in their holiday homes, while others prefer them for kids’ summer holidays, festivals, and long weekends. They do not need to worry about making packing lists and advance bookings. This resort-themed plotting project is one of the good places to invest in Uttarakhand real estate that is solely dedicated to villa owners.</p>
-        <p class="kv-lede">From confirmation on the villa design to sharing common amenities with other residents, it creates a harmonious community in the heart of Uttarakhand. Once you agree to the terms and conditions, our sales team will describe to you the second home investment project that reflects your lifestyle and budget.</p>
-      </div>
-      <div class="kv-legacy-grid">
-        <article>
-          <h3>Weekend Home Seekers from Any City</h3>
-          <p>Whether you live in Delhi-NCR, Mumbai, Bengaluru, Jaipur, Lucknow, or any other major city, The Koru Ville offers a weekend home near Jim Corbett in Uttarakhand.</p>
-        </article>
-        <article>
-          <h3>Wildlife and nature enthusiasts</h3>
-          <p>If you like wildlife adventures, a weekend home near Jim Corbett offers an opportunity for a jungle safari close to Phato Gate.</p>
-        </article>
-        <article>
-          <h3>Retirees</h3>
-          <p>Make your retirement plan memorable by booking a quiet, lush green villa with access to all daily essentials.</p>
-        </article>
-        <article>
-          <h3>NRIs and outstation buyers</h3>
-          <p>Diversify your real estate portfolio with a second home investment that is managed well, even if you’re settled abroad.</p>
-        </article>
-        <article>
-          <h3>Multi-generation families</h3>
-          <p>Book a property for sale in Uttarakhand for family gatherings that suits all generations. It is equipped with a play area, a jogging track, and a common pool on the site.</p>
-        </article>
-        <article>
-          <h3>Patient, long-term buyers</h3>
-          <p>If you are comfortable holding property with documented paperwork for years and plan to use it yourself, this project is perfectly suitable for you.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="kv-about-page__visit" aria-labelledby="about-visit-title">
-    <div class="kv-shell">
-      <div class="kv-about-page__visit-panel">
-        <div data-mv="up">
-          <p class="kv-about-page__label">Get In Touch</p>
-          <h2 id="about-visit-title">Plan a Private Visit</h2>
-          <p>Plots near Jim Corbett National Park are more than just an investment — Buyers and investors have a chance to build a luxury villa that reflects their lifestyle. The Koru Ville is a thoughtfully designed thematic township for those seeking a closer connection to nature and a welcome escape from the city’s hustle. Our team will help you explore suitable plots, experience the site personally, and understand the pricing clearly.</p>
-          <button type="button" class="kv-btn kv-btn--olive" data-kv-open="enquiry">Book a Site Visit</button>
-          <a href="{{ url('/amenities') }}" class="kv-btn kv-btn--gold">Explore Amenities <span aria-hidden="true">→</span></a>
         </div>
+      </section>
 
-        <div class="kv-about-page__contact" data-mv="up" data-mv-delay="100">
-          <p><strong>The Koru Ville</strong><br>Kilawali, Kashipur, Uttarakhand – 244712</p>
-          <p><strong>Corporate Office</strong><br>G-192, Sector 63, Noida, Uttar Pradesh – 201301</p>
-          <p><a href="mailto:info@thekoruville.com">info@thekoruville.com</a><br><a href="tel:+918377000300">+91 8377 000300</a></p>
+      <section class="about-values" aria-labelledby="about-values-title">
+        <div>
+          <h2 id="about-values-title">Thoughtful spaces.<br>Natural connections.</h2>
+          <figure><img src="{{ asset($imagePath.'why-1040.webp') }}" alt="Landscaping around the clubhouse and pool" loading="lazy" decoding="async"></figure>
+          <p>Space for quiet mornings, time outdoors and weekends with family.</p>
         </div>
-      </div>
+        <div>
+          <details name="about-values" open>
+            <summary>How does the plan make room for nature?</summary>
+            <p>Landscaped open spaces and wide internal roads connect homes with the township’s green surroundings.</p>
+          </details>
+          <details name="about-values">
+            <summary>What kinds of plots are planned?</summary>
+            <p>The gated township offers plots of 111, 125 or 139 sq. yd, each with a fixed duplex-villa design.</p>
+          </details>
+          <details name="about-values">
+            <summary>What amenities are planned?</summary>
+            <p>Each villa design has a private pool. Residents share a clubhouse and common pool.</p>
+          </details>
+          <details name="about-values">
+            <summary>Where is The Koru Ville located?</summary>
+            <p>The township sits in Kilawali on the Kashipur–Ramnagar road, within walking distance of Tumaria Dam and about 15 minutes from Phato Gate.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="about-gallery" aria-labelledby="about-gallery-title">
+        <h2 id="about-gallery-title">Gallery</h2>
+        <div class="about-mosaic">
+          @foreach ($gallery as [$file, $alt])
+            <figure><img src="{{ asset($imagePath.$file) }}" alt="{{ $alt }}" loading="lazy" decoding="async"></figure>
+          @endforeach
+        </div>
+        <div class="about-gallery-footer">
+          <p>A look at the villas, landscape and planned community spaces.</p>
+          <a class="about-button" href="{{ url('/') }}#gallery">View the full gallery</a>
+        </div>
+      </section>
     </div>
-  </section>
+  </div>
+
 </div>
-
 @endsection

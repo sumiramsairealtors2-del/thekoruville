@@ -3,39 +3,8 @@
 @php
   $published = $post->created_at ?? $post->updated_at;
   $excerpt = $post->meta_description ?: Str::limit(strip_tags($post->content ?? ''), 190);
-  /*
-    Blog cover dummies (fallback when a post has no usable image) — replace these
-    three files with real uploads at the SAME dimensions:
-      desktop  2000x1000  (2:1)   ->  public/assets/img/kv/art-hero/hero-desktop-2000x1000.jpg
-      tablet   1600x1200  (4:3)   ->  public/assets/img/kv/art-hero/hero-tablet-1600x1200.jpg
-      mobile   1080x1200  (9:10)  ->  public/assets/img/kv/art-hero/hero-mobile-1080x1200.jpg
-
-    If the post HAS an image, we read its real pixel dimensions and set
-    --kv-hero-ratio on the hero frame, so the frame matches the image exactly:
-    no cropping, no blank bars — any upload dimension renders correctly.
-  */
-  $heroImageDesktop = asset('assets/img/kv/art-hero/hero-desktop-2000x1000.jpg');
-  $heroImageTablet  = asset('assets/img/kv/art-hero/hero-tablet-1600x1200.jpg');
-  $heroImageMobile  = asset('assets/img/kv/art-hero/hero-mobile-1080x1200.jpg');
-  $heroImage = $heroImageDesktop;
-  $heroRatio = null; // only set when a real uploaded image is used
-  $heroImgW = null;
-  $heroImgH = null;
-  if ($post->image && $post->getConnectionName() === 'live_blog') {
-      $heroImage = $heroImageDesktop = $heroImageTablet = $heroImageMobile = $post->imageUrl();
-  } elseif ($post->image) {
-      $heroPath = public_path('storage/'.$post->image);
-      if (is_file($heroPath)) {
-          $dims = @getimagesize($heroPath);
-          if ($dims) {
-              $heroImgW = $dims[0];
-              $heroImgH = $dims[1];
-              $heroRatio = round($heroImgW / $heroImgH, 4);
-              $heroImageDesktop = $heroImageTablet = $heroImageMobile = $post->imageUrl();
-              $heroImage = $heroImageDesktop;
-          }
-      }
-  }
+  $hasCover = $post->image && ($post->getConnectionName() === 'live_blog' || is_file(public_path('storage/'.$post->image)));
+  $coverImage = $hasCover ? $post->imageUrl() : null;
   $pageUrl = url()->current();
   $canonical = $post->canonical_url ?: $pageUrl;
   $shareUrl = rawurlencode($pageUrl);
@@ -47,6 +16,8 @@
 @section('hero', '1')
 
 @section('head')
+@vite('resources/css/blog.css')
+@include('partials.kv.diagonal-hero-styles')
 <meta property="og:type" content="article">
 <meta property="og:title" content="{{ $post->meta_title ?? $post->title }}">
 <meta property="og:description" content="{{ $post->meta_description ?? Str::limit(strip_tags($post->content ?? ''), 160) }}">
@@ -58,8 +29,8 @@
 <meta property="article:modified_time" content="{{ $post->updated_at->toAtomString() }}">
 @endif
 <meta property="article:section" content="Land · Location · Living">
-@if($post->image)
-<meta property="og:image" content="{{ $heroImage }}">
+@if($coverImage)
+<meta property="og:image" content="{{ $coverImage }}">
 @endif
 <script type="application/ld+json">
 {
@@ -72,8 +43,8 @@
   "mainEntityOfPage": @json($canonical),
   "author": {"@type": "Organization", "name": "The Koru Ville"},
   "publisher": {"@type": "Organization", "name": "The Koru Ville", "logo": {"@type": "ImageObject", "url": "{{ asset('assets/img/Logo.webp') }}"}}
-  @if($post->image)
-  ,"image": "{{ $heroImage }}"
+  @if($coverImage)
+  ,"image": "{{ $coverImage }}"
   @endif
 }
 </script>
@@ -94,34 +65,14 @@
 
 <div class="kv-art-progress" aria-hidden="true"><span data-kv-progress></span></div>
 
-<article class="kv-art">
+<article class="kv-art blog-page blog-article">
 
-  {{-- ============================================================== cover --}}
-  <section class="kv-art-hero" aria-label="Article cover">
-    <div class="kv-art-hero__frame"@if($heroRatio) style="--kv-hero-ratio: {{ $heroRatio }}"@endif>
-      <div class="kv-art-hero__media">
-        <picture>
-          <source media="(max-width:720px)" srcset="{{ $heroImageMobile }}"@if($heroImgW) width="{{ $heroImgW }}" height="{{ $heroImgH }}"@endif>
-          <source media="(min-width:721px) and (max-width:1100px)" srcset="{{ $heroImageTablet }}"@if($heroImgW) width="{{ $heroImgW }}" height="{{ $heroImgH }}"@endif>
-          <img src="{{ $heroImageDesktop }}" alt="{{ $post->title }}"@if($heroImgW) width="{{ $heroImgW }}" height="{{ $heroImgH }}"@else width="2000" height="1000"@endif fetchpriority="high">
-        </picture>
-      </div>
-      <div class="kv-art-hero__shade" aria-hidden="true"></div>
+  @include('partials.kv.blog-hero', [
+    'heading' => $post->title,
+    'image' => asset('assets/img/kv/gallery-1440.webp'),
+    'isArticle' => true,
+  ])
 
-      {{-- <div class="kv-art-hero__content">
-        <div class="kv-art-hero__top">
-          <span class="kv-eyebrow">The Koru Ville · Journal</span>
-          <a class="kv-art-back" href="{{ url('/blog') }}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-            All articles
-          </a>
-        </div>
-      </div> --}}
-
-    </div>
-  </section>
-
-  {{-- ================================================================ body --}}
   <div class="kv-art-body">
     <div class="kv-shell">
       <div class="kv-art-grid">
@@ -174,14 +125,15 @@
             </details>
           @endif
 
-          <div class="kv-art-hero__main">
-            <h1 class="kv-art-title">{{ $post->title }}</h1>
+          @if($coverImage)
+            <figure class="blog-article-cover">
+              <img src="{{ $coverImage }}" alt="" loading="lazy" decoding="async">
+            </figure>
+          @endif
 
-            @if($excerpt)
-              <p class="kv-art-lede">{{ $excerpt }}</p>
-            @endif
-
-          </div>
+          @if($excerpt)
+            <p class="blog-article-intro">{{ $excerpt }}</p>
+          @endif
 
           <div class="kv-prose kv-art-prose">
             {!! $content !!}
@@ -293,24 +245,7 @@
 
         <div class="kv-bloggrid">
           @foreach($related as $relatedPost)
-            <article class="kv-postcard">
-              <a href="{{ route('posts.show', $relatedPost) }}" class="kv-postcard__media" tabindex="-1" aria-hidden="true">
-                @if($relatedPost->image)
-                  <img src="{{ $relatedPost->imageUrl() }}" alt="{{ $relatedPost->title }}" loading="lazy">
-                @else
-                  <img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="" loading="lazy">
-                @endif
-              </a>
-              <div class="kv-postcard__body">
-                <span class="kv-postcard__date">{{ ($relatedPost->created_at ?? $relatedPost->updated_at)?->format('M d, Y') }}</span>
-                <h3><a href="{{ route('posts.show', $relatedPost) }}">{{ $relatedPost->title }}</a></h3>
-                <p>{{ $relatedPost->meta_description ?: Str::limit(strip_tags($relatedPost->content), 130) }}</p>
-                <a href="{{ route('posts.show', $relatedPost) }}" class="kv-postcard__more">
-                  Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </a>
-              </div>
-            </article>
+            @include('partials.kv.blog-card', ['entry' => $relatedPost, 'level' => 'h3'])
           @endforeach
         </div>
       </div>
@@ -318,7 +253,7 @@
   @endif
 
   {{-- ================================================================= cta --}}
-  <section class="kv-subsection kv-subsection--olive kv-art-cta">
+  <section class="kv-subsection kv-subsection--olive kv-art-cta blog-cta">
     <div class="kv-shell">
       <div class="kv-cta-row">
         <div>

@@ -73,7 +73,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <a class="kv-skip" href="#main">Skip to content</a>
 
 @include('partials.kv.topbar')
-@include('partials.kv.header', ['solid' => !View::hasSection('home') && !View::hasSection('hero'), 'light' => request()->routeIs('about', 'amenities', 'pricing'), 'errorPage' => View::hasSection('errorPage')])
+@include('partials.kv.header', ['solid' => !View::hasSection('home') && !View::hasSection('hero'), 'light' => request()->routeIs('about', 'amenities', 'pricing', 'posts.index', 'posts.show'), 'errorPage' => View::hasSection('errorPage')])
 
 <main id="main"@if(View::hasSection('home')) class="kv-home"@endif>
   @yield('content')

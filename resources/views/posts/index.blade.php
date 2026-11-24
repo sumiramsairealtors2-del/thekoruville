@@ -6,6 +6,7 @@
 
 @section('head')
 @vite('resources/css/blog.css')
+@include('partials.kv.diagonal-hero-styles')
 <script type="application/ld+json">
 {
   "@@context": "https://schema.org",
@@ -31,177 +32,87 @@
 
 @section('content')
 
-@include('partials.kv.pagehero', [
-  'id' => 'blog',
-  'eyebrow' => 'The Koru Ville · Journal',
-  'title' => 'The Koru Ville Blog',
-  'lede' => 'Guides, location intelligence and honest answers for anyone evaluating residential plots near Jim Corbett — written by the team behind The Koru Ville in Kilawali, Uttarakhand.',
-  'image' => 'assets/img/Sunset Villa Overlooking a Tropical Valley.png',
-  'imageWidth' => 1920,
-  'imageHeight' => 1080,
-  'alt' => 'Sunset villa overlooking a tropical valley near Jim Corbett',
-  'meta' => [$posts->total().' '.Str::plural('article', $posts->total()), 'Land · Location · Living'],
-])
+<div class="blog-page blog-index">
+  @include('partials.kv.blog-hero', [
+    'heading' => 'The Koru Ville Blog',
+    'image' => asset('assets/img/kv/kr2.webp'),
+    'isArticle' => false,
+  ])
 
-
-
-<section class="kv-subsection">
-  <div class="kv-shell">
-    <div class="kv-section-head" >
+  <section class="blog-shell blog-listing" aria-labelledby="blog-listing-title">
+    <div class="blog-listing-heading">
       <span class="kv-eyebrow">Latest Articles</span>
-      <h2 class="kv-display">Insights on land, location &amp; living</h2>
+      <h2 id="blog-listing-title">Insights on land, location &amp; living</h2>
+      <p>Guides, location intelligence and honest answers for anyone evaluating residential plots near Jim Corbett — written by the team behind The Koru Ville in Kilawali, Uttarakhand.</p>
     </div>
 
-    <div class="blog-filter-bar">
-      <form action="{{ route('posts.index') }}" method="GET" class="blog-search-form" role="search">
-        <label class="sr-only" for="blog-search">Search blog</label>
-        <input type="search" name="q" id="blog-search" class="blog-search-input" placeholder="Search articles…" value="{{ $query }}" autocomplete="off">
-        <button type="submit" class="blog-search-btn" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        </button>
-      </form>
-    </div>
-
-    <p id="blog-search-status" role="status" class="sr-only"></p>
-    <div id="blog-search-results">
-    @fragment('blog-results')
-    <div class="kv-bloggrid" data-result-count="{{ $posts->total().' '.Str::plural('article', $posts->total()) }}">
-      @forelse($posts as $post)
-        <article class="kv-postcard kv-reveal">
-          <a href="{{ route('posts.show', $post) }}" class="kv-postcard__media" tabindex="-1" aria-hidden="true">
-            @if($post->image)
-              <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}" loading="lazy">
-            @else
-              <img src="{{ asset('assets/img/kv/gallery-900.webp') }}" alt="" loading="lazy">
-            @endif
-          </a>
-          <div class="kv-postcard__body">
-            <span class="kv-postcard__date">{{ ($post->created_at ?? $post->updated_at)?->format('M d, Y') }}</span>
-            <h2><a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a></h2>
-            <p>{{ $post->meta_description ?: Str::limit(strip_tags($post->content), 130) }}</p>
-            <a href="{{ route('posts.show', $post) }}" class="kv-postcard__more">
-              Read More
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </article>
-      @empty
-        <div class="kv-empty">
-          @if($query !== '')
-            No articles found for “{{ $query }}”.
-          @else
-            No articles published yet. Check back soon.
-          @endif
+    <div class="blog-layout">
+      <aside class="blog-sidebar" aria-label="Explore the blog">
+        <div class="blog-sidebar-search">
+          <h3>Search</h3>
+          <form action="{{ route('posts.index') }}" method="GET" class="blog-search-form" role="search">
+            <label class="sr-only" for="blog-search">Search blog</label>
+            <input type="search" name="q" id="blog-search" placeholder="Search articles…" value="{{ $query }}" autocomplete="off">
+            <button type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            </button>
+          </form>
         </div>
-      @endforelse
-    </div>
 
-    @if($posts->hasPages())
-      <div class="kv-pagination">
-        {{ $posts->onEachSide(1)->links('pagination.kv') }}
+        @if($recentPosts->isNotEmpty())
+          <div class="blog-recent">
+            <h3>Recent Posts</h3>
+            <ul>
+              @foreach($recentPosts as $entry)
+                <li>
+                  <a href="{{ route('posts.show', $entry) }}">
+                    <img src="{{ $entry->image ? $entry->imageUrl() : asset('assets/img/kv/gallery-900.webp') }}"
+                         alt="" loading="lazy" decoding="async">
+                    <span>
+                      @if($date = $entry->created_at ?? $entry->updated_at)
+                        <time datetime="{{ $date->toDateString() }}">{{ $date->format('M d, Y') }}</time>
+                      @endif
+                      <strong>{{ $entry->title }}</strong>
+                    </span>
+                  </a>
+                </li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
+      </aside>
+
+      <div class="blog-results">
+        <p id="blog-search-status" role="status" class="sr-only"></p>
+        <div id="blog-search-results">
+          @fragment('blog-results')
+            <div class="kv-bloggrid" data-result-count="{{ $posts->total().' '.Str::plural('article', $posts->total()) }}">
+              @forelse($posts as $post)
+                @include('partials.kv.blog-card', ['entry' => $post, 'level' => 'h3'])
+              @empty
+                <div class="kv-empty">
+                  @if($query !== '')
+                    No articles found for “{{ $query }}”.
+                  @else
+                    No articles published yet. Check back soon.
+                  @endif
+                </div>
+              @endforelse
+            </div>
+
+            @if($posts->hasPages())
+              <div class="kv-pagination">
+                {{ $posts->onEachSide(1)->links('pagination.kv') }}
+              </div>
+            @endif
+          @endfragment
+        </div>
       </div>
-    @endif
-    @endfragment
     </div>
+  </section>
+</div>
 
-    <script>
-      (() => {
-        const input = document.getElementById('blog-search');
-        const form = input.form;
-        const button = form.querySelector('.blog-search-btn');
-        const results = document.getElementById('blog-search-results');
-        const status = document.getElementById('blog-search-status');
-        const articleCount = document.querySelector('#blog .kv-pagehero__meta span');
-        let timer;
-        let pending;
-
-        function setExpanded(expanded) {
-          form.classList.toggle('is-collapsed', !expanded);
-          input.inert = !expanded;
-          button.type = expanded ? 'submit' : 'button';
-          button.setAttribute('aria-expanded', String(expanded));
-          button.setAttribute('aria-label', expanded ? 'Search' : 'Open blog search');
-        }
-
-        function scheduleSearch(delay) {
-          clearTimeout(timer);
-          pending?.abort();
-          status.classList.add('sr-only');
-          status.textContent = 'Searching…';
-          results.setAttribute('aria-busy', 'true');
-          timer = setTimeout(updateResults, delay);
-        }
-
-        async function updateResults() {
-          const query = input.value.trim();
-          const url = new URL(form.action);
-          if (query) url.searchParams.set('q', query);
-
-          const endpoint = new URL(url);
-          endpoint.searchParams.set('_results', '1');
-          const request = new AbortController();
-          pending = request;
-
-          try {
-            const response = await fetch(endpoint, { signal: request.signal });
-            if (!response.ok) throw new Error('Blog search failed');
-
-            const fragment = document.createElement('template');
-            fragment.innerHTML = await response.text();
-            if (request.signal.aborted) return;
-
-            const grid = fragment.content.querySelector('[data-result-count]');
-            if (!grid) throw new Error('Missing search results');
-            grid.querySelectorAll('.kv-reveal').forEach((card) => card.classList.add('is-in'));
-            results.replaceChildren(fragment.content);
-            if (articleCount) articleCount.textContent = grid.dataset.resultCount;
-            status.textContent = `${grid.dataset.resultCount} found.`;
-            window.history.replaceState(window.history.state, '', url);
-          } catch {
-            if (request.signal.aborted) return;
-            status.classList.remove('sr-only');
-            status.textContent = 'Search results could not be updated. Try again.';
-          } finally {
-            if (!request.signal.aborted) results.removeAttribute('aria-busy');
-          }
-        }
-
-        button.setAttribute('aria-controls', input.id);
-        setExpanded(input.value.trim() !== '');
-
-        button.addEventListener('click', (event) => {
-          if (!input.inert) return;
-          event.preventDefault();
-          setExpanded(true);
-          input.focus({ preventScroll: true });
-        });
-
-        input.addEventListener('input', (event) => {
-          if (!event.isComposing) scheduleSearch(250);
-        });
-        input.addEventListener('compositionend', () => scheduleSearch(250));
-
-        form.addEventListener('submit', (event) => {
-          event.preventDefault();
-          scheduleSearch(0);
-        });
-
-        form.addEventListener('keydown', (event) => {
-          if (event.key !== 'Escape' || event.isComposing || input.inert) return;
-          event.preventDefault();
-          button.focus();
-          setExpanded(false);
-        });
-
-        document.addEventListener('click', (event) => {
-          if (!input.inert && !form.contains(event.target)) setExpanded(false);
-        });
-      })();
-    </script>
-  </div>
-</section>
-
-<section class="kv-subsection kv-subsection--olive">
+<section class="kv-subsection kv-subsection--olive blog-cta">
   <div class="kv-shell">
     <div class="kv-cta-row">
       <div>
@@ -218,3 +129,59 @@
 </section>
 
 @endsection
+
+@push('scripts')
+<script>
+  (() => {
+    const input = document.getElementById('blog-search');
+    const form = input.form;
+    const results = document.getElementById('blog-search-results');
+    const status = document.getElementById('blog-search-status');
+    let timer;
+    let pending;
+    function scheduleSearch(delay) {
+      clearTimeout(timer);
+      pending?.abort();
+      status.classList.add('sr-only');
+      status.textContent = 'Searching…';
+      results.setAttribute('aria-busy', 'true');
+      timer = setTimeout(updateResults, delay);
+    }
+    async function updateResults() {
+      const query = input.value.trim();
+      const url = new URL(form.action);
+      if (query) url.searchParams.set('q', query);
+      const endpoint = new URL(url);
+      endpoint.searchParams.set('_results', '1');
+      const request = new AbortController();
+      pending = request;
+      try {
+        const response = await fetch(endpoint, { signal: request.signal });
+        if (!response.ok) throw new Error('Blog search failed');
+        const fragment = document.createElement('template');
+        fragment.innerHTML = await response.text();
+        if (request.signal.aborted) return;
+        const grid = fragment.content.querySelector('[data-result-count]');
+        if (!grid) throw new Error('Missing search results');
+        results.replaceChildren(fragment.content);
+        status.textContent = `${grid.dataset.resultCount} found.`;
+        window.history.replaceState(window.history.state, '', url);
+      } catch {
+        if (request.signal.aborted) return;
+        status.classList.remove('sr-only');
+        status.textContent = 'Search results could not be updated. Try again.';
+      } finally {
+        if (!request.signal.aborted) results.removeAttribute('aria-busy');
+      }
+    }
+    input.addEventListener('input', (event) => {
+      if (!event.isComposing) scheduleSearch(250);
+    });
+    input.addEventListener('compositionend', () => scheduleSearch(250));
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      scheduleSearch(0);
+    });
+  })();
+</script>
+@endpush

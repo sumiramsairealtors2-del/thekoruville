@@ -22,14 +22,18 @@ class PostController extends Controller
                         ->orWhereLike('meta_description', $pattern);
                 });
             })
-            ->latest()->paginate(9);
+            ->latest()->orderByDesc('id')->paginate(6);
 
         if ($query !== '') {
             $posts->appends(['q' => $query]);
         }
 
-        return view('posts.index', compact('posts', 'query'))
-            ->fragmentIf(request()->query('_results') === '1', 'blog-results');
+        $resultsOnly = request()->query('_results') === '1';
+        $recentPosts = $resultsOnly ? collect() : Post::publishedForWebsite()
+            ->latest()->orderByDesc('id')->take(3)->get();
+
+        return view('posts.index', compact('posts', 'query', 'recentPosts'))
+            ->fragmentIf($resultsOnly, 'blog-results');
     }
 
     public function show(string $post)
